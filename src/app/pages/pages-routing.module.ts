@@ -9,7 +9,7 @@ const routes: Routes = [
     component: PagesComponent,
     children: [
       {
-        path: 'Dashboard',
+        path: 'dashboard',
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
       },
       {
@@ -43,7 +43,7 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'main',
+        redirectTo: 'Dashboard',
         pathMatch: 'full',
       },
       // {

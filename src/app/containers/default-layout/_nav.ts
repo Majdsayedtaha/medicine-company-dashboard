@@ -5,10 +5,10 @@ export const navItems: INavData[] = [
     name: 'Dashboard',
     url: '/dashboard',
     iconComponent: { name: 'cil-speedometer' },
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
+    // badge: {
+    //   color: 'info',
+    //   text: 'NEW',
+    // },
   },
   {
     name: 'Users',
@@ -18,37 +18,37 @@ export const navItems: INavData[] = [
   {
     name: 'Users Management',
     url: 'users-management/all-users',
-    iconComponent: { name: 'people-outline' },
+    iconComponent: { name: 'cil-User' },
   },
   {
     name: 'Medicines',
     url: 'medicines',
-    iconComponent: { name: 'archive-outline' },
+    iconComponent: { name: 'cil-User' },
   },
   {
     name: 'Offers',
     url: 'medicines',
-    iconComponent: { name: 'shopping-bag-outline' },
+    iconComponent: { name: 'cil-User' },
   },
   {
     name: 'Events',
     url: 'medicines',
-    iconComponent: { name: 'calendar-outline' },
+    iconComponent: { name: 'cil-User' },
   },
   {
     name: 'Ads',
     url: 'medicines',
-    iconComponent: { name: 'list-outline' },
+    iconComponent: { name: 'cil-User' },
   },
   {
     name: 'Articles',
     url: 'medicines',
-    iconComponent: { name: 'file-text-outline' },
+    iconComponent: { name: 'cil-User' },
   },
   {
     name: 'Company Details',
     url: 'medicines',
-    iconComponent: { name: 'credit-card-outline' },
+    iconComponent: { name: 'cil-User' },
   },
   // {
   //   name: 'Typography',
