@@ -259,7 +259,7 @@ export enum IconSubset {
   cilShare = 'cilShare',
   cilShareAll = 'cilShareAll',
   cilShareBoxed = 'cilShareBoxed',
-  cilSpeech = 'cilSpeech',
+  cilSpeech = 'cilSpeech',  
   cilSpeedometer = 'cilSpeedometer',
   cilSpreadsheet = 'cilSpreadsheet',
   cilStar = 'cilStar',
