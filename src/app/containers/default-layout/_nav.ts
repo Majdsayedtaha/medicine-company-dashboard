@@ -2,58 +2,45 @@ import { INavData } from '@coreui/angular';
 
 export const navItems: INavData[] = [
   {
-    name: 'Dashboard',
-    url: '/dashboard',
-    iconComponent: { name: 'cil-speedometer' },
-    // badge: {
-    //   color: 'info',
-    //   text: 'NEW',
-    // },
+    name: 'Pages',
+    title: true
   },
   {
-    name: 'Users',
-    url: '/users',
-    iconComponent: { name: 'cil-User' },
+    name: 'users-management',
+    url: '/users-management',
+    iconComponent: { name: 'cil-chart-pie' }
   },
   {
-    name: 'Users Management',
-    url: 'users-management/all-users',
-    iconComponent: { name: 'cil-User' },
+    name: 'ads',
+    url: '/ads',
+    iconComponent: { name: 'cil-chart-pie' }
   },
   {
-    name: 'Medicines',
-    url: 'medicines',
-    iconComponent: { name: 'cil-User' },
+    name: 'medicines',
+    url: '/medicines',
+    iconComponent: { name: 'cil-chart-pie' }
   },
   {
-    name: 'Offers',
-    url: 'medicines',
-    iconComponent: { name: 'cil-User' },
+    name: 'offers',
+    url: '/offers',
+    iconComponent: { name: 'cil-chart-pie' }
   },
   {
-    name: 'Events',
-    url: 'medicines',
-    iconComponent: { name: 'cil-User' },
+    name: 'events',
+    url: '/events',
+    iconComponent: { name: 'cil-chart-pie' }
   },
   {
-    name: 'Ads',
-    url: 'medicines',
-    iconComponent: { name: 'cil-User' },
+    name: 'articles',
+    url: '/articles',
+    iconComponent: { name: 'cil-chart-pie' }
   },
   {
-    name: 'Articles',
-    url: 'medicines',
-    iconComponent: { name: 'cil-User' },
+    name: 'company-details',
+    url: '/company-details',
+    iconComponent: { name: 'cil-chart-pie' }
   },
-  {
-    name: 'Company Details',
-    url: 'medicines',
-    iconComponent: { name: 'cil-User' },
-  },
-  // {
-  //   name: 'Typography',
-  //   url: '/theme/typography',
-  //   linkProps: { fragment: 'someAnchor' },
-  //   iconComponentComponent: { name: 'cil-pencil' }
-  // },
+
+
+ 
 ];
