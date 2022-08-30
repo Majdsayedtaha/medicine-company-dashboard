@@ -17,6 +17,11 @@ const routes: Routes = [
     },
     children: [
       {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule)
+      },
+      {
         path: 'users-management',
         loadChildren: () =>
           import('./views/users-management/users-management.module').then(m => m.UsersManagementModule),
@@ -45,6 +50,11 @@ const routes: Routes = [
         path: 'company-details',
         loadChildren: () => import('./views/company-details/company-details.module').then(m => m.CompanyDetailsModule),
       },
+      {
+        path: 'widgets',
+        loadChildren: () =>
+          import('./views/widgets/widgets.module').then((m) => m.WidgetsModule)
+      },
     ],
   },
 
@@ -53,12 +63,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, {
-      scrollPositionRestoration: 'top',
-      anchorScrolling: 'enabled',
-      initialNavigation: 'enabledBlocking',
-      // relativeLinkResolution: 'legacy'
-    }),
+    RouterModule.forRoot(routes),
   ],
   exports: [RouterModule],
 })

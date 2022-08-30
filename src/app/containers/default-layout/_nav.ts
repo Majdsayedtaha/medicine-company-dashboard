@@ -2,45 +2,65 @@ import { INavData } from '@coreui/angular';
 
 export const navItems: INavData[] = [
   {
+    name: 'Dashboard',
+    url: '/dashboard',
+    iconComponent: { name: 'cil-speedometer' },
+    badge: {
+      color: 'info',
+      text: 'NEW'
+    }
+  },
+  {
+    name: 'Widgets',
+    url: '/widgets',
+    iconComponent: { name: 'cil-calculator' },
+    badge: {
+      color: 'info',
+      text: 'NEW'
+    }
+  },
+  {
     name: 'Pages',
     title: true
   },
   {
     name: 'users-management',
     url: '/users-management',
-    iconComponent: { name: 'cil-chart-pie' }
+    iconComponent: { name: 'cilUser' }
   },
   {
     name: 'ads',
     url: '/ads',
-    iconComponent: { name: 'cil-chart-pie' }
+    iconComponent: { name: 'cilSun' }
+
   },
   {
     name: 'medicines',
     url: '/medicines',
-    iconComponent: { name: 'cil-chart-pie' }
+    iconComponent: { name: 'cilBookmark' }
   },
   {
     name: 'offers',
     url: '/offers',
-    iconComponent: { name: 'cil-chart-pie' }
+    iconComponent: { name: 'cilStar' }
   },
   {
     name: 'events',
     url: '/events',
-    iconComponent: { name: 'cil-chart-pie' }
+    iconComponent: { name: 'cilMediaPlay' }
   },
   {
     name: 'articles',
     url: '/articles',
-    iconComponent: { name: 'cil-chart-pie' }
+
+    iconComponent: { name: 'cilFile' }
   },
   {
     name: 'company-details',
     url: '/company-details',
-    iconComponent: { name: 'cil-chart-pie' }
+    iconComponent: { name: 'cilAlignCenter' }
   },
 
 
- 
+
 ];
