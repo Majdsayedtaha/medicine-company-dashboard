@@ -6,7 +6,6 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ApiService {
   constructor(
-    // Angular Modules
     private http: HttpClient
   ) {}
   public get(url: string, options?: any) {
