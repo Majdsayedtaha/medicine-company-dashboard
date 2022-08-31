@@ -37,7 +37,10 @@
               "node_modules/@coreui/coreui/dist/css/coreui.css",
               "node_modules/@coreui/icons/css/all.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ],
             "allowedCommonJsDependencies": ["chart.js", "@coreui/chartjs/dist/js/coreui-chartjs.js"]
           },
           "configurations": {
