@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
+import { ApiService } from '../../services/api.service';
+import { environment } from '../../../environments/environment';
+
+
 interface User {
   firstName?: string;
   lastName?: string;
@@ -19,6 +23,7 @@ interface User {
   styleUrls: ['./users-management.component.scss'],
 })
 export class UsersManagementComponent implements OnInit {
+
   user: User = {
     firstName: '',
     lastName: '',
@@ -41,5 +46,18 @@ export class UsersManagementComponent implements OnInit {
     // console.log(this.users);
     // console.log(userForm.value);
     userForm.reset();
+
+  constructor(private api: ApiService) {}
+
+  ngOnInit(): void {}
+  login() {
+    this.api
+      .post(environment.base + 'site/login', {
+        email: 'nawlomuhammad@gmail.com',
+        password: 'hi this is muhammad',
+      })
+      .subscribe(() => {
+        console.log('WHAT!');
+      });
   }
 }
