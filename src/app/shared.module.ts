@@ -3,9 +3,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
-// Import containers
-import { DefaultFooterComponent, DefaultHeaderComponent, DefaultLayoutComponent } from './containers';
-
 import {
   AvatarModule,
   BadgeModule,
@@ -26,9 +23,7 @@ import {
   UtilitiesModule,
 } from '@coreui/angular';
 
-import { IconModule, IconSetService } from '@coreui/icons-angular';
-
-const APP_CONTAINERS = [DefaultFooterComponent, DefaultHeaderComponent, DefaultLayoutComponent];
+import { IconModule } from '@coreui/icons-angular';
 
 @NgModule({
   declarations: [],
