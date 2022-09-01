@@ -7,8 +7,8 @@ export const navItems: INavData[] = [
     iconComponent: { name: 'cil-speedometer' },
     badge: {
       color: 'info',
-      text: 'NEW'
-    }
+      text: 'NEW',
+    },
   },
   {
     name: 'Widgets',
@@ -16,51 +16,71 @@ export const navItems: INavData[] = [
     iconComponent: { name: 'cil-calculator' },
     badge: {
       color: 'info',
-      text: 'NEW'
-    }
+      text: 'NEW',
+    },
   },
   {
     name: 'Pages',
-    title: true
+    title: true,
   },
   {
     name: 'users-management',
     url: '/users-management',
-    iconComponent: { name: 'cilUser' }
+    iconComponent: { name: 'cilUser' },
   },
   {
     name: 'ads',
     url: '/ads',
-    iconComponent: { name: 'cilSun' }
-
+    iconComponent: { name: 'cilSun' },
   },
   {
     name: 'medicines',
     url: '/medicines',
-    iconComponent: { name: 'cilBookmark' }
+    iconComponent: { name: 'cilBookmark' },
   },
   {
     name: 'offers',
     url: '/offers',
-    iconComponent: { name: 'cilStar' }
+    iconComponent: { name: 'cilStar' },
   },
   {
     name: 'events',
     url: '/events',
-    iconComponent: { name: 'cilMediaPlay' }
+    iconComponent: { name: 'cilMediaPlay' },
   },
   {
     name: 'articles',
     url: '/articles',
 
-    iconComponent: { name: 'cilFile' }
+    iconComponent: { name: 'cilFile' },
   },
   {
     name: 'company-details',
     url: '/company-details',
-    iconComponent: { name: 'cilAlignCenter' }
+    iconComponent: { name: 'cilAlignCenter' },
   },
 
-
-
+  {
+    title: true,
+    name: 'Extras',
+  },
+  {
+    name: 'Auth',
+    url: '/login',
+    iconComponent: { name: 'cil-star' },
+    children: [
+      {
+        name: 'Login',
+        url: '/login',
+      },
+      {
+        name: 'Register',
+        url: '/register',
+      },
+      {
+        name: 'Error 404',
+        url: '/404',
+      },
+    ],
+  },
 ];
