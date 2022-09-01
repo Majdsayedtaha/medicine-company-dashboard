@@ -3,7 +3,7 @@ form {
   label {
     margin-right: 10px;
   }
-  input {
+  input ,select{
     margin-bottom: 10px;
     caret-color: lightseagreen;
     &.ng-valid.ng-touched{

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { ApiService } from '../../services/api.service';
-import { environment } from '../../../environments/environment';
 
 interface User {
   firstName?: string;
@@ -35,7 +33,7 @@ export class UsersManagementComponent implements OnInit {
   };
   users: User[] = [];
   roles = ['Doctor', 'Pharmacist', ' Sales Representative', 'Scientific representative', 'Agent'];
-  constructor(private api: ApiService) {}
+  constructor() {}
   ngOnInit(): void {}
 
   onSubmit(userForm: NgForm) {
@@ -46,14 +44,5 @@ export class UsersManagementComponent implements OnInit {
     userForm.reset();
   }
 
-  login() {
-    this.api
-      .post(environment.base + 'site/login', {
-        email: 'nawlomuhammad@gmail.com',
-        password: 'hi this is muhammad',
-      })
-      .subscribe(() => {
-        console.log('WHAT!');
-      });
-  }
+
 }
