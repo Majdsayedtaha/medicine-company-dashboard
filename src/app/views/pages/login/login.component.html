@@ -1,43 +1,46 @@
-<div class="login-form">
-  <div class="card">
-    <h2 class="head py-2">Login</h2>
-    <div *ngIf="message" class="alert alert-danger" role="alert">
-      {{ message }}
+<div class="body">
+  <div class="login-form">
+    <div class="card container">
+      <h2 class="head py-2">Login</h2>
+      <div *ngIf="message" class="alert alert-danger" role="alert">
+        {{ message }}
+      </div>
+      <form class="user-login" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <div class="row">
+          <div class="col-md-12 roundedTextBox mb-3">
+            <label class="mb-2">Email</label>
+            <input
+              type="email"
+              class="form-control mb-2 login__input"
+              id="inputEmail"
+              formControlName="email"
+              placeholder="Enter Email" />
+            <div *ngIf="submitted && formControl['email'].errors" class="text-danger">
+              <span *ngIf="formControl['email'].errors['email']">Email must be valid.</span>
+              <span *ngIf="formControl['email'].errors['required']">Email is required.</span>
+            </div>
+          </div>
+          <div class="col-md-12 roundedTextBox mb-3">
+            <label class="mb-2">Password</label>
+            <input
+              type="password"
+              class="form-control mb-2 login__input"
+              id="inputPassword"
+              formControlName="password"
+              placeholder="Enter Password" />
+            <div *ngIf="submitted && formControl['password'].errors" class="text-danger">
+              <span *ngIf="formControl['password'].errors['required']">Password is required.</span>
+            </div>
+          </div>
+        </div>
+        <div class=" row buttons ">
+          <button cButton class="mt-3 mb-2" color="primary" class="btn-customBlue mr-2 left" type="submit">Login</button>
+
+          <button [active]="true" type="button" cButton class="mt-3 right" color="primary" routerLink="/register">
+            Register Now!
+          </button>
+        </div>
+      </form>
     </div>
-    <form class="user-login" [formGroup]="loginForm" (ngSubmit)="onLogin()">
-      <div class="row">
-        <div class="col-md-12 roundedTextBox mb-3">
-          <label>Username</label>
-          <input
-            type="email"
-            class="form-control mb-2"
-            id="inputEmail"
-            formControlName="email"
-            placeholder="Enter Email" />
-          <!-- <small id="emailHelp" class="form-text text-muted ml-2">We'll never share your email with anyone else.</small> -->
-          <div *ngIf="submitted && formControl['email'].errors" class="text-danger">
-            <div *ngIf="formControl['email'].errors['email']">Email must be valid.</div>
-            <div *ngIf="formControl['email'].errors['required']">Email is required.</div>
-          </div>
-        </div>
-        <div class="col-md-12 roundedTextBox mb-3">
-          <label>Password</label>
-          <input
-            type="password"
-            class="form-control mb-2"
-            id="inputPassword"
-            formControlName="password"
-            placeholder="Enter Password" />
-          <div *ngIf="submitted && formControl['password'].errors" class="text-danger">
-            <div *ngIf="formControl['password'].errors['required']">Password is required.</div>
-          </div>
-        </div>
-      </div>
-      <br />
-      <div class="buttons text-center">
-        <button cButton class="mt-3" color="primary" class="btn-customBlue mr-2" type="submit">Login</button>
-      </div>
-    </form>
-    <button [active]="true" cButton class="mt-3" color="primary" routerLink="/register">Register Now!</button>
   </div>
 </div>

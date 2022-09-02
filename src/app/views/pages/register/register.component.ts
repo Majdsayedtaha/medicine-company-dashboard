@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
     return this.registerForm.controls;
   }
 
-  onSubmit() {
+  onRegister() {
     this.submitted = true;
     // stop here if form is invalid
     if (this.registerForm.invalid) {
@@ -45,7 +45,6 @@ export class RegisterComponent implements OnInit {
     }
     this.http.post(environment.base + '/site/signup', JSON.stringify(this.registerForm.value)).subscribe((res: any) => {
       if (res.status === 'ok') {
-        console.log('Done Signup')
         const data = {
           email: this.registerForm.controls['email'].value,
           password: this.registerForm.controls['password'].value,

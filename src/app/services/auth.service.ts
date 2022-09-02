@@ -13,6 +13,7 @@ import { User } from '../interfaces/user.model';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   user = new BehaviorSubject<User | null>(null);
+
   constructor(private http: HttpClient, private router: Router) {}
 
   login(email: string, password: string) {
@@ -37,7 +38,6 @@ export class AuthService {
   }
 
   autoLogin(email?: string, password?: string) {
-    console.log('Fired Up')
     if (!localStorage.getItem('userData') && !(email && password)) {
       return;
     }
@@ -81,6 +81,7 @@ export class AuthService {
             res.userInfo.role,
             res.userInfo.userContacts
           );
+          // TODO redirect to actual route
           this.router.navigate(['/dashboard']);
         } else {
           console.log(res.details);
