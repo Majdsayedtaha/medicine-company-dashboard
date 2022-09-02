@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControlOptions, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/services/api.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { MustMatch } from '../../../helpers/must-match.validator';
 @Component({
@@ -14,7 +15,9 @@ export class RegisterComponent implements OnInit {
   submitted: boolean = false;
   message: string = '';
 
-  constructor(private fb: FormBuilder, private http: ApiService, private router: Router) {}
+  // TODO Send Role
+
+  constructor(private fb: FormBuilder, private http: ApiService, private router: Router, private auth: AuthService) {}
   ngOnInit(): void {
     this.registerForm = this.fb.group(
       {
@@ -42,13 +45,17 @@ export class RegisterComponent implements OnInit {
     }
     this.http.post(environment.base + '/site/signup', JSON.stringify(this.registerForm.value)).subscribe((res: any) => {
       if (res.status === 'ok') {
-        // TODO Should Put Here Auto Login
+        console.log('Done Signup')
+        const data = {
+          email: this.registerForm.controls['email'].value,
+          password: this.registerForm.controls['password'].value,
+        };
+        this.auth.autoLogin(data.email, data.password);
       } else {
-        // TODO Handle email Taken before
+        // TODO Handle email taken before as warning
         this.message = res.details;
       }
     });
-
     // console.log(JSON.stringify(this.registerForm.value, null, 4))
   }
 

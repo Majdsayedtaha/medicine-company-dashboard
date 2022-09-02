@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
-import { environment } from 'src/environments/environment';
-import { ApiService } from '../../../services/api.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +13,7 @@ export class LoginComponent {
   public submitted = false;
   message: string = '';
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private http: ApiService) {}
+  constructor(private formBuilder: FormBuilder, private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -29,16 +27,27 @@ export class LoginComponent {
   }
 
   onLogin(): void {
-    // console.log(this.loginForm.value);
+    
     this.submitted = true;
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-      this.http.post(environment.base + '/site/login', JSON.stringify(this.loginForm.value)).subscribe((res: any) => {
+      const email = this.loginForm.controls['email'].value;
+      const password = this.loginForm.controls['password'].value;
+      
+      this.auth.login(email, password).subscribe((res: any) => {
         if (res.status === 'ok') {
-          localStorage.setItem('userData', JSON.stringify(res.userInfo));
+          this.auth.handleAuthentication(
+            res.userInfo.accessToken,
+            res.userInfo.email,
+            res.userInfo.id,
+            res.userInfo.first_name,
+            res.userInfo.last_name,
+            res.userInfo.img,
+            res.userInfo.regionId,
+            res.userInfo.role,
+            res.userInfo.userContacts
+          );
           this.router.navigate(['/dashboard']);
         } else {
-          // TODO Handle email Taken before
           this.message = res.details;
         }
       });

@@ -5,7 +5,7 @@ import { DefaultLayoutComponent } from './containers';
 import { LoginComponent } from './views/pages/login/login.component';
 import { Page404Component } from './views/pages/page404/page404.component';
 import { RegisterComponent } from './views/pages/register/register.component';
-
+import { AuthGuard } from '../app/services/auth.guard';
 const routes: Routes = [
   {
     path: '',
@@ -21,9 +21,9 @@ const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadChildren: () =>
-          import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule)
+        loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule),
       },
+
       {
         path: 'users-management',
         loadChildren: () =>
@@ -55,13 +55,11 @@ const routes: Routes = [
       },
       {
         path: 'widgets',
-        loadChildren: () =>
-          import('./views/widgets/widgets.module').then((m) => m.WidgetsModule)
+        loadChildren: () => import('./views/widgets/widgets.module').then(m => m.WidgetsModule),
       },
       {
         path: 'pages',
-        loadChildren: () =>
-          import('./views/pages/pages.module').then((m) => m.PagesModule)
+        loadChildren: () => import('./views/pages/pages.module').then(m => m.PagesModule),
       },
     ],
   },
@@ -69,30 +67,28 @@ const routes: Routes = [
     path: '404',
     component: Page404Component,
     data: {
-      title: 'Page 404'
-    }
+      title: 'Page 404',
+    },
   },
   {
     path: 'login',
     component: LoginComponent,
     data: {
-      title: 'Login Page'
-    }
+      title: 'Login Page',
+    },
   },
   {
     path: 'register',
     component: RegisterComponent,
     data: {
-      title: 'Register Page'
-    }
+      title: 'Register Page',
+    },
   },
   { path: '**', redirectTo: 'dashboard' },
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes),
-  ],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

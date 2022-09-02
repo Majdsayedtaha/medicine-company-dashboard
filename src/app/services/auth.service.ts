@@ -13,63 +13,85 @@ import { User } from '../interfaces/user.model';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   user = new BehaviorSubject<User | null>(null);
-  constructor(
-    private http: HttpClient,
-    private router: Router // private translate: TranslateService
-  ) {}
-  login(data: { email: string; password: string }) {
-    return this.http.post(environment.base + '/site/login', data);
+  constructor(private http: HttpClient, private router: Router) {}
+
+  login(email: string, password: string) {
+    return this.http.post(environment.base + '/site/login', { email, password });
   }
 
   public handleAuthentication(
+    accessToken: string,
     email: string,
-    userId: number,
-    user_name: string,
-    company_name: string,
-    company_address: string,
-    tel_number: string,
-    token: string,
-    lang: string
+    firstName: string,
+    lastName: string,
+    id: number,
+    img: string,
+    regionId: number,
+    role: string,
+    userContacts: string[]
   ) {
     // this.translate.use(lang);
-    const user = new User(email, userId, user_name, company_name, company_address, tel_number, token, lang);
+    const user = new User(accessToken, email, firstName, lastName, id, img, regionId, role, userContacts);
     this.user.next(user);
     localStorage.setItem('userData', JSON.stringify(user));
   }
 
-  autoLogin() {
-    if (!localStorage.getItem('userData')) {
+  autoLogin(email?: string, password?: string) {
+    console.log('Fired Up')
+    if (!localStorage.getItem('userData') && !(email && password)) {
       return;
     }
-
-    const userData: {
-      email: string;
-      userId: number;
-      user_name: string;
-      company_name: string;
-      company_address: string;
-      tel_number: string;
-      token: string;
-      lang: string;
-    } = JSON.parse(localStorage.getItem('userData')!);
-    // this.translate.use(userData.lang);
-    const loadedUser = new User(
-      userData.email,
-      userData.userId,
-      userData.user_name,
-      userData.company_name,
-      userData.company_address,
-      userData.tel_number,
-      userData.token,
-      userData.lang
-    );
-
-    this.user.next(loadedUser);
+    if (localStorage.getItem('userData')) {
+      const userData: {
+        accessToken: string;
+        email: string;
+        firstName: string;
+        lastName: string;
+        id: number;
+        img: string;
+        regionId: number;
+        role: string;
+        userContacts: string[];
+      } = JSON.parse(localStorage.getItem('userData')!);
+      // this.translate.use(userData.lang);
+      const loadedUser = new User(
+        userData.accessToken,
+        userData.email,
+        userData.firstName,
+        userData.lastName,
+        userData.id,
+        userData.img,
+        userData.regionId,
+        userData.role,
+        userData.userContacts
+      );
+      this.user.next(loadedUser);
+      this.router.navigate(['/dashboard']);
+    } else if (email && password) {
+      this.http.post(environment.base + '/site/login', { email, password }).subscribe((res: any) => {
+        if (res.status === 'ok') {
+          this.handleAuthentication(
+            res.userInfo.accessToken,
+            res.userInfo.email,
+            res.userInfo.id,
+            res.userInfo.first_name,
+            res.userInfo.last_name,
+            res.userInfo.img,
+            res.userInfo.regionId,
+            res.userInfo.role,
+            res.userInfo.userContacts
+          );
+          this.router.navigate(['/dashboard']);
+        } else {
+          console.log(res.details);
+        }
+      });
+    }
   }
 
   logout() {
     this.user.next(null);
-    this.router.navigate(['/auth']);
     localStorage.removeItem('userData');
+    this.router.navigate(['/login']);
   }
 }

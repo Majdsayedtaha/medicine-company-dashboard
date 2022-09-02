@@ -1,15 +1,17 @@
 export class User {
   constructor(
+    private accessToken: string,
     public email: string,
+    public first_name: string,
+    public last_name: string,
     public id: number,
-    public user_name: string,
-    public company_name: string,
-    public company_address: string,
-    public tel_number: string,
-    private token: string,
-    public lang: string
-  ) {}
+    public img: string,
+    public regionId: number,
+    public role: string,
+    public userContacts: string[]
+  ) // public lang?: string
+  {}
   getToken() {
-    return this.token;
+    return this.accessToken;
   }
 }
