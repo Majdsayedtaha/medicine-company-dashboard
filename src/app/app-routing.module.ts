@@ -84,7 +84,7 @@ const routes: Routes = [
       title: 'Register Page',
     },
   },
-  { path: '**', redirectTo: 'dashboard' },
+  { path: '**', redirectTo: '404', pathMatch: 'full'},
 ];
 
 @NgModule({

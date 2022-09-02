@@ -5,19 +5,19 @@ export const navItems: INavData[] = [
     name: 'Dashboard',
     url: '/dashboard',
     iconComponent: { name: 'cil-speedometer' },
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
+    // badge: {
+    //   color: 'info',
+    //   text: 'NEW',
+    // },
   },
   {
     name: 'Widgets',
     url: '/widgets',
     iconComponent: { name: 'cil-calculator' },
-    badge: {
-      color: 'info',
-      text: 'NEW',
-    },
+    // badge: {
+    //   color: 'info',
+    //   text: 'NEW',
+    // },
   },
   {
     name: 'Pages',
@@ -58,11 +58,6 @@ export const navItems: INavData[] = [
     name: 'company-details',
     url: '/company-details',
     iconComponent: { name: 'cilAlignCenter' },
-  },
-
-  {
-    title: true,
-    name: 'Extras',
   },
   {
     name: 'Auth',

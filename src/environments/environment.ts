@@ -11,7 +11,7 @@ if (local) {
   // type here links related to local serve
 }
 base = 'http://localhost/aphamea_project/web/index.php';
-category = 'http://localhost/aphamea_project/web/index.php/category';
+category = '/category';
 
 export const environment = {
   production: false,
