@@ -19,6 +19,23 @@ export class AuthService {
   login(email: string, password: string) {
     return this.http.post(environment.base + '/site/login', { email, password });
   }
+  saveUserInfo(
+    firstName: string,
+    lastName: string,
+    img: string,
+    regionId: number,
+    role: string,
+    userContacts?: string[]
+  ) {
+    return this.http.post(environment.base +`/site/save-user-info`, {
+      firstName,
+      lastName,
+      img,
+      regionId,
+      role,
+      userContacts,
+    });
+  }
 
   public handleAuthentication(
     accessToken: string,
@@ -74,8 +91,8 @@ export class AuthService {
             res.userInfo.accessToken,
             res.userInfo.email,
             res.userInfo.id,
-            res.userInfo.first_name,
-            res.userInfo.last_name,
+            res.userInfo.firstName,
+            res.userInfo.lastName,
             res.userInfo.img,
             res.userInfo.regionId,
             res.userInfo.role,

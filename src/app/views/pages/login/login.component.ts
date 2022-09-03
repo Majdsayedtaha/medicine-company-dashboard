@@ -27,20 +27,20 @@ export class LoginComponent {
   }
 
   onLogin(): void {
-    
+
     this.submitted = true;
     if (this.loginForm.valid) {
       const email = this.loginForm.controls['email'].value;
       const password = this.loginForm.controls['password'].value;
-      
+
       this.auth.login(email, password).subscribe((res: any) => {
         if (res.status === 'ok') {
           this.auth.handleAuthentication(
             res.userInfo.accessToken,
             res.userInfo.email,
             res.userInfo.id,
-            res.userInfo.first_name,
-            res.userInfo.last_name,
+            res.userInfo.firstName,
+            res.userInfo.lastName,
             res.userInfo.img,
             res.userInfo.regionId,
             res.userInfo.role,

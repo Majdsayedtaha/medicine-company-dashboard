@@ -2,8 +2,8 @@ export class User {
   constructor(
     private accessToken: string,
     public email: string,
-    public first_name: string,
-    public last_name: string,
+    public firstName: string,
+    public lastName: string,
     public id: number,
     public img: string,
     public regionId: number,
