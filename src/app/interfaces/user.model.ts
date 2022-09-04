@@ -8,7 +8,8 @@ export class User {
     public img: string,
     public regionId: number,
     public role: string,
-    public userContacts: string[]
+    public userContacts: string[],
+    public isAuth?: boolean,
   ) // public lang?: string
   {}
   getToken() {

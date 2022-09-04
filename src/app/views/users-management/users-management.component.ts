@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ApiService } from 'src/app/services/api.service';
-import { environment } from 'src/environments/environment';
+
+// Fontawesome
+import { faDownload, faUser } from '@fortawesome/free-solid-svg-icons';
 
 interface User {
   firstName?: string;
@@ -34,7 +35,9 @@ export class UsersManagementComponent implements OnInit {
   };
   users: User[] = [];
   roles = ['Doctor', 'Pharmacist', ' Sales Representative', 'Scientific representative', 'Agent'];
-  constructor(private http: ApiService) {}
+  constructor() {}
+  faDownload = faDownload;
+  faUser = faUser;
   ngOnInit(): void {}
 
   onSubmit(userForm: NgForm) {
