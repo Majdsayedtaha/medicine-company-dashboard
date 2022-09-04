@@ -86,7 +86,7 @@ export class AuthService {
       this.user.next(loadedUser);
       loadedUser.isAuth=true;
       this.router.navigate(['/dashboard']);
-    } else if (email && password) {
+    } else if (email && password && updateUserInfo === true) {
       this.http.post(environment.base + '/site/login', { email, password }).subscribe((res: any) => {
         if (res.status === 'ok') {
           this.handleAuthentication(
