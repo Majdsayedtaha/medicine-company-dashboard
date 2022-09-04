@@ -1,46 +1,34 @@
 <!--<c-header class="mb-4 d-print-none" position="sticky">-->
 <ng-container>
   <c-container [fluid]="true">
-    <button
-      toggle="visible"
-      cHeaderToggler
-      [cSidebarToggle]="sidebarId"
-      class="ps-1"
-    >
-      <svg cIcon
-        name="cilMenu"
-        size="lg"
-      ></svg>
+    <button toggle="visible" cHeaderToggler [cSidebarToggle]="sidebarId" class="ps-1">
+      <svg cIcon name="cilMenu" size="lg"></svg>
     </button>
     <c-header-nav class="d-none d-lg-flex me-auto">
       <c-nav-item>
-        <a cNavLink routerLink="/dashboard" routerLinkActive="active">
-          Dashboard
-        </a>
+        <a cNavLink routerLink="/dashboard" routerLinkActive="active"> Dashboard </a>
       </c-nav-item>
       <c-nav-item>
         <a cNavLink routerLink="/users" routerLinkActive="active">Users</a>
       </c-nav-item>
       <c-nav-item>
-        <a cNavLink routerLink="/settings" routerLinkActive="active">
-          Settings
-        </a>
+        <a cNavLink routerLink="/settings" routerLinkActive="active"> Settings </a>
       </c-nav-item>
     </c-header-nav>
 
     <c-header-nav class="d-none d-lg-flex">
       <c-nav-item>
-        <a routerLink="./" cNavLink>
+        <a cNavLink>
           <svg cIcon name="cilBell" size="lg"></svg>
         </a>
       </c-nav-item>
       <c-nav-item>
-        <a routerLink="./" cNavLink>
+        <a cNavLink>
           <svg cIcon name="cilList" size="lg"></svg>
         </a>
       </c-nav-item>
       <c-nav-item>
-        <a routerLink="./" cNavLink>
+        <a cNavLink>
           <svg cIcon name="cilEnvelopeOpen" size="lg"></svg>
         </a>
       </c-nav-item>
@@ -48,7 +36,6 @@
     <c-header-nav class="ms-3">
       <ng-container *ngTemplateOutlet="userDropdown"></ng-container>
     </c-header-nav>
-
   </c-container>
   <c-header-divider></c-header-divider>
   <c-container [fluid]="true">
@@ -59,20 +46,13 @@
 
 <ng-template #userDropdown>
   <c-dropdown alignment="end" variant="nav-item">
-    <button
-      cButton
-      color=""
-      [caret]="false"
-      cDropdownToggle
-      class="py-0"
-    >
+    <button cButton color="" [caret]="false" cDropdownToggle class="py-0">
       <c-avatar
         cTextColor="primary"
         shape="rounded-1"
         size="md"
-        src="./assets/img/avatars/8.jpg"
-        status="success"
-      >
+        src="./../../../../assets/img/avatars/avatar-default.jpg"
+        status="success">
       </c-avatar>
     </button>
     <ul cDropdownMenu class="pt-0 pr-5 w-auto">
@@ -80,80 +60,67 @@
         <h6 cDropdownHeader class="bg-light fw-semibold py-2">Account</h6>
       </li>
       <li>
-        <a routerLink="./" cDropdownItem>
+        <a cDropdownItem>
           <svg cIcon class="me-2" name="cilBell"></svg>
           Updates
-          <c-badge class="ms-2 float-end" color="info">
-            42
-          </c-badge>
+          <c-badge class="ms-2 float-end" color="info"> 42 </c-badge>
         </a>
       </li>
       <li>
-        <a routerLink="./" cDropdownItem>
+        <a cDropdownItem>
           <svg cIcon class="me-2" name="cilEnvelopeOpen"></svg>
           Messages
-          <c-badge class="ms-2 float-end" color="success">
-            42
-          </c-badge>
+          <c-badge class="ms-2 float-end" color="success"> 42 </c-badge>
         </a>
       </li>
       <li>
-        <a routerLink="./" cDropdownItem>
+        <a cDropdownItem>
           <svg cIcon class="me-2" name="cilTask"></svg>
           Tasks
-          <c-badge class="ms-2 float-end" color="danger">
-            42
-          </c-badge>
+          <c-badge class="ms-2 float-end" color="danger"> 42 </c-badge>
         </a>
       </li>
       <li>
-        <a routerLink="./" cDropdownItem>
-          <svg cIcon class="me-2" name='cilCommentSquare'></svg>
+        <a cDropdownItem>
+          <svg cIcon class="me-2" name="cilCommentSquare"></svg>
           Comments
-          <c-badge class="ms-auto" color="warning">
-            42
-          </c-badge>
+          <c-badge class="ms-auto" color="warning"> 42 </c-badge>
         </a>
       </li>
       <li>
         <h6 cDropdownHeader class="bg-light fw-semibold py-2">Settings</h6>
       </li>
-      <li></li>
-      <li>
-        <a routerLink="./" cDropdownItem>
+      <li type="button" data-bs-toggle="modal" data-bs-target="#profileInfoModal">
+        <a cDropdownItem>
           <svg cIcon class="me-2" name="cilUser"></svg>
           Profile
         </a>
       </li>
       <li>
-        <a routerLink="./" cDropdownItem>
+        <a cDropdownItem>
           <svg cIcon class="me-2" name="cilSettings"></svg>
           Settings
         </a>
       </li>
       <li>
-        <a routerLink="./" cDropdownItem>
+        <a cDropdownItem>
           <svg cIcon class="me-2" name="cilCreditCard"></svg>
           Payments
-          <c-badge class="ms-2 float-end" color="secondary">
-            42
-          </c-badge>
+          <c-badge class="ms-2 float-end" color="secondary"> 42 </c-badge>
         </a>
       </li>
       <li>
-        <a routerLink="./" cDropdownItem>
+        <a cDropdownItem>
           <svg cIcon class="me-2" name="cilFile"></svg>
           Projects
-          <c-badge class="ms-2 float-end" color="primary">
-            42
-          </c-badge>
+          <c-badge class="ms-2 float-end" color="primary"> 42 </c-badge>
         </a>
       </li>
       <li>
-        <hr cDropdownDivider/>
+        <hr cDropdownDivider />
       </li>
       <li>
-        <a routerLink="./" cDropdownItem>
+        <a cDropdownItem>
           <svg cIcon class="me-2" name="cilLockLocked"></svg>
           Lock Account
         </a>
@@ -169,3 +136,81 @@
   </c-dropdown>
 </ng-template>
 
+<div class="modal fade" id="profileInfoModal" tabindex="-1" aria-labelledby="profileInfoModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="profileHeaderInfoModal">Profile Info</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="saveUserInfoForm" #form>
+          <div class="save-infor">
+            <div class="row">
+              <label for="upLoad">
+                Select Img
+                <input
+                  type="file"
+                  formControlName="img"
+                  accept="image/*"
+                  #imgInput
+                  id="upLoad"
+                  (change)="processFile(imgInput)" />
+              </label>
+            </div>
+            <!--Region & City & Country  -->
+            <div class="d-flex mt-3 region">
+              <!-- Region -->
+              <label for="inputRegion" class="form-label">Region</label>
+              <select id="inputRegion" class="form-select" formControlName="region">
+                <option selected>Choose...</option>
+                <option>m</option>
+                <option>m</option>
+                <option>m</option>
+                <option>m</option>
+              </select>
+
+              <!-- City -->
+              <label for="inputCity" class="form-label ms-2">City</label>
+              <select id="inputCity" class="form-select" formControlName="city">
+                <option selected>Choose...</option>
+                <option>m</option>
+                <option>m</option>
+                <option>m</option>
+                <option>m</option>
+              </select>
+
+              <!-- Country -->
+              <label for="inputCountry" class="form-label ms-2">Country</label>
+              <select id="inputCountry" class="form-select" formControlName="country">
+                <option selected>Choose...</option>
+                <option>m</option>
+                <option>m</option>
+                <option>m</option>
+                <option>m</option>
+              </select>
+            </div>
+            <!-- Special Mark-->
+            <div class="row">
+              <label for="inputSpecialMark" class="col-form-label label">SpecialMark</label>
+              <input
+                type="text"
+                class="form-control"
+                id="inputSpecialMark"
+                placeholder="SpecialMark"
+                formControlName="specialMark" />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" type="reset" (click)="onReset()">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" type="submit" (click)="onSaveUserInfo()">
+          Save changes
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

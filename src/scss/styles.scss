@@ -1,26 +1,47 @@
 /* You can add global styles to this file, and also import other style files */
 // If you want to override variables do it here
-@import "variables";
+@import 'variables';
 
 $enable-ltr: true;
 $enable-rtl: true;
 
 // Import styles with default layout.
-@import "~@coreui/coreui/scss/coreui";
+@import '~@coreui/coreui/scss/coreui';
 
 // Import Chart.js custom tooltips styles
-@import "~@coreui/chartjs/scss/coreui-chartjs";
+@import '~@coreui/chartjs/scss/coreui-chartjs';
 
 // perfect scrollbar theming for use with [perfectScrollbar] directive
 //@import '~perfect-scrollbar/css/perfect-scrollbar.css';
 
-@import "layout";
+@import 'layout';
 
 // Some temp fixes
-@import "fixes";
+@import 'fixes';
 
 // Prism.js
-@import "examples";
+@import 'examples';
 
 // If you want to add something do it here
-@import "custom";
+@import 'custom';
+
+::ng-deep {
+  @mixin overlay-backdrop($zindex, $backdrop-bg, $backdrop-opacity) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10 !important;
+    width: 100vw;
+    height: 100vh;
+    background-color: $backdrop-bg;
+
+    // Fade for backdrop
+    &.fade {
+      opacity: 0;
+    }
+    &.show {
+      opacity: $backdrop-opacity;
+      z-index: 10 !important;
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-
+import { ApiService } from 'src/app/services/api.service';
+import { environment } from 'src/environments/environment';
 
 interface User {
   firstName?: string;
@@ -33,16 +34,28 @@ export class UsersManagementComponent implements OnInit {
   };
   users: User[] = [];
   roles = ['Doctor', 'Pharmacist', ' Sales Representative', 'Scientific representative', 'Agent'];
-  constructor() {}
+  constructor(private http: ApiService) {}
   ngOnInit(): void {}
 
   onSubmit(userForm: NgForm) {
-    this.users.push(userForm.value);
+    console.log('Het');
+    this.http
+      .post(environment.base + 'category/add', {
+        deletedCategories: [],
+        categories: [
+          {
+            id: '1',
+            name: 'testt',
+          },
+        ],
+      })
+      .subscribe((res: any) => {
+        console.log(res);
+      });
+    // this.users.push(userForm.value);
     // console.log(this.user);
     // console.log(this.users);
     // console.log(userForm.value);
-    userForm.reset();
+    // userForm.reset();
   }
-
-
 }

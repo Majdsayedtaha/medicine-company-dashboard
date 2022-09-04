@@ -27,11 +27,6 @@ export class RegisterComponent implements OnInit {
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
-        region: [''],
-        city: [''],
-        country: [''],
-        specialMark: [''],
-        img: [null],
       },
       {
         validator: MustMatch('password', 'confirmPassword'),
@@ -50,6 +45,7 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
+    console.log(JSON.stringify(this.registerForm.value))
     this.http.post(environment.base + '/site/signup', JSON.stringify(this.registerForm.value)).subscribe((res: any) => {
       if (res.status === 'ok') {
         const data = {
@@ -72,15 +68,15 @@ export class RegisterComponent implements OnInit {
     this.registerForm.reset();
     this.router.navigate(['/login']);
   }
-  processFile(imageInput: any) {
-    const file: File = imageInput.files[0];
-    this.upload(file);
-  }
+  // processFile(imageInput: any) {
+  //   const file: File = imageInput.files[0];
+  //   this.upload(file);
+  // }
 
-  upload(file: any) {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('userImage', file.name);
-    this.userImg = formData.get('userImage');
-  }
+  // upload(file: any) {
+  //   const formData = new FormData();
+  //   formData.append('file', file);
+  //   formData.append('userImage', file.name);
+  //   this.userImg = formData.get('userImage');
+  // }
 }

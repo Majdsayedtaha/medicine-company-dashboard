@@ -27,7 +27,7 @@ export class AuthService {
     role: string,
     userContacts?: string[]
   ) {
-    return this.http.post(environment.base +`/site/save-user-info`, {
+    return this.http.post(environment.base + `/site/save-user-info`, {
       firstName,
       lastName,
       img,
@@ -54,11 +54,11 @@ export class AuthService {
     localStorage.setItem('userData', JSON.stringify(user));
   }
 
-  autoLogin(email?: string, password?: string) {
+  autoLogin(updateUserInfo: boolean = false, email?: string, password?: string) {
     if (!localStorage.getItem('userData') && !(email && password)) {
       return;
     }
-    if (localStorage.getItem('userData')) {
+    if (localStorage.getItem('userData') && updateUserInfo === false) {
       const userData: {
         accessToken: string;
         email: string;
@@ -83,22 +83,21 @@ export class AuthService {
         userData.userContacts
       );
       this.user.next(loadedUser);
-      this.router.navigate(['/dashboard']);
-    } else if (email && password) {
+      // this.router.navigate(['/dashboard']);
+    } else if (email && password && updateUserInfo === true) {
       this.http.post(environment.base + '/site/login', { email, password }).subscribe((res: any) => {
         if (res.status === 'ok') {
           this.handleAuthentication(
             res.userInfo.accessToken,
             res.userInfo.email,
-            res.userInfo.id,
             res.userInfo.firstName,
             res.userInfo.lastName,
+            res.userInfo.id,
             res.userInfo.img,
             res.userInfo.regionId,
             res.userInfo.role,
             res.userInfo.userContacts
           );
-          // TODO redirect to actual route
           this.router.navigate(['/dashboard']);
         } else {
           console.log(res.details);

@@ -8,18 +8,6 @@
       </div>
       <form [formGroup]="registerForm" (ngSubmit)="onRegister()" #form>
         <div class="row">
-          <label for="upLoad">
-            Select Img
-            <input
-              type="file"
-              formControlName="img"
-              accept="image/*"
-              #imgInput
-              id="upLoad"
-              (change)="processFile(imgInput)" />
-          </label>
-        </div>
-        <div class="row">
           <div class="col">
             <label>First Name</label>
             <input
@@ -43,7 +31,6 @@
             </div>
           </div>
         </div>
-
         <div class="form-group">
           <label>Email</label>
           <input
@@ -82,59 +69,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="form-group form-check">
-          <input
-            type="checkbox"
-            formControlName="acceptTerms"
-            id="acceptTerms"
-            class="form-check-input"
-            [ngClass]="{ 'is-invalid': submitted && f.acceptTerms.errors }" />
-          <label for="acceptTerms" class="form-check-label">Accept Terms & Conditions</label>
-          <div *ngIf="submitted && f.acceptTerms.errors" class="invalid-feedback">Accept Ts & Cs is required</div>
-        </div> -->
-
-        <!--Region & City & Country  -->
-        <div class="d-flex mt-3 region">
-          <!-- Region -->
-          <label for="inputRegion" class="form-label">Region</label>
-          <select id="inputRegion" class="form-select" formControlName="region">
-            <option selected>Choose...</option>
-            <option>m</option>
-            <option>m</option>
-            <option>m</option>
-            <option>m</option>
-          </select>
-
-          <!-- City -->
-          <label for="inputCity" class="form-label ms-2">City</label>
-          <select id="inputCity" class="form-select" formControlName="city">
-            <option selected>Choose...</option>
-            <option>m</option>
-            <option>m</option>
-            <option>m</option>
-            <option>m</option>
-          </select>
-
-          <!-- Country -->
-          <label for="inputCountry" class="form-label ms-2">Country</label>
-          <select id="inputCountry" class="form-select" formControlName="country">
-            <option selected>Choose...</option>
-            <option>m</option>
-            <option>m</option>
-            <option>m</option>
-            <option>m</option>
-          </select>
-        </div>
-
-        <!-- Special Mark-->
-        <label for="inputSpecialMark" class="col-form-label label">SpecialMark</label>
-        <input
-          type="text"
-          class="form-control"
-          id="inputSpecialMark"
-          placeholder="SpecialMark"
-          formControlName="specialMark" />
-
         <div class="text-center buttons">
           <button class="btn btn-primary mr-1 left" type="submit">Register</button>
           <button class="btn btn-secondary right" type="reset" (click)="onReset()">Cancel</button>

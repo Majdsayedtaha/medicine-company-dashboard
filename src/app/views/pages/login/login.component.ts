@@ -47,6 +47,7 @@ export class LoginComponent {
             res.userInfo.userContacts
           );
           this.router.navigate(['/dashboard']);
+          console.log()
         } else {
           this.message = res.details;
         }
