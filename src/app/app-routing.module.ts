@@ -22,6 +22,7 @@ const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule),
+        canActivate: [AuthGuard],
       },
 
       {
@@ -84,7 +85,7 @@ const routes: Routes = [
       title: 'Register Page',
     },
   },
-  { path: '**', redirectTo: '404', pathMatch: 'full'},
+  { path: '**', redirectTo: '404', pathMatch: 'full' },
 ];
 
 @NgModule({
