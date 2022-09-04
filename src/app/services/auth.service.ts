@@ -51,6 +51,7 @@ export class AuthService {
     // this.translate.use(lang);
     const user = new User(accessToken, email, firstName, lastName, id, img, regionId, role, userContacts);
     this.user.next(user);
+    user.isAuth=true;
     localStorage.setItem('userData', JSON.stringify(user));
   }
 

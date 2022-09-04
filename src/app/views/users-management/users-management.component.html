@@ -1,12 +1,20 @@
 <!-- Button trigger modal-->
 <div class="d-flex justify-content-end">
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add User</button>
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    <fa-icon [icon]="faUser"></fa-icon>
+    Add User
+  </button>
 
-  <button type="button" class="btn btn-success ms-2" data-toggle="tooltip" data-placement="top" title="Import Template">
-    Download
+  <button
+    type="button"
+    class="btn btn-success ms-2 download"
+    data-toggle="tooltip"
+    data-placement="top"
+    title="Import Template">
+    <fa-icon [icon]="faDownload"></fa-icon> Download
   </button>
 </div>
-
+<div></div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
