@@ -137,7 +137,7 @@
 </ng-template>
 
 <div class="modal fade" id="profileInfoModal" tabindex="-1" aria-labelledby="profileInfoModal" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="profileHeaderInfoModal">Profile Info</h5>
@@ -147,14 +147,17 @@
         <form [formGroup]="saveUserInfoForm" #form>
           <div class="save-infor">
             <div class="row">
-              <label for="upLoad">
-                Select Img
+              <label for="upLoad"
+                >Select Your Image Profile
+                <fa-icon [icon]="faExchange"></fa-icon>
+
                 <input
                   type="file"
                   formControlName="img"
                   accept="image/*"
                   #imgInput
                   id="upLoad"
+                  class="d-none"
                   (change)="processFile(imgInput)" />
               </label>
             </div>

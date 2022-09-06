@@ -4,6 +4,8 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AuthInterceptorService } from 'src/app/interfaces/auth.interceptor';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import {
   PERFECT_SCROLLBAR_CONFIG,
   PerfectScrollbarConfigInterface,
@@ -70,7 +72,6 @@ const APP_CONTAINERS = [DefaultFooterComponent, DefaultHeaderComponent, DefaultL
     FormModule,
     UtilitiesModule,
     ButtonGroupModule,
-    ReactiveFormsModule,
     SidebarModule,
     SharedModule,
     TabsModule,
@@ -80,6 +81,8 @@ const APP_CONTAINERS = [DefaultFooterComponent, DefaultHeaderComponent, DefaultL
     ListGroupModule,
     CardModule,
     HttpClientModule,
+    ReactiveFormsModule,
+    FontAwesomeModule
   ],
   providers: [
     {

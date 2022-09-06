@@ -1,17 +1,21 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 
-// Fontawesome
-import { faDownload, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faUser, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { Observable } from 'rxjs/internal/Observable';
+import { User } from 'src/app/interfaces/user.model';
 import { ApiService } from 'src/app/services/api.service';
 import { environment } from 'src/environments/environment';
+import { saveAs } from 'file-saver';
 
-interface User {
+interface IUser {
   firstName?: string;
   lastName?: string;
   email?: string;
   password?: string;
-  role?: string;
+  role?: number;
   region?: string;
   country?: string;
   city?: string;
@@ -24,43 +28,89 @@ interface User {
   styleUrls: ['./users-management.component.scss'],
 })
 export class UsersManagementComponent implements OnInit {
-  user: User = {
+  user: IUser = {
     firstName: '',
     lastName: '',
     email: '',
     password: '',
-    role: '',
+    role: 5,
     region: '',
     country: '',
     city: '',
     specialMark: '',
   };
-  users: User[] = [];
+  userModel?: User;
+  users: IUser[] = [];
   roles = ['Doctor', 'Pharmacist', ' Sales Representative', 'Scientific representative', 'Agent'];
-  constructor(private http: ApiService) {}
+  constructor(private http: ApiService, private router: Router) {}
   faDownload = faDownload;
   faUser = faUser;
-  ngOnInit(): void {}
-
-  onSubmit(userForm: NgForm) {
-    console.log('Het');
-    this.http
-      .post(environment.base + 'category/add', {
-        deletedCategories: [],
-        categories: [
-          {
-            id: '1',
-            name: 'testt',
-          },
-        ],
-      })
-      .subscribe((res: any) => {
+  faUpload = faUpload;
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+  loadUsers() {
+    this.http.get(environment.base + 'site/get-all-users').subscribe((res: any) => {
+      if (res.status === 'ok') {
+        this.users = res.users;
+      } else {
         console.log(res);
-      });
-    // this.users.push(userForm.value);
-    // console.log(this.user);
-    // console.log(this.users);
-    // console.log(userForm.value);
-    // userForm.reset();
+      }
+    });
+  }
+  onSubmit(userForm: NgForm) {
+    this.http.post(environment.base + '/site/signup', JSON.stringify(userForm.value)).subscribe((res: any) => {
+      if (res.status === 'ok') {
+        console.log('user added successfully');
+        this.loadUsers();
+      } else {
+        console.log('error');
+      }
+    });
+  }
+
+  // Handling Import Excel Template For Adding New Users
+  importingExcel(event: any) {
+    this.upload(event.target.files[0]).subscribe((data: any) => {
+      if (data.msg == 'ok' && data.errorDetails.length == 0) {
+        this.loadUsers();
+      } else {
+        let tx = '';
+        data.errorDetails.forEach((d: any) => {
+          tx = tx + '<li>' + d.error + '</li>';
+        });
+        // this.notifierService.errorNotification(tx, 'Errors');
+      }
+      ((<HTMLInputElement>document.getElementById('input_file')) as any).value = null;
+    });
+  }
+  importTemplateToEXCEL() {
+    this.import().subscribe(response => this.downloadFile(response));
+  }
+  import() {
+    const headerParams = { Authorization: 'Bearer ' + this.userModel?.getToken() };
+    return this.http.get(environment.base + 'site/generate_users_excel_file_template', {
+      headers: new HttpHeaders(headerParams),
+      observe: 'response',
+      responseType: 'arraybuffer',
+    });
+  }
+  upload(file: any): Observable<any> {
+    const accessToken = this.userModel?.getToken;
+    const headerParams = { Authorization: 'Bearer ' + accessToken };
+    const formData = new FormData();
+    formData.append('userSheetInfo', file, file.name);
+    return this.http.post(environment.base + `/site/import_users_excel_file`, formData, {
+      headers: new HttpHeaders(headerParams),
+    });
+  }
+  public downloadFile(data: any) {
+    const blob = new Blob([data.body], {
+      type: data.headers.get('content-type'),
+    });
+    const file = new File([blob], data.headers.get('file-name'), {
+      type: data.headers.get('content-type'),
+    });
+    saveAs(file);
   }
 }
