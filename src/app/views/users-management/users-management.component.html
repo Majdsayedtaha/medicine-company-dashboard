@@ -7,11 +7,18 @@
 
   <button
     type="button"
-    class="btn btn-success ms-2 download"
+    class="btn btn-success excel-btn"
     data-toggle="tooltip"
     data-placement="top"
-    title="Import Template">
+    title="Import Excel Template"
+    (click)="importTemplateToEXCEL()">
     <fa-icon [icon]="faDownload"></fa-icon> Download
+  </button>
+  <button type="button" class="btn btn-info excel-btn" data-toggle="tooltip" data-placement="top" title="Export Excel Template">
+    <label for="input_file">
+      <fa-icon [icon]="faUpload"></fa-icon> Upload
+      <input class="pointer" id="input_file" type="file" (change)="importingExcel($event)" />
+    </label>
   </button>
 </div>
 <div></div>
@@ -197,7 +204,6 @@
       <th scope="col">FirstName</th>
       <th scope="col">LastName</th>
       <th scope="col">Email</th>
-      <th scope="col">Password</th>
       <th scope="col">Role</th>
       <th scope="col">Region</th>
       <th scope="col">Country</th>
@@ -206,17 +212,16 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let user1 of users; let i = index">
+    <tr *ngFor="let user of users; let i = index">
       <th scope="row">{{ i + 1 }}</th>
-      <td>{{ user1.firstName }}</td>
-      <td>{{ user1.lastName }}</td>
-      <td>{{ user1.email }}</td>
-      <td>{{ user1.password }}</td>
-      <td>{{ user1.role }}</td>
-      <td>{{ user1.region }}</td>
-      <td>{{ user1.country }}</td>
-      <td>{{ user1.city }}</td>
-      <td>{{ user1.specialMark }}</td>
+      <td>{{ user.firstName }}</td>
+      <td>{{ user.lastName }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ roles[user.role !== undefined ? user.role : 5] }}</td>
+      <td>{{ user.region }}</td>
+      <td>{{ user.country }}</td>
+      <td>{{ user.city }}</td>
+      <td>{{ user.specialMark }}</td>
     </tr>
   </tbody>
 </table>

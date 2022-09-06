@@ -45,7 +45,6 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
-    console.log(JSON.stringify(this.registerForm.value))
     this.http.post(environment.base + '/site/signup', JSON.stringify(this.registerForm.value)).subscribe((res: any) => {
       if (res.status === 'ok') {
         const data = {

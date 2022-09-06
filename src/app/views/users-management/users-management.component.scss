@@ -1,4 +1,4 @@
-.download{
+.download {
   color: white;
 }
 form {
@@ -6,16 +6,25 @@ form {
   label {
     margin-right: 10px;
   }
-  input ,select{
+  input,
+  select {
     margin-bottom: 10px;
     caret-color: lightseagreen;
-    &.ng-valid.ng-touched{
+    &.ng-valid.ng-touched {
       border: 1px solid lightgreen;
       border-left: 3px solid lightgreen;
     }
-    &.ng-invalid.ng-touched{
+    &.ng-invalid.ng-touched {
       border: 1px solid lightcoral;
       border-left: 3px solid lightcoral;
     }
   }
+}
+
+.pointer {
+  display: none;
+}
+.excel-btn {
+  color: #fff;
+  margin-left: 0.5rem;
 }

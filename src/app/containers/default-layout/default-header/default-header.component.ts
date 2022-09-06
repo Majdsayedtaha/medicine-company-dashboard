@@ -2,7 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 // import { FormControl, FormGroup } from '@angular/forms';
 
-import { ClassToggleService, HeaderComponent } from '@coreui/angular';
+import { faExchange } from '@fortawesome/free-solid-svg-icons';
+import { HeaderComponent } from '@coreui/angular';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
@@ -15,7 +16,7 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit {
   saveUserInfoForm!: FormGroup;
   userImg: any;
   submitted: boolean = false;
-
+  faExchange=faExchange
   ngOnInit(): void {
     this.saveUserInfoForm = this.fb.group({
       region: [''],
