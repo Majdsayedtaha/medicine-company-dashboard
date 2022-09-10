@@ -51,7 +51,7 @@
         cTextColor="primary"
         shape="rounded-1"
         size="md"
-        src="./../../../../assets/img/avatars/avatar-default.jpg"
+        [src]="userDetails?.img !== null ? userDetails.img : './../../../../assets/img/avatars/avatar-default.jpg'"
         status="success">
       </c-avatar>
     </button>
@@ -149,7 +149,7 @@
             <div class="row">
               <label for="upLoad"
                 >Select Your Image Profile
-                <fa-icon [icon]="faExchange"></fa-icon>
+                <fa-icon [icon]="faPesoSign"></fa-icon>
 
                 <input
                   type="file"
@@ -213,7 +213,3 @@
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" type="submit" (click)="onSaveUserInfo()">
           Save changes
         </button>
-      </div>
-    </div>
-  </div>
-</div>
