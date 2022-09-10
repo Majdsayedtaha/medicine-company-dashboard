@@ -37,7 +37,7 @@ export class AuthService {
     });
   }
 
-  public handleAuthentication(
+  handleAuthentication(
     accessToken: string,
     email: string,
     firstName: string,
@@ -55,11 +55,11 @@ export class AuthService {
     localStorage.setItem('userData', JSON.stringify(user));
   }
 
-  autoLogin(updateUserInfo: boolean = false, email?: string, password?: string) {
+  autoLogin(email?: string, password?: string) {
     if (!localStorage.getItem('userData') && !(email && password)) {
       return;
     }
-    if (localStorage.getItem('userData') && updateUserInfo === false) {
+    if (localStorage.getItem('userData')) {
       const userData: {
         accessToken: string;
         email: string;
@@ -86,7 +86,7 @@ export class AuthService {
       this.user.next(loadedUser);
       loadedUser.isAuth=true;
       // this.router.navigate(['/dashboard']);
-    } else if (email && password && updateUserInfo === true) {
+    } else if (email && password) {
       this.http.post(environment.base + '/site/login', { email, password }).subscribe((res: any) => {
         if (res.status === 'ok') {
           this.handleAuthentication(

@@ -1,0 +1,24 @@
+.imgs-icon {
+  display: block;
+  width: 50px;
+  height: 50px;
+  font-size: 40px;
+  margin: 0 auto;
+}
+.btn-group {
+  button.btn:nth-of-type(odd) {
+    background-color: #6d7c97 !important;
+    color: #ffffffde;
+  }
+  button.btn:nth-of-type(even) {
+    background-color: #3c4b64 !important;
+    color: #ffffffde;
+  }
+}
+:host {
+  .legend {
+    small {
+      font-size: x-small;
+    }
+  }
+}

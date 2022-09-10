@@ -41,7 +41,7 @@ export class UsersManagementComponent implements OnInit {
   };
   userModel?: User;
   users: IUser[] = [];
-  roles = ['Doctor', 'Pharmacist', ' Sales Representative', 'Scientific representative', 'Agent'];
+  roles = ['Doctor', 'Pharmacist', ' Sales Representative', 'Scientific Representative', 'Agent', 'Company Manager'];
   constructor(private http: ApiService, private router: Router) {}
   faDownload = faDownload;
   faUser = faUser;
@@ -72,7 +72,7 @@ export class UsersManagementComponent implements OnInit {
   // Handling Import Excel Template For Adding New Users
   importingExcel(event: any) {
     this.upload(event.target.files[0]).subscribe((data: any) => {
-      if (data.msg == 'ok' && data.errorDetails.length == 0) {
+      if (data.status == 'ok') {
         this.loadUsers();
       } else {
         let tx = '';
@@ -89,7 +89,7 @@ export class UsersManagementComponent implements OnInit {
   }
   import() {
     const headerParams = { Authorization: 'Bearer ' + this.userModel?.getToken() };
-    return this.http.get(environment.base + 'site/generate_users_excel_file_template', {
+    return this.http.get(environment.base + 'site/generate-excel-file-template', {
       headers: new HttpHeaders(headerParams),
       observe: 'response',
       responseType: 'arraybuffer',
@@ -99,8 +99,8 @@ export class UsersManagementComponent implements OnInit {
     const accessToken = this.userModel?.getToken;
     const headerParams = { Authorization: 'Bearer ' + accessToken };
     const formData = new FormData();
-    formData.append('userSheetInfo', file, file.name);
-    return this.http.post(environment.base + `/site/import_users_excel_file`, formData, {
+    formData.append('sheet', file, file.name);
+    return this.http.post(environment.base + `site/import-excel-file`, formData, {
       headers: new HttpHeaders(headerParams),
     });
   }

@@ -1,1 +1,190 @@
-<p>medicines works!</p>
+<h3>Select Something To Add To Your Dashboard</h3>
+<div class="btn-group" role="group">
+  <button class="btn" data-bs-toggle="modal" data-bs-target="#categoryModal">New Category</button>
+  <button class="btn" data-bs-toggle="modal" data-bs-target="#pharmaceuticalModal">New Pharmaceutical Form</button>
+  <button class="btn" data-bs-toggle="modal" data-bs-target="#medicineModal">New Medicine</button>
+  <button
+    type="button"
+    class="btn excel-btn dropdown-toggle dropdown-toggle-split rounded-0"
+    id="dropdownMenuReference1"
+    data-toggle="tooltip"
+    data-placement="top"
+    title="Import Excel Template"
+    data-bs-toggle="dropdown"
+    aria-expanded="false">
+    <fa-icon [icon]="faDownload"></fa-icon>
+  </button>
+  <button
+    type="button"
+    class="btn excel-btn"
+    id="dropdownMenuReference2"
+    data-toggle="tooltip"
+    data-placement="top"
+    title="Export Excel Template">
+    <label for="input_file_medicine">
+      <fa-icon [icon]="faUpload"></fa-icon>
+      <input class="pointer d-none" id="input_file_medicine" type="file" (change)="importingExcel($event)" />
+    </label>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
+    <li (click)="importTemplateToEXCEL('/category/generate-excel-file-template')">
+      <a class="dropdown-item">Category Template</a>
+    </li>
+    <li (click)="importTemplateToEXCEL('/medicine/generate-excel-file-template')">
+      <a class="dropdown-item">Pharmaceutical Form Template</a>
+    </li>
+    <li (click)="importTemplateToEXCEL('/pharmaceutical-form/generat-excel-file-template')">
+      <a class="dropdown-item">Medicine Template</a>
+    </li>
+  </ul>
+</div>
+
+<!-- Medicine Table -->
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">productName</th>
+      <th scope="col">barcode</th>
+      <th scope="col">composition</th>
+      <th scope="col">expiredDate</th>
+      <th scope="col">packing</th>
+      <th scope="col">price</th>
+      <th scope="col">netPrice</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let medicine of medicines; let i = index">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>{{ medicine.productName }}</td>
+      <td>{{ medicine.barcode }}</td>
+      <td>{{ medicine.composition }}</td>
+      <td>{{ medicine.expiredDate }}</td>
+      <td>{{ medicine.packing }}</td>
+      <td>{{ medicine.price }}</td>
+      <td>{{ medicine.netPrice }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Category Modal -->
+<div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="categoryModalLabel">Add new category</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Please Provide Us Your New Category Name
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="categoryName" #categoryName />
+          <label for="floatingInput">Category Name</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="addCategory(categoryName.value)" data-bs-dismiss="modal">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Pharmaceutical Modal -->
+<div class="modal fade" id="pharmaceuticalModal" tabindex="-1" aria-labelledby="pharmaceuticalModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pharmaceuticalModalLabel">Add new pharmaceutical form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Please Provide Us Your New Pharmaceutical Form
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="pharmaceuticalFormName" #pharmaceuticalFormName />
+          <label for="floatingInput">Pharmaceutical Form Name</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="addPharmaceuticalForm(pharmaceuticalFormName.value)"
+          data-bs-dismiss="modal">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Medicine Modal -->
+<div class="modal fade" id="medicineModal" tabindex="-1" aria-labelledby="medicineModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="medicineModalLabel">Add new medicine</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Please Provide Us Your New Medicine Details
+        <form [formGroup]="medicineForm">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" formControlName="productName" />
+            <label for="floatingInput">Medicine Name</label>
+          </div>
+          <div class="row mb-3">
+            <label for="medicineImages"
+              >Select Your New Medicine Image/s please
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                id="medicineImages"
+                class="d-none"
+                (change)="processFile($event)" />
+              <fa-icon class="imgs-icon" [icon]="faImages"></fa-icon>
+            </label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" formControlName="indications" />
+            <label for="floatingInput">Indications</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" formControlName="packing" />
+            <label for="floatingInput">Packing</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" formControlName="composition" />
+            <label for="floatingInput">Composition</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" formControlName="expiredDate" />
+            <label for="floatingInput">Expired Date (in years)</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" formControlName="price" />
+            <label for="floatingInput">Public Price</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" formControlName="netPrice" />
+            <label for="floatingInput">Net Price</label>
+          </div>
+          <select class="form-select" aria-label="Category Select" formControlName="categoryId">
+            <option selected>Choose Category</option>
+            <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+          </select>
+          <select class="form-select" aria-label="Pharmaceutical Form Select" formControlName="pharmaceuticalFormId">
+            <option selected>Choose Pharmaceutical Form</option>
+            <option *ngFor="let pharm of pharmaceuticalForms" [value]="pharm.id">{{ pharm.name }}</option>
+          </select>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="addMedicine()" data-bs-dismiss="modal">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

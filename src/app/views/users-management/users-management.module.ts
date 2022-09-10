@@ -10,6 +10,6 @@ import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [UsersManagementComponent],
 
-  imports: [CommonModule, UsersManagementRoutingModule, SharedModule,FormsModule,],
+  imports: [CommonModule, UsersManagementRoutingModule, SharedModule,FormsModule],
 })
 export class UsersManagementModule { }

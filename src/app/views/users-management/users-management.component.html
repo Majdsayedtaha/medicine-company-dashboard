@@ -21,7 +21,7 @@
     </label>
   </button>
 </div>
-<div></div>
+
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -217,7 +217,7 @@
       <td>{{ user.firstName }}</td>
       <td>{{ user.lastName }}</td>
       <td>{{ user.email }}</td>
-      <td>{{ roles[user.role !== undefined ? user.role : 5] }}</td>
+      <td>{{ roles[user.role ? user.role : 5] }}</td>
       <td>{{ user.region }}</td>
       <td>{{ user.country }}</td>
       <td>{{ user.city }}</td>
