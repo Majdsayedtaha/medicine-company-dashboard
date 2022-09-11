@@ -16,6 +16,7 @@ import {
   GridModule,
   HeaderModule,
   ListGroupModule,
+  ModalModule,
   NavModule,
   ProgressModule,
   SidebarModule,
@@ -50,6 +51,7 @@ import { IconModule } from '@coreui/icons-angular';
     BadgeModule,
     ListGroupModule,
     CardModule,
+    ModalModule
   ],
   exports: [
     AvatarModule,
@@ -75,6 +77,7 @@ import { IconModule } from '@coreui/icons-angular';
     ListGroupModule,
     FontAwesomeModule,
     CardModule,
+    ModalModule
   ],
   //   providers: [
   //     {

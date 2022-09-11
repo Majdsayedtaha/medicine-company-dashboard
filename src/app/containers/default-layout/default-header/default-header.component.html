@@ -90,7 +90,7 @@
       <li>
         <h6 cDropdownHeader class="bg-light fw-semibold py-2">Settings</h6>
       </li>
-      <li type="button" data-bs-toggle="modal" data-bs-target="#profileInfoModal">
+      <li type="button" data-bs-toggle="modal" data-bs-target="#profileInfoModal" (click)="deleteBackdrop()">
         <a cDropdownItem>
           <svg cIcon class="me-2" name="cilUser"></svg>
           Profile
@@ -135,7 +135,7 @@
     </ul>
   </c-dropdown>
 </ng-template>
-
+<!-- User Info Modal -->
 <div class="modal fade" id="profileInfoModal" tabindex="-1" aria-labelledby="profileInfoModal" aria-hidden="true">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
@@ -213,3 +213,7 @@
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" type="submit" (click)="onSaveUserInfo()">
           Save changes
         </button>
+      </div>
+    </div>
+  </div>
+</div>

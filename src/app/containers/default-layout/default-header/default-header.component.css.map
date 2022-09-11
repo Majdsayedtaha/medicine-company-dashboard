@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "",
-    "sources": [
-        "default-header.component.scss"
-    ],
-    "names": [],
-    "file": "default-header.component.css"
-}

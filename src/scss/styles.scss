@@ -30,7 +30,7 @@ $enable-rtl: true;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 10 !important;
+    z-index: 1000 !important;
     width: 100vw;
     height: 100vh;
     background-color: $backdrop-bg;
@@ -41,7 +41,7 @@ $enable-rtl: true;
     }
     &.show {
       opacity: $backdrop-opacity;
-      z-index: 10 !important;
+      z-index: 1000 !important;
     }
   }
 }

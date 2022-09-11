@@ -59,23 +59,23 @@ export const navItems: INavData[] = [
     url: '/company-details',
     iconComponent: { name: 'cilAlignCenter' },
   },
-  {
-    name: 'Auth',
-    url: '/login',
-    iconComponent: { name: 'cil-star' },
-    children: [
-      {
-        name: 'Login',
-        url: '/login',
-      },
-      {
-        name: 'Register',
-        url: '/register',
-      },
-      {
-        name: 'Error 404',
-        url: '/404',
-      },
-    ],
-  },
+  // {
+  //   name: 'Auth',
+  //   url: '/login',
+  //   iconComponent: { name: 'cil-star' },
+  //   children: [
+  //     {
+  //       name: 'Login',
+  //       url: '/login',
+  //     },
+  //     {
+  //       name: 'Register',
+  //       url: '/register',
+  //     },
+  //     {
+  //       name: 'Error 404',
+  //       url: '/404',
+  //     },
+  //   ],
+  // },
 ];

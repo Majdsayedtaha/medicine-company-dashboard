@@ -34,6 +34,7 @@ import {
   GridModule,
   HeaderModule,
   ListGroupModule,
+  ModalModule,
   NavModule,
   ProgressModule,
   SharedModule,
@@ -82,7 +83,8 @@ const APP_CONTAINERS = [DefaultFooterComponent, DefaultHeaderComponent, DefaultL
     CardModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    ModalModule
   ],
   providers: [
     {

@@ -90,4 +90,8 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
         }
       });
   }
+  deleteBackdrop() {
+    const e = document.querySelector('.modal-backdrop');
+    e?.remove();
+  }
 }
