@@ -3,9 +3,6 @@
   <div class="card container">
     <h5 class="card-header">Welcome To Medicine Company Dashboard</h5>
     <div class="card-body">
-      <div *ngIf="message" class="alert alert-danger" role="alert">
-        {{ message }}
-      </div>
       <form [formGroup]="registerForm" (ngSubmit)="onRegister()" #form>
         <div class="row">
           <div class="col">

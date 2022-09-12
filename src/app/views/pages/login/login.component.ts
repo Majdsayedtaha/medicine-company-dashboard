@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { NotifierService } from 'src/app/services/notifier.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent {
   public submitted = false;
   message: string = '';
 
-  constructor(private formBuilder: FormBuilder, private auth: AuthService, private router: Router) {}
+  constructor(private formBuilder: FormBuilder, private auth: AuthService, private router: Router,private notify:NotifierService) {}
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -50,6 +51,8 @@ export class LoginComponent {
           console.log()
         } else {
           this.message = res.details;
+          console.log(res);
+          this.notify.errorNotification(this.message,'Login failed');
         }
       });
     }

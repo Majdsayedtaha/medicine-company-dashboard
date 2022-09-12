@@ -1,7 +1,7 @@
 <h3>Here Fill Free To Fill Your Offer And Manage Them All.</h3>
 <button
   type="button"
-  class="btn btn-primary"
+  class="btn offer"
   data-toggle="tooltip"
   data-placement="top"
   title="Add New Offer"
@@ -23,40 +23,40 @@
           <div class="row mb-3">
             <label for="offerName"
               >Add Name To Your New Offer
-              <input type="text" formControlName="name" id="offerName" />
+              <input type="text" class="form-control mt-2" formControlName="name" id="offerName" />
             </label>
           </div>
-          <h4>Now Please Fill The Medicines That The Offer Have</h4>
+          <h5>Now Please Fill The Medicines That The Offer Have</h5>
           <div formArrayName="offerDetails">
             <ng-container *ngFor="let offer of offerDetails?.controls; let i = index">
               <div class="mb-3" [formGroupName]="i">
-                <select class="form-select" aria-label="Category Select" formControlName="medicineId">
+                <select class="form-select mt-2" aria-label="Category Select" formControlName="medicineId">
                   <option selected>Choose A Medicine</option>
                   <option *ngFor="let medicine of medicines" [value]="medicine?.id">{{ medicine.productName }}</option>
                 </select>
-                <input type="number" formControlName="quantity"  placeholder="Quantity"/>
-                <select class="form-select" aria-label="Pharmaceutical Form Select" formControlName="extraMedicineId">
+                <input type="number" class="form-control mt-2" formControlName="quantity"  placeholder="Quantity"/>
+                <select class="form-select mt-2" aria-label="Pharmaceutical Form Select" formControlName="extraMedicineId">
                   <option selected>No Extra</option>
                   <option *ngFor="let extraMedicine of medicines" [value]="extraMedicine?.id">
                     {{ extraMedicine.productName }}
                   </option>
                 </select>
-                <input type="number" formControlName="extraQuantity" placeholder="Extra Quantity"/>
+                <input type="number" class="form-control mt-2" formControlName="extraQuantity" placeholder="Extra Quantity"/>
               </div>
             </ng-container>
           </div>
-          <button class="btn" (click)="addNewMedicineOffer()">
+          <button class="btn-input" (click)="addNewMedicineOffer()">
             <fa-icon [icon]="faSquarePlus"></fa-icon>
           </button>
           <br />
-          <pre>{{ offerForm.value | json }}</pre>
+          <!-- <pre>{{ offerForm.value | json }}</pre> -->
           <br />
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addNewOffer()">
-          Save changes
+          Add offer
         </button>
       </div>
     </div>

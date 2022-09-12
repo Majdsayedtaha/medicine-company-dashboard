@@ -9,6 +9,7 @@ import { User } from 'src/app/interfaces/user.model';
 import { ApiService } from 'src/app/services/api.service';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
+import { NotifierService } from 'src/app/services/notifier.service';
 
 interface IUser {
   firstName?: string;
@@ -42,7 +43,7 @@ export class UsersManagementComponent implements OnInit {
   userModel?: User;
   users: IUser[] = [];
   roles = ['Doctor', 'Pharmacist', ' Sales Representative', 'Scientific Representative', 'Agent', 'Company Manager'];
-  constructor(private http: ApiService, private router: Router) {}
+  constructor(private http: ApiService, private router: Router, private notify: NotifierService) {}
   faDownload = faDownload;
   faUser = faUser;
   faUpload = faUpload;
@@ -50,42 +51,66 @@ export class UsersManagementComponent implements OnInit {
     this.loadUsers();
   }
   loadUsers() {
-    this.http.get(environment.base + 'site/get-all-users').subscribe((res: any) => {
-      if (res.status === 'ok') {
-        this.users = res.users;
-      } else {
-        console.log(res);
+    this.http.get(environment.base + 'site/get-all-users').subscribe(
+      (res: any) => {
+        if (res.status === 'ok') {
+          this.users = res.users;
+        } else {
+          // TODO Error
+          console.log(res, 'k');
+        }
+      },
+      error => {
+        this.notify.errorNotification(error);
       }
-    });
+    );
   }
   onSubmit(userForm: NgForm) {
-    this.http.post(environment.base + '/site/signup', JSON.stringify(userForm.value)).subscribe((res: any) => {
-      if (res.status === 'ok') {
-        console.log('user added successfully');
-        this.loadUsers();
-      } else {
-        console.log('error');
+    this.http.post(environment.base + '/site/signup', JSON.stringify(userForm.value)).subscribe(
+      (res: any) => {
+        if (res.status === 'ok') {
+          this.notify.successNotification('user added successfully');
+          this.loadUsers();
+        } else {
+          this.notify.errorNotification('error user added');
+        }
+      },
+      error => {
+        this.notify.errorNotification(error);
       }
-    });
+    );
   }
 
   // Handling Import Excel Template For Adding New Users
   importingExcel(event: any) {
-    this.upload(event.target.files[0]).subscribe((data: any) => {
-      if (data.status == 'ok') {
-        this.loadUsers();
-      } else {
-        let tx = '';
-        data.errorDetails.forEach((d: any) => {
-          tx = tx + '<li>' + d.error + '</li>';
-        });
-        // this.notifierService.errorNotification(tx, 'Errors');
-      }
-      ((<HTMLInputElement>document.getElementById('input_file')) as any).value = null;
+    this.upload(event.target.files[0]).subscribe({
+      next: (data: any) => {
+        if (data.status == 'ok') {
+          this.loadUsers();
+        } else {
+          let tx = '';
+          data.errorDetails.forEach((d: any) => {
+            tx = tx + '<li>' + d.error + '</li>';
+          });
+          this.notify.errorNotification(tx, 'Errors');
+        }
+        ((<HTMLInputElement>document.getElementById('input_file')) as any).value = null;
+      },
+      error: (error: any) => {
+        this.notify.errorNotification(error);
+      },
     });
   }
   importTemplateToEXCEL() {
-    this.import().subscribe(response => this.downloadFile(response));
+    this.import().subscribe({
+      next: response => {
+        this.downloadFile(response);
+        this.notify.successNotification('download File successfully');
+      },
+      error: (error: any) => {
+        this.notify.errorNotification(error);
+      },
+    });
   }
   import() {
     const headerParams = { Authorization: 'Bearer ' + this.userModel?.getToken() };
@@ -95,6 +120,7 @@ export class UsersManagementComponent implements OnInit {
       responseType: 'arraybuffer',
     });
   }
+
   upload(file: any): Observable<any> {
     const accessToken = this.userModel?.getToken;
     const headerParams = { Authorization: 'Bearer ' + accessToken };
@@ -104,6 +130,7 @@ export class UsersManagementComponent implements OnInit {
       headers: new HttpHeaders(headerParams),
     });
   }
+
   public downloadFile(data: any) {
     const blob = new Blob([data.body], {
       type: data.headers.get('content-type'),
