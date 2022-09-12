@@ -59,9 +59,7 @@ export class RegisterComponent implements OnInit {
         };
         this.auth.autoLogin(data.email, data.password);
       } else {
-        // TODO Handle email taken before as warning
         this.message = res.details.email;
-        console.log(res);
         this.notify.errorNotification(this.message,'register failed');
       }
     });

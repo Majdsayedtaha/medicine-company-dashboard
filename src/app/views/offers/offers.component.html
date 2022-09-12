@@ -1,7 +1,7 @@
 <h3>Here Fill Free To Fill Your Offer And Manage Them All.</h3>
 <button
   type="button"
-  class="btn offer"
+  class="btn offer mb-5"
   data-toggle="tooltip"
   data-placement="top"
   title="Add New Offer"
@@ -9,7 +9,26 @@
   data-bs-target="#offerModal">
   Add New Offer
 </button>
-
+<c-row>
+  <c-col
+    lg="3"
+    md="6"
+    xs="12"
+    *ngFor="let offer of offers"
+    data-bs-toggle="modal"
+    data-bs-target="#offerDetailsModal"
+    (click)="getOfferDetails(offer.id)">
+    <c-widget-stat-b
+      #widgetStatB2inv="cWidgetStatB"
+      [title]="shortDate(offer.creationDate)"
+      class="mb-4"
+      [color]="offer.offerStatus == 1 ? 'info' : 'warning'"
+      inverse
+      [text]="offer.offerStatus == 1 ? 'the offer is active now!' : 'the offer is inactive!'"
+      [value]="offer.name">
+    </c-widget-stat-b>
+  </c-col>
+</c-row>
 <!-- Offer Modal -->
 <div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModal" aria-hidden="true">
   <div class="modal-dialog">
@@ -34,14 +53,93 @@
                   <option selected>Choose A Medicine</option>
                   <option *ngFor="let medicine of medicines" [value]="medicine?.id">{{ medicine.productName }}</option>
                 </select>
-                <input type="number" class="form-control mt-2" formControlName="quantity"  placeholder="Quantity"/>
-                <select class="form-select mt-2" aria-label="Pharmaceutical Form Select" formControlName="extraMedicineId">
+                <input type="number" class="form-control mt-2" formControlName="quantity" placeholder="Quantity" />
+                <select
+                  class="form-select mt-2"
+                  aria-label="Pharmaceutical Form Select"
+                  formControlName="extraMedicineId">
                   <option selected>No Extra</option>
                   <option *ngFor="let extraMedicine of medicines" [value]="extraMedicine?.id">
                     {{ extraMedicine.productName }}
                   </option>
                 </select>
-                <input type="number" class="form-control mt-2" formControlName="extraQuantity" placeholder="Extra Quantity"/>
+                <input
+                  type="number"
+                  class="form-control mt-2"
+                  formControlName="extraQuantity"
+                  placeholder="Extra Quantity" />
+              </div>
+            </ng-container>
+          </div>
+          <button class="btn-input" (click)="addNewMedicineOffer()">
+            <fa-icon [icon]="faSquarePlus"></fa-icon>
+          </button>
+          <br />
+          <!-- <pre>{{ offerForm.value | json }}</pre> -->
+          <br />
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addNewOffer()">Add offer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Offer Details Modal -->
+<div class="modal fade" id="offerDetailsModal" tabindex="-1" aria-labelledby="offerDetailsModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="offerDetailsModalHeader">View Offer Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="offerForm">
+          <div class="row mb-3">
+            <label for="offerNameD"
+              >offer name
+              <input
+                type="text"
+                class="form-control mt-2"
+                formControlName="name"
+                id="offerNameD"
+                [value]="activeOffer?.name" />
+            </label>
+          </div>
+          <h5>{{ activeOffer?.name }} Details:</h5>
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="flexSwitchCheckDefault"
+              [checked]="activeOffer?.offerStatus == 1 ? true : false"
+              (change)="changeOfferStatus($event, activeOffer.id)" />
+            <label class="form-check-label" for="flexSwitchCheckDefault">Offer Status</label>
+          </div>
+          <div formArrayName="offerDetails">
+            <ng-container *ngFor="let offer of offerDetails?.controls; let i = index">
+              <div class="mb-3" [formGroupName]="i">
+                <select class="form-select mt-2" aria-label="Category Select" formControlName="medicineId">
+                  <option selected>Choose A Medicine</option>
+                  <option *ngFor="let medicine of medicines" [value]="medicine?.id">{{ medicine.productName }}</option>
+                </select>
+                <input type="number" class="form-control mt-2" formControlName="quantity" placeholder="Quantity" />
+                <select
+                  class="form-select mt-2"
+                  aria-label="Pharmaceutical Form Select"
+                  formControlName="extraMedicineId">
+                  <option selected>No Extra</option>
+                  <option *ngFor="let extraMedicine of medicines" [value]="extraMedicine?.id">
+                    {{ extraMedicine.productName }}
+                  </option>
+                </select>
+                <input
+                  type="number"
+                  class="form-control mt-2"
+                  formControlName="extraQuantity"
+                  placeholder="Extra Quantity" />
               </div>
             </ng-container>
           </div>
@@ -56,7 +154,11 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addNewOffer()">
-          Add offer
+          Save Changes
+        </button>
+
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteOffer(activeOffer.id)">
+          <fa-icon [icon]="faTrashAlt"></fa-icon>Delete
         </button>
       </div>
     </div>

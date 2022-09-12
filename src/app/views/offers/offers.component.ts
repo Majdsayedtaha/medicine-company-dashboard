@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { faSquarePlus } from '@fortawesome/free-regular-svg-icons';
+import { faSquarePlus, faTrashAlt, faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import { ApiService } from 'src/app/services/api.service';
 import { environment } from 'src/environments/environment';
 
@@ -12,7 +12,12 @@ import { environment } from 'src/environments/environment';
 export class OffersComponent implements OnInit {
   offerForm!: FormGroup;
   medicines!: any[];
+  offers!: any[];
+  activeOffer: any;
+  activeOfferDetails!: any[];
   faSquarePlus = faSquarePlus;
+  faTrashAlt = faTrashAlt;
+  faTrashCan = faTrashCan;
   constructor(private fb: FormBuilder, private http: ApiService) {}
 
   get offerDetails(): FormArray {
@@ -20,24 +25,24 @@ export class OffersComponent implements OnInit {
   }
   ngOnInit(): void {
     this.getAllMedicines();
+    this.getAllOffers();
 
     const fb = this.fb;
     this.offerForm = fb.group({
       name: ['', [Validators.required]],
       offerDetails: fb.array([
-        this.fb.group({
-          medicineId: ['', [Validators.required]],
-          quantity: ['', [Validators.required]],
-          extraMedicineId: ['', [Validators.required]],
-          extraQuantity: ['', [Validators.required]],
-        }),
+        // this.fb.group({
+        //   medicineId: ['', [Validators.required]],
+        //   quantity: ['', [Validators.required]],
+        //   extraMedicineId: ['', [Validators.required]],
+        //   extraQuantity: ['', [Validators.required]],
+        // }),
       ]),
     });
   }
   getAllMedicines() {
     this.http.get(environment.base + '/medicine/get-all').subscribe((res: any) => {
       if (res.status == 'ok') {
-        console.log(res);
         this.medicines = res.medicines;
       } else {
         console.log(res);
@@ -69,10 +74,55 @@ export class OffersComponent implements OnInit {
   getAllOffers() {
     this.http.get(environment.base + '/offer/get-all').subscribe((res: any) => {
       if (res.status === 'ok') {
+        this.offers = res.offers;
+      } else {
+        console.log(res);
+      }
+    });
+  }
+  getOfferDetails(id: number) {
+    this.http.get(environment.base + '/offer/get?id=' + id).subscribe((res: any) => {
+      if (res.status === 'ok') {
+        this.activeOffer = res.offer;
+        this.activeOfferDetails = res.offerDetails;
+        // TODO fill the modal
+        this.activeOfferDetails.forEach(offer => {
+          // this.offerDetails.push(
+          //   this.fb.group({
+          //     medicineId: [offer., [Validators.required]],
+          //     quantity: ['', [Validators.required]],
+          //     extraMedicineId: ['', [Validators.required]],
+          //     extraQuantity: ['', [Validators.required]],
+          //   })
+          // );
+        });
+      } else {
+        console.log(res);
+      }
+    });
+  }
+  changeOfferStatus(e: any, id: number) {
+    e.target.value == 'on' ? (e.target.value = 'off') : (e.target.value = 'on');
+    let status = e.target.value == 'on' ? 1 : 0;
+    this.http.get(environment.base + '/offer/change-status?id=' + id + '&status=' + status).subscribe((res: any) => {
+      if (res.status === 'ok') {
+        this.getAllOffers();
+      } else {
+        console.log(res);
+      }
+    });
+  }
+  deleteOffer(id: number) {
+    this.http.get(environment.base + '/offer/delete?id=' + id).subscribe((res: any) => {
+      if (res.status === 'ok') {
+        this.getAllOffers();
         console.log(res);
       } else {
         console.log(res);
       }
     });
+  }
+  shortDate(value: string): string {
+    return value.substring(0, 10);
   }
 }

@@ -1,1 +1,40 @@
-<p>events works!</p>
+<h3>Manage Your Company Events!</h3>
+<button
+  type="button"
+  class="btn event mb-5"
+  data-toggle="tooltip"
+  data-placement="top"
+  title="Add New Event"
+  data-bs-toggle="modal"
+  data-bs-target="#eventModal">
+  Add New Event
+</button>
+
+<!-- Offer Modal -->
+<div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="offerModalHeader">Add New Offer</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="eventForm">
+          <div class="row mb-3">
+            <label for="offerName"
+              >Add Name To Your New Event
+              <input type="text" class="form-control mt-2" formControlName="name" id="eventName" />
+            </label>
+          </div>
+          <!-- <fa-icon [icon]="faSquarePlus"></fa-icon> -->
+          <br />
+          <br />
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addNewEvent()">Add offer</button>
+      </div>
+    </div>
+  </div>
+</div>
