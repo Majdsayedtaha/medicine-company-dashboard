@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControlOptions, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { NotifierService } from '../../../services/notifier.service';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
@@ -18,7 +18,13 @@ export class RegisterComponent implements OnInit {
   userImg: any;
   // TODO Send Role
 
-  constructor(private fb: FormBuilder, private http: ApiService, private router: Router, private auth: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    private http: ApiService,
+    private router: Router,
+    private auth: AuthService,
+    private notify: NotifierService
+  ) {}
   ngOnInit(): void {
     this.registerForm = this.fb.group(
       {
@@ -54,10 +60,11 @@ export class RegisterComponent implements OnInit {
         this.auth.autoLogin(data.email, data.password);
       } else {
         // TODO Handle email taken before as warning
-        this.message = res.details;
+        this.message = res.details.email;
+        console.log(res);
+        this.notify.errorNotification(this.message,'register failed');
       }
     });
-
 
     // console.log(JSON.stringify(this.registerForm.value, null, 4))
   }

@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AuthInterceptorService } from 'src/app/interfaces/auth.interceptor';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-
+import { ToastrModule } from 'ngx-toastr';
 import {
   PERFECT_SCROLLBAR_CONFIG,
   PerfectScrollbarConfigInterface,
@@ -84,7 +84,8 @@ const APP_CONTAINERS = [DefaultFooterComponent, DefaultHeaderComponent, DefaultL
     HttpClientModule,
     ReactiveFormsModule,
     FontAwesomeModule,
-    ModalModule
+    ModalModule,
+    ToastrModule.forRoot(),
   ],
   providers: [
     {

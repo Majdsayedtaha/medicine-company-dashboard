@@ -27,9 +27,9 @@ export class OffersComponent implements OnInit {
       offerDetails: fb.array([
         this.fb.group({
           medicineId: ['', [Validators.required]],
-          quantity: [0, [Validators.required]],
+          quantity: ['', [Validators.required]],
           extraMedicineId: ['', [Validators.required]],
-          extraQuantity: [0, [Validators.required]],
+          extraQuantity: ['', [Validators.required]],
         }),
       ]),
     });
@@ -49,9 +49,9 @@ export class OffersComponent implements OnInit {
     this.offerDetails.push(
       this.fb.group({
         medicineId: ['', [Validators.required]],
-        quantity: [0, [Validators.required]],
+        quantity: ['', [Validators.required]],
         extraMedicineId: ['', [Validators.required]],
-        extraQuantity: [0, [Validators.required]],
+        extraQuantity: ['', [Validators.required]],
       })
     );
   }

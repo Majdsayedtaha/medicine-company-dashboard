@@ -2,9 +2,6 @@
   <div class="login-form">
     <div class="card container">
       <h2 class="head py-2">Login</h2>
-      <div *ngIf="message" class="alert alert-danger" role="alert">
-        {{ message }}
-      </div>
       <form class="user-login" [formGroup]="loginForm" (ngSubmit)="onLogin()">
         <div class="row">
           <div class="col-md-12 roundedTextBox mb-3">

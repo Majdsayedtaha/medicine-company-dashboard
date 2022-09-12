@@ -77,7 +77,7 @@
       </div>
       <div class="modal-body">
         Please Provide Us Your New Category Name
-        <div class="form-floating mb-3">
+        <div class="form-floating mb-3 mt-3">
           <input type="text" class="form-control" id="categoryName" #categoryName />
           <label for="floatingInput">Category Name</label>
         </div>
@@ -85,7 +85,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" (click)="addCategory(categoryName.value)" data-bs-dismiss="modal">
-          Save
+          Add
         </button>
       </div>
     </div>
@@ -101,7 +101,7 @@
       </div>
       <div class="modal-body">
         Please Provide Us Your New Pharmaceutical Form
-        <div class="form-floating mb-3">
+        <div class="form-floating mb-3 mt-3">
           <input type="text" class="form-control" id="pharmaceuticalFormName" #pharmaceuticalFormName />
           <label for="floatingInput">Pharmaceutical Form Name</label>
         </div>
@@ -113,7 +113,7 @@
           class="btn btn-primary"
           (click)="addPharmaceuticalForm(pharmaceuticalFormName.value)"
           data-bs-dismiss="modal">
-          Save
+          Add
         </button>
       </div>
     </div>
@@ -131,7 +131,7 @@
         Please Provide Us Your New Medicine Details
         <form [formGroup]="medicineForm">
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" formControlName="productName" />
+            <input type="text" class="form-control  mt-3" formControlName="productName" />
             <label for="floatingInput">Medicine Name</label>
           </div>
           <div class="row mb-3">
@@ -152,7 +152,7 @@
             <label for="floatingInput">Indications</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" formControlName="packing" />
+            <input type="number" class="form-control" formControlName="packing" />
             <label for="floatingInput">Packing</label>
           </div>
           <div class="form-floating mb-3">
@@ -164,18 +164,18 @@
             <label for="floatingInput">Expired Date (in years)</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" formControlName="price" />
+            <input type="number" class="form-control" formControlName="price" />
             <label for="floatingInput">Public Price</label>
           </div>
           <div class="form-floating mb-3">
-            <input type="text" class="form-control" formControlName="netPrice" />
+            <input type="number" class="form-control" formControlName="netPrice" />
             <label for="floatingInput">Net Price</label>
           </div>
-          <select class="form-select" aria-label="Category Select" formControlName="categoryId">
+          <select class="form-select mb-3" aria-label="Category Select" formControlName="categoryId">
             <option selected>Choose Category</option>
             <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
           </select>
-          <select class="form-select" aria-label="Pharmaceutical Form Select" formControlName="pharmaceuticalFormId">
+          <select class="form-select mb-3" aria-label="Pharmaceutical Form Select" formControlName="pharmaceuticalFormId">
             <option selected>Choose Pharmaceutical Form</option>
             <option *ngFor="let pharm of pharmaceuticalForms" [value]="pharm.id">{{ pharm.name }}</option>
           </select>
@@ -183,7 +183,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="addMedicine()" data-bs-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-primary" (click)="addMedicine()" data-bs-dismiss="modal">Add</button>
       </div>
     </div>
   </div>
