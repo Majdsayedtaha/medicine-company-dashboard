@@ -24,7 +24,17 @@ $enable-rtl: true;
 
 // If you want to add something do it here
 @import 'custom';
+// ag-Grid
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
 
+html, body {
+   height: 100%;
+   width: 100%;
+   padding: 5px;
+   box-sizing: border-box;
+   -webkit-overflow-scrolling: touch;
+}
 ::ng-deep {
   @mixin overlay-backdrop($zindex, $backdrop-bg, $backdrop-opacity) {
     position: fixed;
