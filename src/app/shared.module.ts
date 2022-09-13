@@ -77,6 +77,7 @@ import { IconModule } from '@coreui/icons-angular';
     ListGroupModule,
     FontAwesomeModule,
     CardModule,
+
     ModalModule
   ],
   //   providers: [
