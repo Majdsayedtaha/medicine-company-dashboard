@@ -9,10 +9,10 @@
         <a cNavLink routerLink="/dashboard" routerLinkActive="active"> Dashboard </a>
       </c-nav-item>
       <c-nav-item>
-        <a cNavLink routerLink="/users" routerLinkActive="active">Users</a>
+        <a cNavLink routerLink="/users-management" routerLinkActive="active">Users</a>
       </c-nav-item>
       <c-nav-item>
-        <a cNavLink routerLink="/settings" routerLinkActive="active"> Settings </a>
+        <a cNavLink routerLink="/company-details" routerLinkActive="active">Company Details</a>
       </c-nav-item>
     </c-header-nav>
 
@@ -56,78 +56,15 @@
       </c-avatar>
     </button>
     <ul cDropdownMenu class="pt-0 pr-5 w-auto">
-      <li>
-        <h6 cDropdownHeader class="bg-light fw-semibold py-2">Account</h6>
-      </li>
-      <li>
-        <a cDropdownItem>
-          <svg cIcon class="me-2" name="cilBell"></svg>
-          Updates
-          <c-badge class="ms-2 float-end" color="info"> 42 </c-badge>
-        </a>
-      </li>
-      <li>
-        <a cDropdownItem>
-          <svg cIcon class="me-2" name="cilEnvelopeOpen"></svg>
-          Messages
-          <c-badge class="ms-2 float-end" color="success"> 42 </c-badge>
-        </a>
-      </li>
-      <li>
-        <a cDropdownItem>
-          <svg cIcon class="me-2" name="cilTask"></svg>
-          Tasks
-          <c-badge class="ms-2 float-end" color="danger"> 42 </c-badge>
-        </a>
-      </li>
-      <li>
-        <a cDropdownItem>
-          <svg cIcon class="me-2" name="cilCommentSquare"></svg>
-          Comments
-          <c-badge class="ms-auto" color="warning"> 42 </c-badge>
-        </a>
-      </li>
-      <li>
-        <h6 cDropdownHeader class="bg-light fw-semibold py-2">Settings</h6>
-      </li>
       <li type="button" data-bs-toggle="modal" data-bs-target="#profileInfoModal" (click)="deleteBackdrop()">
         <a cDropdownItem>
           <svg cIcon class="me-2" name="cilUser"></svg>
           Profile
         </a>
       </li>
-      <li>
-        <a cDropdownItem>
-          <svg cIcon class="me-2" name="cilSettings"></svg>
-          Settings
-        </a>
-      </li>
-      <li>
-        <a cDropdownItem>
-          <svg cIcon class="me-2" name="cilCreditCard"></svg>
-          Payments
-          <c-badge class="ms-2 float-end" color="secondary"> 42 </c-badge>
-        </a>
-      </li>
-      <li>
-        <a cDropdownItem>
-          <svg cIcon class="me-2" name="cilFile"></svg>
-          Projects
-          <c-badge class="ms-2 float-end" color="primary"> 42 </c-badge>
-        </a>
-      </li>
-      <li>
-        <hr cDropdownDivider />
-      </li>
-      <li>
-        <a cDropdownItem>
-          <svg cIcon class="me-2" name="cilLockLocked"></svg>
-          Lock Account
-        </a>
-      </li>
       <li (click)="onLogout()">
         <a cDropdownItem>
-          <!-- <svg cIcon class="me-2" name="cilLogout"></svg> -->
+          <svg cIcon class="me-2" name="cilChevronLeft"></svg>
           Logout
         </a>
       </li>
@@ -135,6 +72,7 @@
     </ul>
   </c-dropdown>
 </ng-template>
+
 <!-- User Info Modal -->
 <div class="modal fade" id="profileInfoModal" tabindex="-1" aria-labelledby="profileInfoModal" aria-hidden="true">
   <div class="modal-dialog modal-md">
@@ -147,24 +85,38 @@
         <form [formGroup]="saveUserInfoForm" #form>
           <div class="save-infor">
             <div class="row">
-              <label for="upLoad"
-                >Select Your Image Profile
-                <fa-icon [icon]="faPesoSign"></fa-icon>
-
+              <!-- Image Select -->
+              <div class="file-input mb-3">
                 <input
                   type="file"
+                  name="file-input"
+                  id="file-input"
                   formControlName="img"
-                  accept="image/*"
+                  class="file-input__input"
                   #imgInput
-                  id="upLoad"
-                  class="d-none"
                   (change)="processFile(imgInput)" />
-              </label>
+                <label class="file-input__label" for="file-input">
+                  <div class="user-img">
+                    <c-avatar
+                      cTextColor="primary"
+                      shape="rounded-1"
+                      size="md"
+                      [src]="
+                        userDetails?.img !== null
+                          ? userDetails.img
+                          : './../../../../assets/img/avatars/avatar-default.jpg'
+                      "
+                      status="success">
+                    </c-avatar>
+                    <b>+</b>
+                  </div>
+                </label>
+              </div>
             </div>
             <!--Region & City & Country  -->
             <div class="d-flex mt-3 region">
               <!-- Region -->
-              <label for="inputRegion" class="form-label">Region</label>
+              <label for="inputRegion" class="form-label ms-2 me-2">Region</label>
               <select id="inputRegion" class="form-select" formControlName="region">
                 <option selected>Choose...</option>
                 <option>m</option>
@@ -174,7 +126,7 @@
               </select>
 
               <!-- City -->
-              <label for="inputCity" class="form-label ms-2">City</label>
+              <label for="inputCity" class="form-label ms-2 me-2">City</label>
               <select id="inputCity" class="form-select" formControlName="city">
                 <option selected>Choose...</option>
                 <option>m</option>
@@ -184,7 +136,7 @@
               </select>
 
               <!-- Country -->
-              <label for="inputCountry" class="form-label ms-2">Country</label>
+              <label for="inputCountry" class="form-label ms-2 me-2">Country</label>
               <select id="inputCountry" class="form-select" formControlName="country">
                 <option selected>Choose...</option>
                 <option>m</option>
@@ -195,10 +147,10 @@
             </div>
             <!-- Special Mark-->
             <div class="row">
-              <label for="inputSpecialMark" class="col-form-label label">SpecialMark</label>
+              <label for="inputSpecialMark" class="col-form-label label ">SpecialMark</label>
               <input
                 type="text"
-                class="form-control"
+                class="form-control mt-2 "
                 id="inputSpecialMark"
                 placeholder="SpecialMark"
                 formControlName="specialMark" />
