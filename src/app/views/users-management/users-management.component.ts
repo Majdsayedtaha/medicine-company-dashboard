@@ -56,8 +56,7 @@ export class UsersManagementComponent implements OnInit {
         if (res.status === 'ok') {
           this.users = res.users;
         } else {
-          // TODO Error
-          console.log(res, 'k');
+          this.notify.errorNotification(res.error);
         }
       },
       error => {
@@ -87,12 +86,20 @@ export class UsersManagementComponent implements OnInit {
       next: (data: any) => {
         if (data.status == 'ok') {
           this.loadUsers();
-        } else {
-          let tx = '';
-          data.errorDetails.forEach((d: any) => {
-            tx = tx + '<li>' + d.error + '</li>';
-          });
-          this.notify.errorNotification(tx, 'Errors');
+          if (data.errorDetails.length > 0) {
+            //Handle ERROR
+            let tx = '';
+            data.errorDetails.forEach((d: any) => {
+              tx = tx + '<li>' + d.error + '</li>' + '</br>';
+              this.notify.errorNotification(tx, 'Errors');
+              //Handle ERROR Email if Found
+              if (d.details?.email.length > 0) {
+                tx = tx + '<li>' + d.details?.email + '</li>';
+              }
+            });
+          } else {
+            this.notify.successNotification('Upload File successfully');
+          }
         }
         ((<HTMLInputElement>document.getElementById('input_file')) as any).value = null;
       },
