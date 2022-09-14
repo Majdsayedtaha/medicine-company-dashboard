@@ -1,8 +1,13 @@
 <h3>Select Something To Add To Your Dashboard</h3>
-<div class="btn-group" role="group">
+<div class="btn-group mb-3" role="group">
   <button class="btn" data-bs-toggle="modal" data-bs-target="#categoryModal">New Category</button>
   <button class="btn" data-bs-toggle="modal" data-bs-target="#pharmaceuticalModal">New Pharmaceutical Form</button>
   <button class="btn" data-bs-toggle="modal" data-bs-target="#medicineModal">New Medicine</button>
+    <!-- Update Medicine Table -->
+    <button class="btn   " (click)="updateMedicine()">
+      <fa-icon [icon]="faBookMedical" class="me-2"></fa-icon>update Medicine
+    </button>
+
   <button
     type="button"
     class="btn excel-btn dropdown-toggle dropdown-toggle-split rounded-0"
@@ -11,7 +16,8 @@
     data-placement="top"
     title="Import Excel Template"
     data-bs-toggle="dropdown"
-    aria-expanded="false" (click)="importTemplateToEXCEL()">
+    aria-expanded="false"
+    (click)="importTemplateToEXCEL()">
     <fa-icon [icon]="faDownload"></fa-icon>
   </button>
   <button
@@ -26,6 +32,9 @@
       <input class="pointer d-none" id="input_file_medicine" type="file" (change)="importingExcel($event)" />
     </label>
   </button>
+
+
+
   <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
     <li (click)="importTemplateToEXCEL('/category/generate-excel-file-template')">
       <a class="dropdown-item">Category Template</a>
@@ -40,7 +49,7 @@
 </div>
 
 <!-- Medicine Table -->
-<table class="table table-striped table-hover">
+<!-- <table class="table table-striped table-hover">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -63,7 +72,21 @@
       <td>{{ medicine.netPrice }}</td>
     </tr>
   </tbody>
-</table>
+</table> -->
+
+<!-- <button class="btn btn-danger mb-3 excel-btn" (click)="deleteRowMedicine()">
+  <fa-icon [icon]="faDeleteLeft" class="me-2"></fa-icon>delete Medicine
+</button> -->
+
+<!--ag-grid Table  -->
+<ag-grid-angular
+  #agGrid
+  style="width: 1000px; height: 800px"
+  class="ag-theme-alpine"
+  (gridReady)="gridReady($event)"
+  [gridOptions]="gridOption"
+  [columnDefs]="columnDefs"
+  rowSelection="multiple"></ag-grid-angular>
 
 <!-- Category Modal -->
 <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModal" aria-hidden="true">
@@ -89,6 +112,7 @@
     </div>
   </div>
 </div>
+
 <!-- Pharmaceutical Modal -->
 <div class="modal fade" id="pharmaceuticalModal" tabindex="-1" aria-labelledby="pharmaceuticalModal" aria-hidden="true">
   <div class="modal-dialog">
@@ -117,6 +141,7 @@
     </div>
   </div>
 </div>
+
 <!-- Medicine Modal -->
 <div class="modal fade" id="medicineModal" tabindex="-1" aria-labelledby="medicineModal" aria-hidden="true">
   <div class="modal-dialog">

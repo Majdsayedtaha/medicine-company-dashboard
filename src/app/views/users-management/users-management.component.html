@@ -1,5 +1,5 @@
 <!-- Button trigger modal-->
-<div class="d-flex justify-content-end">
+<div class="d-flex justify-content-end mb-3">
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     <fa-icon [icon]="faUser"></fa-icon>
     Add User
@@ -24,6 +24,15 @@
       <fa-icon [icon]="faUpload"></fa-icon> Upload
       <input class="pointer" id="input_file" type="file" (change)="importingExcel($event)" />
     </label>
+  </button>
+
+  <!-- Delete User Table -->
+  <button class="btn btn-danger  excel-btn" (click)="deleteRowUser()">
+    <fa-icon [icon]="faDeleteLeft" class="me-2"></fa-icon>delete User
+  </button>
+   <!-- update User Table -->
+  <button class="btn btn-success excel-btn" (click)="updateUser()">
+    <fa-icon [icon]="faUser" class="me-2"></fa-icon>update User
   </button>
 </div>
 
@@ -128,7 +137,7 @@
           <!--Region & City & Country  -->
           <div class="d-flex mt-2">
             <!-- Region -->
-            <label for="inputRegion" class="form-label">Region</label>
+            <label for="inputRegion" class="form-label me-2">Region</label>
             <select
               id="inputRegion"
               class="form-select"
@@ -141,14 +150,14 @@
             </select>
 
             <!-- City -->
-            <label for="inputCity" class="form-label ms-2">City</label>
+            <label for="inputCity" class="form-label  me-2">City</label>
             <select id="inputCity" class="form-select" required name="city" [(ngModel)]="user.city" #city="ngModel">
               <option selected>Choose...</option>
               <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
             </select>
 
             <!-- Country -->
-            <label for="inputCountry" class="form-label ms-2">Country</label>
+            <label for="inputCountry" class="form-label  me-2">Country</label>
             <select
               id="inputCountry"
               class="form-select"
@@ -231,12 +240,14 @@
   </tbody>
 </table> -->
 
-<button (click)="getSelectedRows()">Get Selected Rows</button>
-<button (click)="delete()">dalete Selected Rows</button>
+<!-- <button class="btn btn-success mb-2" (click)="getSelectedRows()">Get Selected Rows</button> -->
+
+
 <ag-grid-angular
-  style="width: 900px; height: 800px"
+  #agGrid
+  style="width: 950px; height: 800px"
   class="ag-theme-alpine"
   (gridReady)="gridReady($event)"
-  [gridOptions]="gridOptin"
+  [gridOptions]="gridOption"
   [columnDefs]="columnDefs"
   rowSelection="multiple"></ag-grid-angular>

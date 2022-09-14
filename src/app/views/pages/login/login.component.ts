@@ -39,9 +39,9 @@ export class LoginComponent {
           this.auth.handleAuthentication(
             res.userInfo.accessToken,
             res.userInfo.email,
-            res.userInfo.id,
             res.userInfo.firstName,
             res.userInfo.lastName,
+            res.userInfo.id,
             res.userInfo.img,
             res.userInfo.regionId,
             res.userInfo.role,
