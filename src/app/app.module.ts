@@ -85,6 +85,7 @@ const APP_CONTAINERS = [DefaultFooterComponent, DefaultHeaderComponent, DefaultL
     ReactiveFormsModule,
     FontAwesomeModule,
     ModalModule,
+
     ToastrModule.forRoot(),
   ],
   providers: [

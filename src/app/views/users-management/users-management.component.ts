@@ -1,5 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -10,6 +10,8 @@ import { ApiService } from 'src/app/services/api.service';
 import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
 import { NotifierService } from 'src/app/services/notifier.service';
+import { AgGridAngular } from 'ag-grid-angular';
+import { GetRowIdParams, GridOptions, GridReadyEvent } from 'ag-grid-community';
 
 interface IUser {
   firstName?: string;
@@ -50,14 +52,99 @@ export class UsersManagementComponent implements OnInit {
   ngOnInit(): void {
     this.loadUsers();
   }
+
+
+
+  
+  @ViewChild('agGrid') agGrid!: AgGridAngular;
+  columnDefs = [
+    // { headerName: '#', field: '#', sortable: true, filter: true, checkboxSelection: true },
+    { headerName: 'FirstName', field: 'FirstName', sortable: true, filter: true },
+    { headerName: 'LastName', field: 'LastName', sortable: true },
+    { headerName: 'Email', field: 'Email', sortable: true },
+    { headerName: 'Role', field: 'Role', sortable: true },
+    { headerName: 'Region', field: 'Region', sortable: true },
+    { headerName: 'Country', field: 'Country', sortable: true },
+    { headerName: 'City', field: 'City', sortable: true },
+    { headerName: 'SpecialMark', field: 'SpecialMark', sortable: true },
+  ];
+
+  rowData: any[] = [];
+
+  getSelectedRows() {
+    const selectedNodes = this.agGrid.api.getSelectedNodes();
+    const selectedData = selectedNodes.map(node => node.data);
+    const selectedDataStringPresentation = selectedData.map(node => `${node.make} ${node.model}`).join(', ');
+
+    alert(`Selected nodes: ${selectedDataStringPresentation}`);
+  }
+  delete() {
+    const selectedData = this.agGrid.api.getSelectedRows();
+    this.agGrid.api.updateRowData({ remove: selectedData });
+    // http://localhost/aphamea_project/web/index.php/site/delete
+    console.log(selectedData);
+  }
+   gridApi:any
+ gridOptin:GridOptions = {
+  defaultColDef: {
+    resizable: false,
+    lockPinned: true,
+    wrapText: true,
+    autoHeight: true,
+    suppressMovable: true,
+    headerClass: 'headerCell',
+  },
+
+  columnDefs: this.columnDefs,
+
+  rowData: [],
+  animateRows: true,
+  pinnedBottomRowData: [
+    {
+      month: 'Total',
+      holidays: 27,
+      working: 30,
+      business_trip: 6,
+      direction: 21,
+      total_break: '60:00',
+      total_work: '480:00',
+      bonus: '04:30',
+      bonus_count: 3,
+      leave_type: '15:00',
+      overtime: '60:00',
+      after_mid: '60:00',
+    },
+  ],
+  rowSelection: 'single',
+  rowMultiSelectWithClick: true,
+  onSelectionChanged: () => {
+    let rows = this.gridApi.getSelectedRows();
+  },
+  getRowId: (params: GetRowIdParams) => {
+    return params.data.id;
+  },
+};
+  gridReady(params:GridReadyEvent) {
+     this.gridApi=params.api;
+     let colApi=params.columnApi;
+    this.http.get(environment.base + 'site/get-all-users').subscribe((response: any) => {
+      this.rowData=response.users;
+      console.log(this.rowData);
+      this.gridApi.setRowData(this.rowData);
+    });
+    this.gridApi?.refreshHeader();
+    colApi.autoSizeAllColumns();
+  }
+
+
+
   loadUsers() {
     this.http.get(environment.base + 'site/get-all-users').subscribe(
       (res: any) => {
         if (res.status === 'ok') {
           this.users = res.users;
         } else {
-          // TODO Error
-          console.log(res, 'k');
+          this.notify.errorNotification(res.error);
         }
       },
       error => {
@@ -87,12 +174,20 @@ export class UsersManagementComponent implements OnInit {
       next: (data: any) => {
         if (data.status == 'ok') {
           this.loadUsers();
-        } else {
-          let tx = '';
-          data.errorDetails.forEach((d: any) => {
-            tx = tx + '<li>' + d.error + '</li>';
-          });
-          this.notify.errorNotification(tx, 'Errors');
+          if (data.errorDetails.length > 0) {
+            //Handle ERROR
+            let tx = '';
+            data.errorDetails.forEach((d: any) => {
+              tx = tx + '<li>' + d.error + '</li>' + '</br>';
+              this.notify.errorNotification(tx, 'Errors');
+              //Handle ERROR Email if Found
+              if (d.details?.email.length > 0) {
+                tx = tx + '<li>' + d.details?.email + '</li>';
+              }
+            });
+          } else {
+            this.notify.successNotification('Upload File successfully');
+          }
         }
         ((<HTMLInputElement>document.getElementById('input_file')) as any).value = null;
       },

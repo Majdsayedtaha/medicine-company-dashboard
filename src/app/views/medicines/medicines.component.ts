@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/internal/Observable';
 import { User } from 'src/app/interfaces/user.model';
 import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { NotifierService } from 'src/app/services/notifier.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -15,7 +16,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./medicines.component.scss'],
 })
 export class MedicinesComponent implements OnInit {
-  constructor(private http: ApiService, private fb: FormBuilder) {}
+  constructor(private http: ApiService, private fb: FormBuilder,private notify:NotifierService) {}
   medicineForm!: FormGroup;
   faImages = faImages;
   faDownload = faDownload;
@@ -116,18 +117,29 @@ export class MedicinesComponent implements OnInit {
         this.getAllMedicines();
         this.getAllCategories();
         this.getAllPharmaceuticalForms();
-      } else {
-        let tx = '';
-        data.errorDetails.forEach((d: any) => {
-          tx = tx + '<li>' + d.error + '</li>';
-        });
-        // this.notifierService.errorNotification(tx, 'Errors');
+        console.log(data);
+        // if (data.errorDetails.length > 0) {
+        //   //Handle ERROR
+        //   let tx = '';
+        //   data.errorDetails.forEach((d: any) => {
+        //     console.log(d);
+        //     tx = tx + '<li>' + d.error + '</li>' + '</br>';
+        //     this.notify.errorNotification(tx, 'Errors');
+        //     //Handle ERROR Email if Found
+        //     // if (d.details?.email) {
+        //     //   tx = tx + '<li>' + d.details?.email + '</li>';
+        //     // }
+        //   });
+        // } else {
+        //   this.notify.successNotification('Upload File successfully');
+        // }
       }
       ((<HTMLInputElement>document.getElementById('input_file_medicine')) as any).value = null;
     });
   }
-  importTemplateToEXCEL() {
-    this.import().subscribe(response => this.downloadFile(response));
+  importTemplateToEXCEL(link: string) {
+    this.import(link).subscribe(response => {this.downloadFile(response);
+      this.notify.successNotification('download File successfully');});
   }
   import() {
     const headerParams = { Authorization: 'Bearer ' + this.userModel?.getToken() };
