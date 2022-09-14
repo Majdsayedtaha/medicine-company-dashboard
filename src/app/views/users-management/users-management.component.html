@@ -128,7 +128,7 @@
           <!--Region & City & Country  -->
           <div class="d-flex mt-2">
             <!-- Region -->
-            <label for="inputRegion" class="form-label">Region</label>
+            <label for="inputRegion" class="form-label me-2">Region</label>
             <select
               id="inputRegion"
               class="form-select"
@@ -141,14 +141,14 @@
             </select>
 
             <!-- City -->
-            <label for="inputCity" class="form-label ms-2">City</label>
+            <label for="inputCity" class="form-label  me-2">City</label>
             <select id="inputCity" class="form-select" required name="city" [(ngModel)]="user.city" #city="ngModel">
               <option selected>Choose...</option>
               <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
             </select>
 
             <!-- Country -->
-            <label for="inputCountry" class="form-label ms-2">Country</label>
+            <label for="inputCountry" class="form-label  me-2">Country</label>
             <select
               id="inputCountry"
               class="form-select"
@@ -242,7 +242,7 @@
 
 <ag-grid-angular
   #agGrid
-  style="width: 900px; height: 800px"
+  style="width: 950px; height: 800px"
   class="ag-theme-alpine"
   (gridReady)="gridReady($event)"
   [gridOptions]="gridOptin"

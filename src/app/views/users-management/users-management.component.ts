@@ -2,7 +2,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { faDownload, faUser, faUpload,faDeleteLeft } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faUser, faUpload, faDeleteLeft } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs/internal/Observable';
 import { User } from 'src/app/interfaces/user.model';
 import { ApiService } from 'src/app/services/api.service';
@@ -34,13 +34,13 @@ export class UsersManagementComponent implements OnInit {
   columnDefs = [
     // { headerName: '#', field: '#', sortable: true, filter: true },
     { headerName: 'firstName', field: 'firstName', sortable: true, filter: true, editable: true },
-    { headerName: 'lastName', field: 'lastName', sortable: true },
-    { headerName: 'email', field: 'email', sortable: true },
-    { headerName: 'role', field: 'role', sortable: true },
-    { headerName: 'region', field: 'region', sortable: true },
-    { headerName: 'country', field: 'country', sortable: true },
-    { headerName: 'city', field: 'city', sortable: true },
-    { headerName: 'specialMark', field: 'specialMark', sortable: true },
+    { headerName: 'lastName', field: 'lastName', sortable: true, editable: true },
+    { headerName: 'email', field: 'email', sortable: true, editable: true },
+    { headerName: 'role', field: 'role', sortable: true, editable: true },
+    { headerName: 'region', field: 'region', sortable: true, editable: true },
+    { headerName: 'country', field: 'country', sortable: true, editable: true },
+    { headerName: 'city', field: 'city', sortable: true, editable: true },
+    { headerName: 'specialMark', field: 'specialMark', sortable: true, editable: true },
   ];
 
   rowData: any[] = [];
@@ -103,12 +103,27 @@ export class UsersManagementComponent implements OnInit {
     const selectedData = this.agGrid.api.getSelectedRows();
     const id = parseInt(selectedData.map(user => user.id).toString());
     this.agGrid.api.updateRowData({ remove: selectedData });
-    this.http.post('http://localhost/aphamea_project/web/index.php/site/delete', { id }).subscribe(user => {
-      console.log(user);
+    this.http.post('http://localhost/aphamea_project/web/index.php/site/delete', { id }).subscribe((res:any) => {
+      if(res.status=='ok'){
+        this.notify.successNotification('Delete User Successfully')
+      }
     });
   }
 
-  updateUser() {}
+  updateUser() {
+    const selectedNodes = this.agGrid.api.getSelectedNodes();
+    const selectedData = selectedNodes.map(node => node.data);
+
+    // convert array of object to one object
+    const obj = selectedData.reduce((obj, item) => Object.assign(obj, { [item.key]: item.value }));
+
+     console.log(obj);
+    this.http.post('http://localhost/aphamea_project/web/index.php/site/update-user-info',obj).subscribe((res:any) => {
+      if(res.status=='ok'){
+        this.notify.successNotification('Update User Successfully')
+      }
+    });
+  }
 
   gridReady(params: GridReadyEvent) {
     this.gridApi = params.api;

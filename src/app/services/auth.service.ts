@@ -19,23 +19,6 @@ export class AuthService {
   login(email: string, password: string) {
     return this.http.post(environment.base + '/site/login', { email, password });
   }
-  saveUserInfo(
-    firstName: string,
-    lastName: string,
-    img: string,
-    regionId: number,
-    role: string,
-    userContacts?: string[]
-  ) {
-    return this.http.post(environment.base + `/site/save-user-info`, {
-      firstName,
-      lastName,
-      img,
-      regionId,
-      role,
-      userContacts,
-    });
-  }
 
   handleAuthentication(
     accessToken: string,
