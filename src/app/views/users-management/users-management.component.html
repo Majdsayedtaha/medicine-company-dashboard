@@ -232,8 +232,10 @@
 </table> -->
 
 <button (click)="getSelectedRows()">Get Selected Rows</button>
-<button (click)="delete()">dalete Selected Rows</button>
+<button (click)="deleteRowUser()">dalete Selected Rows</button>
+<button (click)="updateUser()">dalete Selected Rows</button>
 <ag-grid-angular
+  #agGrid
   style="width: 900px; height: 800px"
   class="ag-theme-alpine"
   (gridReady)="gridReady($event)"

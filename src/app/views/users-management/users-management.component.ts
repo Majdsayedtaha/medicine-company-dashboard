@@ -1,7 +1,6 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
 
 import { faDownload, faUser, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs/internal/Observable';
@@ -24,13 +23,49 @@ interface IUser {
   city?: string;
   specialMark?: string;
 }
-
 @Component({
   selector: 'app-users-management',
   templateUrl: './users-management.component.html',
   styleUrls: ['./users-management.component.scss'],
 })
 export class UsersManagementComponent implements OnInit {
+  @ViewChild('agGrid') agGrid!: AgGridAngular;
+
+  columnDefs = [
+    // { headerName: '#', field: '#', sortable: true, filter: true },
+    { headerName: 'firstName', field: 'firstName', sortable: true, filter: true, editable: true },
+    { headerName: 'lastName', field: 'lastName', sortable: true },
+    { headerName: 'email', field: 'email', sortable: true },
+    { headerName: 'role', field: 'role', sortable: true },
+    { headerName: 'region', field: 'region', sortable: true },
+    { headerName: 'country', field: 'country', sortable: true },
+    { headerName: 'city', field: 'city', sortable: true },
+    { headerName: 'specialMark', field: 'specialMark', sortable: true },
+  ];
+
+  rowData: any[] = [];
+
+  gridApi: any;
+  gridOptin: GridOptions = {
+    defaultColDef: {
+      resizable: false,
+      lockPinned: true,
+      wrapText: true,
+      autoHeight: true,
+      suppressMovable: true,
+      headerClass: 'headerCell',
+    },
+
+    columnDefs: this.columnDefs,
+
+    animateRows: true,
+    rowSelection: 'single',
+    rowMultiSelectWithClick: true,
+    getRowId: (params: GetRowIdParams) => {
+      return params.data.id;
+    },
+  };
+
   user: IUser = {
     firstName: '',
     lastName: '',
@@ -45,106 +80,64 @@ export class UsersManagementComponent implements OnInit {
   userModel?: User;
   users: IUser[] = [];
   roles = ['Doctor', 'Pharmacist', ' Sales Representative', 'Scientific Representative', 'Agent', 'Company Manager'];
-  constructor(private http: ApiService, private router: Router, private notify: NotifierService) {}
+
   faDownload = faDownload;
   faUser = faUser;
   faUpload = faUpload;
+
+  constructor(private http: ApiService, private notify: NotifierService) {}
+
   ngOnInit(): void {
     this.loadUsers();
   }
 
-
-
-  
-  @ViewChild('agGrid') agGrid!: AgGridAngular;
-  columnDefs = [
-    // { headerName: '#', field: '#', sortable: true, filter: true, checkboxSelection: true },
-    { headerName: 'FirstName', field: 'firstName', sortable: true, filter: true },
-    { headerName: 'LastName', field: 'lastName', sortable: true },
-    { headerName: 'Email', field: 'email', sortable: true },
-    { headerName: 'Role', field: 'role', sortable: true },
-    { headerName: 'Region', field: 'region', sortable: true },
-    { headerName: 'Country', field: 'country', sortable: true },
-    { headerName: 'City', field: 'city', sortable: true },
-    { headerName: 'SpecialMark', field: 'specialMark', sortable: true },
-  ];
-
-  rowData: any[] = [];
-
   getSelectedRows() {
     const selectedNodes = this.agGrid.api.getSelectedNodes();
     const selectedData = selectedNodes.map(node => node.data);
-    const selectedDataStringPresentation = selectedData.map(node => `${node.make} ${node.model}`).join(', ');
-
+    const selectedDataStringPresentation = selectedData.map(node => `${node.firstName} ${node.lastName}`).join(', ');
     alert(`Selected nodes: ${selectedDataStringPresentation}`);
   }
-  delete() {
+
+  deleteRowUser() {
     const selectedData = this.agGrid.api.getSelectedRows();
+    const id = parseInt(selectedData.map(user => user.id).toString());
     this.agGrid.api.updateRowData({ remove: selectedData });
-    // http://localhost/aphamea_project/web/index.php/site/delete
-    console.log(selectedData);
+    this.http.post('http://localhost/aphamea_project/web/index.php/site/delete', { id }).subscribe(user => {
+      console.log(user);
+    });
   }
-   gridApi:any
- gridOptin:GridOptions = {
-  defaultColDef: {
-    resizable: false,
-    lockPinned: true,
-    wrapText: true,
-    autoHeight: true,
-    suppressMovable: true,
-    headerClass: 'headerCell',
-  },
 
-  columnDefs: this.columnDefs,
+  updateUser() {}
 
-  animateRows: true,
-  rowSelection: 'single',
-  rowMultiSelectWithClick: true,
-  getRowId: (params: GetRowIdParams) => {
-    return params.data.id;
-  },
-};
-  gridReady(params:GridReadyEvent) {
-     this.gridApi=params.api;
-     let colApi=params.columnApi;
+  gridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    let colApi = params.columnApi;
     this.http.get(environment.base + 'site/get-all-users').subscribe((response: any) => {
-      this.rowData=response.users;
-      console.log(this.rowData);
+      this.rowData = response.users;
       this.gridApi.setRowData(this.rowData);
     });
     colApi.autoSizeAllColumns();
   }
 
-
-
   loadUsers() {
-    this.http.get(environment.base + 'site/get-all-users').subscribe(
-      (res: any) => {
-        if (res.status === 'ok') {
-          this.users = res.users;
-        } else {
-          this.notify.errorNotification(res.error);
-        }
-      },
-      error => {
-        this.notify.errorNotification(error);
+    this.http.get(environment.base + 'site/get-all-users').subscribe((res: any) => {
+      if (res.status === 'ok') {
+        this.users = res.users;
+      } else {
+        this.notify.errorNotification(res.error);
       }
-    );
+    });
   }
+
   onSubmit(userForm: NgForm) {
-    this.http.post(environment.base + '/site/signup', JSON.stringify(userForm.value)).subscribe(
-      (res: any) => {
-        if (res.status === 'ok') {
-          this.notify.successNotification('user added successfully');
-          this.loadUsers();
-        } else {
-          this.notify.errorNotification('error user added');
-        }
-      },
-      error => {
-        this.notify.errorNotification(error);
+    this.http.post(environment.base + '/site/signup', JSON.stringify(userForm.value)).subscribe((res: any) => {
+      if (res.status === 'ok') {
+        this.notify.successNotification('user added successfully');
+        this.loadUsers();
+      } else {
+        this.notify.errorNotification('error user added');
       }
-    );
+    });
   }
 
   // Handling Import Excel Template For Adding New Users
@@ -170,22 +163,18 @@ export class UsersManagementComponent implements OnInit {
         }
         ((<HTMLInputElement>document.getElementById('input_file')) as any).value = null;
       },
-      error: (error: any) => {
-        this.notify.errorNotification(error);
-      },
     });
   }
+
   importTemplateToEXCEL() {
     this.import().subscribe({
       next: response => {
         this.downloadFile(response);
         this.notify.successNotification('download File successfully');
       },
-      error: (error: any) => {
-        this.notify.errorNotification(error);
-      },
     });
   }
+
   import() {
     const headerParams = { Authorization: 'Bearer ' + this.userModel?.getToken() };
     return this.http.get(environment.base + 'site/generate-excel-file-template', {
