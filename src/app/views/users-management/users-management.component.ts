@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 import { saveAs } from 'file-saver';
 import { NotifierService } from 'src/app/services/notifier.service';
 import { AgGridAngular } from 'ag-grid-angular';
-import { GetRowIdParams, GridOptions, GridReadyEvent } from 'ag-grid-community';
+import { GetRowIdParams, GridApi, GridOptions, GridReadyEvent } from 'ag-grid-community';
 
 interface IUser {
   firstName?: string;
@@ -103,9 +103,9 @@ export class UsersManagementComponent implements OnInit {
     const selectedData = this.agGrid.api.getSelectedRows();
     const id = parseInt(selectedData.map(user => user.id).toString());
     this.agGrid.api.updateRowData({ remove: selectedData });
-    this.http.post('http://localhost/aphamea_project/web/index.php/site/delete', { id }).subscribe((res:any) => {
-      if(res.status=='ok'){
-        this.notify.successNotification('Delete User Successfully')
+    this.http.post(environment.base + '/site/delete', { id }).subscribe((res: any) => {
+      if (res.status == 'ok') {
+        this.notify.successNotification('Delete User Successfully');
       }
     });
   }
@@ -117,10 +117,10 @@ export class UsersManagementComponent implements OnInit {
     // convert array of object to one object
     const obj = selectedData.reduce((obj, item) => Object.assign(obj, { [item.key]: item.value }));
 
-     console.log(obj);
-    this.http.post('http://localhost/aphamea_project/web/index.php/site/update-user-info',obj).subscribe((res:any) => {
-      if(res.status=='ok'){
-        this.notify.successNotification('Update User Successfully')
+    console.log(obj);
+    this.http.post(environment.base + '/site/update-user-info', obj).subscribe((res: any) => {
+      if (res.status == 'ok') {
+        this.notify.successNotification('Update User Successfully');
       }
     });
   }
@@ -128,7 +128,7 @@ export class UsersManagementComponent implements OnInit {
   gridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     let colApi = params.columnApi;
-    this.http.get(environment.base + 'site/get-all-users').subscribe((response: any) => {
+    this.http.get(environment.base + '/site/get-all-users').subscribe((response: any) => {
       this.rowData = response.users;
       this.gridApi.setRowData(this.rowData);
     });
@@ -136,9 +136,10 @@ export class UsersManagementComponent implements OnInit {
   }
 
   loadUsers() {
-    this.http.get(environment.base + 'site/get-all-users').subscribe((res: any) => {
+    this.http.get(environment.base + '/site/get-all-users').subscribe((res: any) => {
       if (res.status === 'ok') {
         this.users = res.users;
+        console.log(this.users);
       } else {
         this.notify.errorNotification(res.error);
       }
@@ -146,10 +147,16 @@ export class UsersManagementComponent implements OnInit {
   }
 
   onSubmit(userForm: NgForm) {
+    console.log(userForm.value);
     this.http.post(environment.base + '/site/signup', JSON.stringify(userForm.value)).subscribe((res: any) => {
       if (res.status === 'ok') {
+        // Update Table
+        const res = this.gridOption.api!.applyTransaction({
+          add: [userForm.value],
+          addIndex: 0,
+        })!;
+
         this.notify.successNotification('user added successfully');
-        this.loadUsers();
       } else {
         this.notify.errorNotification('error user added');
       }
@@ -193,7 +200,7 @@ export class UsersManagementComponent implements OnInit {
 
   import() {
     const headerParams = { Authorization: 'Bearer ' + this.userModel?.getToken() };
-    return this.http.get(environment.base + 'site/generate-excel-file-template', {
+    return this.http.get(environment.base + '/site/generate-excel-file-template', {
       headers: new HttpHeaders(headerParams),
       observe: 'response',
       responseType: 'arraybuffer',
@@ -205,7 +212,7 @@ export class UsersManagementComponent implements OnInit {
     const headerParams = { Authorization: 'Bearer ' + accessToken };
     const formData = new FormData();
     formData.append('sheet', file, file.name);
-    return this.http.post(environment.base + `site/import-excel-file`, formData, {
+    return this.http.post(environment.base + `/site/import-excel-file`, formData, {
       headers: new HttpHeaders(headerParams),
     });
   }

@@ -5,6 +5,15 @@
     Add User
   </button>
 
+  <!-- Delete User Table -->
+  <button class="btn btn-danger  excel-btn" (click)="deleteRowUser()">
+    <fa-icon [icon]="faDeleteLeft" class="me-2"></fa-icon>delete User
+  </button>
+   <!-- update User Table -->
+  <button class="btn btn-success excel-btn" (click)="updateUser()">
+    <fa-icon [icon]="faUser" class="me-2"></fa-icon>update User
+  </button>
+
   <button
     type="button"
     class="btn btn-success excel-btn"
@@ -26,14 +35,7 @@
     </label>
   </button>
 
-  <!-- Delete User Table -->
-  <button class="btn btn-danger  excel-btn" (click)="deleteRowUser()">
-    <fa-icon [icon]="faDeleteLeft" class="me-2"></fa-icon>delete User
-  </button>
-   <!-- update User Table -->
-  <button class="btn btn-success excel-btn" (click)="updateUser()">
-    <fa-icon [icon]="faUser" class="me-2"></fa-icon>update User
-  </button>
+
 </div>
 
 <!-- Modal -->
