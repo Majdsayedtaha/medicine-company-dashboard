@@ -46,7 +46,7 @@ export class UsersManagementComponent implements OnInit {
   rowData: any[] = [];
 
   gridApi: any;
-  gridOptin: GridOptions = {
+  gridOption: GridOptions = {
     defaultColDef: {
       resizable: false,
       lockPinned: true,
