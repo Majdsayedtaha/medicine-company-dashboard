@@ -231,9 +231,15 @@
   </tbody>
 </table> -->
 
-<button (click)="getSelectedRows()">Get Selected Rows</button>
-<button (click)="deleteRowUser()">dalete Selected Rows</button>
-<button (click)="updateUser()">dalete Selected Rows</button>
+<!-- <button class="btn btn-success mb-2" (click)="getSelectedRows()">Get Selected Rows</button> -->
+<button class="btn btn-danger mb-3 excel-btn" (click)="deleteRowUser()">
+  <fa-icon [icon]="faDeleteLeft" class="me-2"></fa-icon>delete User
+</button>
+
+<button class="btn btn-success mb-3 excel-btn" (click)="updateUser()">
+  <fa-icon [icon]="faUser" class="me-2"></fa-icon>update User
+</button>
+
 <ag-grid-angular
   #agGrid
   style="width: 900px; height: 800px"
