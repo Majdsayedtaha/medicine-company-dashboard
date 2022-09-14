@@ -2,7 +2,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { faDownload, faUser, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faUser, faUpload,faDeleteLeft } from '@fortawesome/free-solid-svg-icons';
 import { Observable } from 'rxjs/internal/Observable';
 import { User } from 'src/app/interfaces/user.model';
 import { ApiService } from 'src/app/services/api.service';
@@ -84,6 +84,7 @@ export class UsersManagementComponent implements OnInit {
   faDownload = faDownload;
   faUser = faUser;
   faUpload = faUpload;
+  faDeleteLeft = faDeleteLeft;
 
   constructor(private http: ApiService, private notify: NotifierService) {}
 
