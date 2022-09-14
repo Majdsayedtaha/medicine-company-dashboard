@@ -11,7 +11,7 @@
     data-placement="top"
     title="Import Excel Template"
     data-bs-toggle="dropdown"
-    aria-expanded="false">
+    aria-expanded="false" (click)="importTemplateToEXCEL()">
     <fa-icon [icon]="faDownload"></fa-icon>
   </button>
   <button
@@ -26,17 +26,17 @@
       <input class="pointer d-none" id="input_file_medicine" type="file" (change)="importingExcel($event)" />
     </label>
   </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
+  <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
     <li (click)="importTemplateToEXCEL('/category/generate-excel-file-template')">
       <a class="dropdown-item">Category Template</a>
     </li>
     <li (click)="importTemplateToEXCEL('/pharmaceutical-form/generat-excel-file-template')">
       <a class="dropdown-item">Pharmaceutical Form Template</a>
     </li>
-    <li (click)="importTemplateToEXCEL('/medicine/generate-excel-file-template')">
+    <li >
       <a class="dropdown-item">Medicine Template</a>
     </li>
-  </ul>
+  </ul> -->
 </div>
 
 <!-- Medicine Table -->
@@ -45,7 +45,6 @@
     <tr>
       <th scope="col">#</th>
       <th scope="col">productName</th>
-      <th scope="col">barcode</th>
       <th scope="col">composition</th>
       <th scope="col">expiredDate</th>
       <th scope="col">packing</th>
@@ -57,7 +56,6 @@
     <tr *ngFor="let medicine of medicines; let i = index">
       <th scope="row">{{ i + 1 }}</th>
       <td>{{ medicine.productName }}</td>
-      <td>{{ medicine.barcode }}</td>
       <td>{{ medicine.composition }}</td>
       <td>{{ medicine.expiredDate }}</td>
       <td>{{ medicine.packing }}</td>
@@ -131,7 +129,7 @@
         Please Provide Us Your New Medicine Details
         <form [formGroup]="medicineForm">
           <div class="form-floating mb-3">
-            <input type="text" class="form-control  mt-3" formControlName="productName" />
+            <input type="text" class="form-control mt-3" formControlName="productName" />
             <label for="floatingInput">Medicine Name</label>
           </div>
           <div class="row mb-3">
@@ -175,7 +173,10 @@
             <option selected>Choose Category</option>
             <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
           </select>
-          <select class="form-select mb-3" aria-label="Pharmaceutical Form Select" formControlName="pharmaceuticalFormId">
+          <select
+            class="form-select mb-3"
+            aria-label="Pharmaceutical Form Select"
+            formControlName="pharmaceuticalFormId">
             <option selected>Choose Pharmaceutical Form</option>
             <option *ngFor="let pharm of pharmaceuticalForms" [value]="pharm.id">{{ pharm.name }}</option>
           </select>

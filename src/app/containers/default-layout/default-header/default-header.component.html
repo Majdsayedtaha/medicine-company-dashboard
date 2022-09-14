@@ -155,17 +155,16 @@
                   type="file"
                   formControlName="img"
                   accept="image/*"
-                  #imgInput
                   id="upLoad"
                   class="d-none"
-                  (change)="processFile(imgInput)" />
+                  (change)="processFile($event)" />
               </label>
             </div>
             <!--Region & City & Country  -->
             <div class="d-flex mt-3 region">
               <!-- Region -->
               <label for="inputRegion" class="form-label">Region</label>
-              <select id="inputRegion" class="form-select" formControlName="region">
+              <select id="inputRegion" class="form-select" formControlName="regionId">
                 <option selected>Choose...</option>
                 <option>m</option>
                 <option>m</option>
@@ -175,7 +174,7 @@
 
               <!-- City -->
               <label for="inputCity" class="form-label ms-2">City</label>
-              <select id="inputCity" class="form-select" formControlName="city">
+              <select id="inputCity" class="form-select" formControlName="cityId">
                 <option selected>Choose...</option>
                 <option>m</option>
                 <option>m</option>
@@ -185,7 +184,7 @@
 
               <!-- Country -->
               <label for="inputCountry" class="form-label ms-2">Country</label>
-              <select id="inputCountry" class="form-select" formControlName="country">
+              <select id="inputCountry" class="form-select" formControlName="countryId">
                 <option selected>Choose...</option>
                 <option>m</option>
                 <option>m</option>

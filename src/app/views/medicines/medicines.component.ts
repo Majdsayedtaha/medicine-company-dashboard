@@ -34,7 +34,6 @@ export class MedicinesComponent implements OnInit {
 
     const fb = this.fb;
     this.medicineForm = fb.group({
-      // barcode: ['', [Validators.required]],
       productName: ['', [Validators.required]],
       indications: ['', [Validators.required]],
       packing: ['', [Validators.required]],
@@ -76,7 +75,6 @@ export class MedicinesComponent implements OnInit {
   }
   addMedicine() {
     const medicine = {
-      barcode: Math.random().toString(),
       productName: this.medicineForm.get('productName')?.value,
       indications: this.medicineForm.get('indications')?.value,
       packing: this.medicineForm.get('packing')?.value,
@@ -125,15 +123,15 @@ export class MedicinesComponent implements OnInit {
         });
         // this.notifierService.errorNotification(tx, 'Errors');
       }
-      ((<HTMLInputElement>document.getElementById('input_file')) as any).value = null;
+      ((<HTMLInputElement>document.getElementById('input_file_medicine')) as any).value = null;
     });
   }
-  importTemplateToEXCEL(link: string) {
-    this.import(link).subscribe(response => this.downloadFile(response));
+  importTemplateToEXCEL() {
+    this.import().subscribe(response => this.downloadFile(response));
   }
-  import(link: string) {
+  import() {
     const headerParams = { Authorization: 'Bearer ' + this.userModel?.getToken() };
-    return this.http.get(environment.base + link, {
+    return this.http.get(environment.base + '/medicine/generate-excel-file-template', {
       headers: new HttpHeaders(headerParams),
       observe: 'response',
       responseType: 'arraybuffer',
@@ -144,7 +142,7 @@ export class MedicinesComponent implements OnInit {
     const headerParams = { Authorization: 'Bearer ' + accessToken };
     const formData = new FormData();
     formData.append('sheet', file, file.name);
-    return this.http.post(environment.base + `site/import-excel-file`, formData, {
+    return this.http.post(environment.base + `/medicine/import-excel-file`, formData, {
       headers: new HttpHeaders(headerParams),
     });
   }
@@ -161,7 +159,6 @@ export class MedicinesComponent implements OnInit {
   getAllCategories() {
     this.http.get(environment.base + '/category/get-all').subscribe((res: any) => {
       if (res.status == 'ok') {
-        console.log(res);
         this.categories = res.categories;
       } else {
         console.log(res);
@@ -178,13 +175,24 @@ export class MedicinesComponent implements OnInit {
     });
   }
   getAllMedicines() {
-    this.http.get(environment.base + '/medicine/get-all').subscribe((res: any) => {
-      if (res.status == 'ok') {
-        console.log(res);
-        this.medicines = res.medicines;
-      } else {
-        console.log(res);
-      }
-    });
+    this.http
+      .post(environment.base + '/medicine/get-all', {
+        searchFilters: {
+          filters: [
+            { name: 'productName', status: false },
+            { name: 'indications', status: false },
+            { name: 'composition', status: false },
+          ],
+          searchText: '',
+        },
+      })
+      .subscribe((res: any) => {
+        if (res.status == 'ok') {
+          console.log(res);
+          this.medicines = res.medicines;
+        } else {
+          console.log(res);
+        }
+      });
   }
 }

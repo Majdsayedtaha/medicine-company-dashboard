@@ -8,6 +8,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
+import { HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-default-header',
@@ -15,7 +16,6 @@ import { Subscription } from 'rxjs';
 })
 export class DefaultHeaderComponent extends HeaderComponent implements OnInit, OnDestroy {
   saveUserInfoForm!: FormGroup;
-  userImg: any;
   submitted: boolean = false;
   faPesoSign = faPesoSign;
   userSubscription$?: Subscription;
@@ -27,9 +27,9 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
       this.userDetails = value;
     });
     this.saveUserInfoForm = this.fb.group({
-      region: [''],
-      city: [''],
-      country: [''],
+      regionId: [''],
+      cityId: [''],
+      countryId: [''],
       specialMark: [''],
       img: [null],
     });
@@ -50,35 +50,42 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
     this.auth.logout();
   }
 
-  processFile(imageInput: any) {
-    const file: File = imageInput.files[0];
-    this.upload(file);
+  processFile(event: any) {
+    if (event.target.files && event.target.files.length > 0) {
+      const file = event.target.files[0] as File;
+      this.upload(file);
+    }
   }
-
-  upload(file: any) {
-    const formData = new FormData();
-    formData.append('file', file);
-    this.userImg = formData.get('file');
+  file!: File;
+  upload(fileTest: File) {
+    // this.saveUserInfoForm.patchValue({
+    //   img: file,
+    // });
+    // this.saveUserInfoForm.get('img')?.updateValueAndValidity();
+    this.file = fileTest;
   }
   onReset() {
     this.submitted = false;
     this.saveUserInfoForm.reset();
   }
   onSaveUserInfo() {
+    const formData: any = new FormData();
+    formData.append('role', 5);
+    formData.append('img', this.file);
+    formData.append('email', this.userDetails.email);
     this.submitted = true;
     // stop here if form is invalid
     if (this.saveUserInfoForm.invalid) {
       return;
     }
+    const accessToken = this.userDetails?.getToken;
+    const headerParams = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
     this.http
-      .post(environment.base + '/site/save-user-info', {
-        userImage: this.userImg,
-        role: 5,
-        email: 'admin@admin.com',
-        // regionId: 1,
-        // cityId: 1,
-        // countryId: 1,
-        specialMark: 'text',
+      .post(environment.base + '/site/save-user-info', formData, {
+        headers: new HttpHeaders(headerParams),
       })
       .subscribe((res: any) => {
         if (res.status === 'ok') {
