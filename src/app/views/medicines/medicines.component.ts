@@ -1,12 +1,13 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { faDownload, faImages, faUpload, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faImages, faUpload,faBookMedical } from '@fortawesome/free-solid-svg-icons';
+import { AgGridAngular } from 'ag-grid-angular';
+import { GetRowIdParams, GridOptions, GridReadyEvent } from 'ag-grid-community';
 import * as saveAs from 'file-saver';
 import { Observable } from 'rxjs/internal/Observable';
 import { User } from 'src/app/interfaces/user.model';
 import { ApiService } from 'src/app/services/api.service';
-import { AuthService } from 'src/app/services/auth.service';
 import { NotifierService } from 'src/app/services/notifier.service';
 import { environment } from 'src/environments/environment';
 
@@ -16,17 +17,57 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./medicines.component.scss'],
 })
 export class MedicinesComponent implements OnInit {
-  constructor(private http: ApiService, private fb: FormBuilder, private notify: NotifierService) {}
-  medicineForm!: FormGroup;
+  @ViewChild('agGrid') agGrid!: AgGridAngular;
+
+  columnDefs = [
+    // { headerName: 'medicineImages', field: 'medicineImages', sortable: true, filter: true },
+    { headerName: 'productName', field: 'productName', sortable: true, filter: true, editable: true },
+    { headerName: 'categoryId', field: 'categoryId', sortable: true, filter: true, editable: true },
+    { headerName: 'pharmaceuticalFormId', field: 'pharmaceuticalFormId', sortable: true, editable: true },
+    { headerName: 'netPrice', field: 'netPrice', sortable: true, editable: true },
+    { headerName: 'price', field: 'price', sortable: true, editable: true },
+    { headerName: 'expiredDate', field: 'expiredDate', sortable: true, editable: true },
+    { headerName: 'composition', field: 'composition', sortable: true, editable: true },
+    { headerName: 'packing', field: 'packing', sortable: true, editable: true },
+    { headerName: 'indications', field: 'indications', sortable: true, editable: true },
+  ];
+
+  rowData: any[] = [];
+
+  gridApi: any;
+  gridOption: GridOptions = {
+    defaultColDef: {
+      resizable: false,
+      lockPinned: true,
+      wrapText: true,
+      autoHeight: true,
+      suppressMovable: true,
+      headerClass: 'headerCell',
+    },
+
+    columnDefs: this.columnDefs,
+
+    animateRows: true,
+    rowSelection: 'single',
+    rowMultiSelectWithClick: true,
+    getRowId: (params: GetRowIdParams) => {
+      return params.data.id;
+    },
+  };
+
   faImages = faImages;
-  faDownload = faDownload;
-  faUser = faUser;
+  faDownload = faDownload;;
   faUpload = faUpload;
+  faBookMedical = faBookMedical;
+
+  medicineForm!: FormGroup;
   images: any = [];
   userModel?: User;
   categories: { id: number; name: string }[] = [];
   pharmaceuticalForms: { id: number; name: string }[] = [];
   medicines: any[] = [];
+
+  constructor(private http: ApiService, private fb: FormBuilder, private notify: NotifierService) {}
 
   ngOnInit(): void {
     this.getAllMedicines();
@@ -46,6 +87,63 @@ export class MedicinesComponent implements OnInit {
       pharmaceuticalFormId: ['', [Validators.required]],
     });
   }
+
+  getSelectedRows() {
+    const selectedNodes = this.agGrid.api.getSelectedNodes();
+    const selectedData = selectedNodes.map(node => node.data);
+    const selectedDataStringPresentation = selectedData.map(node => `${node.firstName} ${node.lastName}`).join(', ');
+    alert(`Selected nodes: ${selectedDataStringPresentation}`);
+  }
+
+  // deleteRowMedicine() {
+  //   const selectedData = this.agGrid.api.getSelectedRows();
+  //   const id = parseInt(selectedData.map(user => user.id).toString());
+  //   this.agGrid.api.updateRowData({ remove: selectedData });
+  //   this.http.post('http://localhost/aphamea_project/web/index.php/site/delete', { id }).subscribe((res: any) => {
+  //     if (res.status == 'ok') {
+  //       this.notify.successNotification('Delete User Successfully');
+  //     }
+  //   });
+  // }
+
+  updateMedicine() {
+    const selectedNodes = this.agGrid.api.getSelectedNodes();
+    const selectedData = selectedNodes.map(node => node.data);
+
+    // convert array of object to one object
+    const obj = selectedData.reduce((obj, item) => Object.assign(obj, { [item.key]: item.value }));
+    console.log(obj);
+
+    this.http
+      .post('http://localhost/aphamea_project/web/index.php/medicine/update',{obj})
+      .subscribe((res: any) => {
+        if (res.status == 'ok') {
+          this.notify.successNotification('Update Medicine Successfully');
+        }
+      });
+  }
+
+  gridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    let colApi = params.columnApi;
+    this.http
+      .post(environment.base + '/medicine/get-all', {
+        searchFilters: {
+          filters: [
+            { name: 'productName', status: false },
+            { name: 'indications', status: false },
+            { name: 'composition', status: false },
+          ],
+          searchText: '',
+        },
+      })
+      .subscribe((response: any) => {
+        this.rowData = response.medicines;        ;
+        this.gridApi.setRowData(this.rowData);
+      });
+    colApi.autoSizeAllColumns();
+  }
+
   addCategory(categoryName: string) {
     this.http
       .post(environment.base + '/category/add', {
@@ -60,6 +158,7 @@ export class MedicinesComponent implements OnInit {
         }
       });
   }
+
   addPharmaceuticalForm(pharmaceuticalFormName: string) {
     this.http
       .post(environment.base + '/pharmaceutical-form/add', {
@@ -74,6 +173,7 @@ export class MedicinesComponent implements OnInit {
         }
       });
   }
+
   addMedicine() {
     const medicine = {
       productName: this.medicineForm.get('productName')?.value,
@@ -137,12 +237,14 @@ export class MedicinesComponent implements OnInit {
       ((<HTMLInputElement>document.getElementById('input_file_medicine')) as any).value = null;
     });
   }
+
   importTemplateToEXCEL() {
     this.import().subscribe(response => {
       this.downloadFile(response);
       this.notify.successNotification('download File successfully');
     });
   }
+
   import() {
     const headerParams = { Authorization: 'Bearer ' + this.userModel?.getToken() };
     return this.http.get(environment.base + '/medicine/generate-excel-file-template', {
@@ -151,6 +253,7 @@ export class MedicinesComponent implements OnInit {
       responseType: 'arraybuffer',
     });
   }
+
   upload(file: any): Observable<any> {
     const accessToken = this.userModel?.getToken;
     const headerParams = { Authorization: 'Bearer ' + accessToken };
@@ -160,6 +263,7 @@ export class MedicinesComponent implements OnInit {
       headers: new HttpHeaders(headerParams),
     });
   }
+
   public downloadFile(data: any) {
     const blob = new Blob([data.body], {
       type: data.headers.get('content-type'),
@@ -179,6 +283,7 @@ export class MedicinesComponent implements OnInit {
       }
     });
   }
+
   getAllPharmaceuticalForms() {
     this.http.get(environment.base + '/pharmaceutical-form/get-all').subscribe((res: any) => {
       if (res.status == 'ok') {
@@ -188,6 +293,7 @@ export class MedicinesComponent implements OnInit {
       }
     });
   }
+
   getAllMedicines() {
     this.http
       .post(environment.base + '/medicine/get-all', {
