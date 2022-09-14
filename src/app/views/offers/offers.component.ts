@@ -41,13 +41,24 @@ export class OffersComponent implements OnInit {
     });
   }
   getAllMedicines() {
-    this.http.get(environment.base + '/medicine/get-all').subscribe((res: any) => {
-      if (res.status == 'ok') {
-        this.medicines = res.medicines;
-      } else {
-        console.log(res);
-      }
-    });
+    this.http
+      .post(environment.base + '/medicine/get-all', {
+        searchFilters: {
+          filters: [
+            { name: 'productName', status: false },
+            { name: 'indications', status: false },
+            { name: 'composition', status: false },
+          ],
+          searchText: '',
+        },
+      })
+      .subscribe((res: any) => {
+        if (res.status == 'ok') {
+          this.medicines = res.medicines;
+        } else {
+          console.log(res);
+        }
+      });
   }
 
   addNewMedicineOffer() {
@@ -62,6 +73,7 @@ export class OffersComponent implements OnInit {
   }
 
   addNewOffer() {
+    // Todo update!
     this.http.post(environment.base + '/offer/add', JSON.stringify(this.offerForm.value)).subscribe((res: any) => {
       if (res.status === 'ok') {
         console.log(res);
@@ -75,7 +87,8 @@ export class OffersComponent implements OnInit {
     this.http.get(environment.base + '/offer/get-all').subscribe((res: any) => {
       if (res.status === 'ok') {
         this.offers = res.offers;
-      } else {
+      } else if (res.status == 'error') {
+        this.offers = [];
         console.log(res);
       }
     });

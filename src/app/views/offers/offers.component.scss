@@ -1,8 +1,8 @@
-.offer{
+.offer {
   background-color: #6d7c97;
   color: white;
 }
-.btn-input{
+.btn-input {
   width: 20px;
   height: 20px;
   border-radius: 20%;
@@ -14,8 +14,10 @@
   box-shadow: 0px 0px 10px 0px #f50000;
   align-items: center;
   justify-content: center;
-  *{
+  * {
     color: #f50000;
   }
-
+}
+.btn-danger {
+  color: #fff;
 }
