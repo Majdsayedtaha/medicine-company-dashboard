@@ -16,7 +16,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./medicines.component.scss'],
 })
 export class MedicinesComponent implements OnInit {
-  constructor(private http: ApiService, private fb: FormBuilder,private notify:NotifierService) {}
+  constructor(private http: ApiService, private fb: FormBuilder, private notify: NotifierService) {}
   medicineForm!: FormGroup;
   faImages = faImages;
   faDownload = faDownload;
@@ -138,8 +138,10 @@ export class MedicinesComponent implements OnInit {
     });
   }
   importTemplateToEXCEL() {
-    this.import().subscribe(response => {this.downloadFile(response);
-      this.notify.successNotification('download File successfully');});
+    this.import().subscribe(response => {
+      this.downloadFile(response);
+      this.notify.successNotification('download File successfully');
+    });
   }
   import() {
     const headerParams = { Authorization: 'Bearer ' + this.userModel?.getToken() };
