@@ -92,53 +92,68 @@
                   name="file-input"
                   id="file-input"
                   formControlName="img"
-                  accept="image/*"
-                  id="upLoad"
-                  class="d-none"
-                  (change)="processFile($event)" />
-              </label>
-            </div>
-            <!--Region & City & Country  -->
-            <div class="d-flex mt-3 region">
-              <!-- Region -->
-              <label for="inputRegion" class="form-label">Region</label>
-              <select id="inputRegion" class="form-select" formControlName="regionId">
-                <option selected>Choose...</option>
-                <option>m</option>
-                <option>m</option>
-                <option>m</option>
-                <option>m</option>
-              </select>
+                  class="file-input__input"
+                  #imgInput
+                  (change)="processFile(imgInput)" />
+                <label class="file-input__label" for="file-input">
+                  <div class="user-img">
+                    <c-avatar
+                      cTextColor="primary"
+                      shape="rounded-1"
+                      size="md"
+                      [src]="
+                        userDetails?.img !== null
+                          ? userDetails.img
+                          : './../../../../assets/img/avatars/avatar-default.jpg'
+                      "
+                      status="success">
+                    </c-avatar>
+                    <b>+</b>
+                  </div>
+                </label>
+              </div>
+              <!--Region & City & Country  -->
+              <div class="d-flex mt-3 region">
+                <!-- Region -->
+                <label for="inputRegion" class="form-label">Region</label>
+                <select id="inputRegion" class="form-select" formControlName="regionId">
+                  <option selected>Choose...</option>
+                  <option>m</option>
+                  <option>m</option>
+                  <option>m</option>
+                  <option>m</option>
+                </select>
 
-              <!-- City -->
-              <label for="inputCity" class="form-label ms-2">City</label>
-              <select id="inputCity" class="form-select" formControlName="cityId">
-                <option selected>Choose...</option>
-                <option>m</option>
-                <option>m</option>
-                <option>m</option>
-                <option>m</option>
-              </select>
+                <!-- City -->
+                <label for="inputCity" class="form-label ms-2">City</label>
+                <select id="inputCity" class="form-select" formControlName="cityId">
+                  <option selected>Choose...</option>
+                  <option>m</option>
+                  <option>m</option>
+                  <option>m</option>
+                  <option>m</option>
+                </select>
 
-              <!-- Country -->
-              <label for="inputCountry" class="form-label ms-2">Country</label>
-              <select id="inputCountry" class="form-select" formControlName="countryId">
-                <option selected>Choose...</option>
-                <option>m</option>
-                <option>m</option>
-                <option>m</option>
-                <option>m</option>
-              </select>
-            </div>
-            <!-- Special Mark-->
-            <div class="row">
-              <label for="inputSpecialMark" class="col-form-label label ">SpecialMark</label>
-              <input
-                type="text"
-                class="form-control mt-2 "
-                id="inputSpecialMark"
-                placeholder="SpecialMark"
-                formControlName="specialMark" />
+                <!-- Country -->
+                <label for="inputCountry" class="form-label ms-2">Country</label>
+                <select id="inputCountry" class="form-select" formControlName="countryId">
+                  <option selected>Choose...</option>
+                  <option>m</option>
+                  <option>m</option>
+                  <option>m</option>
+                  <option>m</option>
+                </select>
+              </div>
+              <!-- Special Mark-->
+              <div class="row">
+                <label for="inputSpecialMark" class="col-form-label label">SpecialMark</label>
+                <input
+                  type="text"
+                  class="form-control mt-2"
+                  id="inputSpecialMark"
+                  placeholder="SpecialMark"
+                  formControlName="specialMark" />
+              </div>
             </div>
           </div>
         </form>

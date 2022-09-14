@@ -59,14 +59,14 @@ export class UsersManagementComponent implements OnInit {
   @ViewChild('agGrid') agGrid!: AgGridAngular;
   columnDefs = [
     // { headerName: '#', field: '#', sortable: true, filter: true, checkboxSelection: true },
-    { headerName: 'FirstName', field: 'FirstName', sortable: true, filter: true },
-    { headerName: 'LastName', field: 'LastName', sortable: true },
-    { headerName: 'Email', field: 'Email', sortable: true },
-    { headerName: 'Role', field: 'Role', sortable: true },
-    { headerName: 'Region', field: 'Region', sortable: true },
-    { headerName: 'Country', field: 'Country', sortable: true },
-    { headerName: 'City', field: 'City', sortable: true },
-    { headerName: 'SpecialMark', field: 'SpecialMark', sortable: true },
+    { headerName: 'FirstName', field: 'firstName', sortable: true, filter: true },
+    { headerName: 'LastName', field: 'lastName', sortable: true },
+    { headerName: 'Email', field: 'email', sortable: true },
+    { headerName: 'Role', field: 'role', sortable: true },
+    { headerName: 'Region', field: 'region', sortable: true },
+    { headerName: 'Country', field: 'country', sortable: true },
+    { headerName: 'City', field: 'city', sortable: true },
+    { headerName: 'SpecialMark', field: 'specialMark', sortable: true },
   ];
 
   rowData: any[] = [];
@@ -97,29 +97,9 @@ export class UsersManagementComponent implements OnInit {
 
   columnDefs: this.columnDefs,
 
-  rowData: [],
   animateRows: true,
-  pinnedBottomRowData: [
-    {
-      month: 'Total',
-      holidays: 27,
-      working: 30,
-      business_trip: 6,
-      direction: 21,
-      total_break: '60:00',
-      total_work: '480:00',
-      bonus: '04:30',
-      bonus_count: 3,
-      leave_type: '15:00',
-      overtime: '60:00',
-      after_mid: '60:00',
-    },
-  ],
   rowSelection: 'single',
   rowMultiSelectWithClick: true,
-  onSelectionChanged: () => {
-    let rows = this.gridApi.getSelectedRows();
-  },
   getRowId: (params: GetRowIdParams) => {
     return params.data.id;
   },
@@ -132,7 +112,6 @@ export class UsersManagementComponent implements OnInit {
       console.log(this.rowData);
       this.gridApi.setRowData(this.rowData);
     });
-    this.gridApi?.refreshHeader();
     colApi.autoSizeAllColumns();
   }
 

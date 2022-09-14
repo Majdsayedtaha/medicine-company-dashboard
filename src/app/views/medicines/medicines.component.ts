@@ -137,8 +137,8 @@ export class MedicinesComponent implements OnInit {
       ((<HTMLInputElement>document.getElementById('input_file_medicine')) as any).value = null;
     });
   }
-  importTemplateToEXCEL(link: string) {
-    this.import(link).subscribe(response => {this.downloadFile(response);
+  importTemplateToEXCEL() {
+    this.import().subscribe(response => {this.downloadFile(response);
       this.notify.successNotification('download File successfully');});
   }
   import() {

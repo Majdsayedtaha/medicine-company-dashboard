@@ -79,23 +79,16 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
       return;
     }
     const accessToken = this.userDetails?.getToken;
-    const headerParams = {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
 
-    this.http
-      .post(environment.base + '/site/save-user-info', formData, {
-        headers: new HttpHeaders(headerParams),
-      })
-      .subscribe((res: any) => {
-        if (res.status === 'ok') {
-          // TODO HERE SET DYNAMIC VALUES
-          this.auth.autoLogin('admin@admin.com', '12345678');
-          this.auth.user.subscribe(value => {
-            console.log(value);
-          });
-        }
-      });
+    this.http.post(environment.base + '/site/save-user-info', formData).subscribe((res: any) => {
+      if (res.status === 'ok') {
+        // TODO HERE SET DYNAMIC VALUES
+        this.auth.autoLogin('admin@admin.com', '12345678');
+        this.auth.user.subscribe(value => {
+          console.log(value);
+        });
+      }
+    });
   }
   deleteBackdrop() {
     const e = document.querySelector('.modal-backdrop');

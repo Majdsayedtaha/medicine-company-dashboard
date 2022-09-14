@@ -14,7 +14,12 @@
     (click)="importTemplateToEXCEL()">
     <fa-icon [icon]="faDownload"></fa-icon> Download
   </button>
-  <button type="button" class="btn btn-info excel-btn" data-toggle="tooltip" data-placement="top" title="Export Excel Template">
+  <button
+    type="button"
+    class="btn btn-info excel-btn"
+    data-toggle="tooltip"
+    data-placement="top"
+    title="Export Excel Template">
     <label for="input_file">
       <fa-icon [icon]="faUpload"></fa-icon> Upload
       <input class="pointer" id="input_file" type="file" (change)="importingExcel($event)" />
@@ -197,7 +202,7 @@
   </div>
 </div>
 
-<table class="table table-striped table-hover">
+<!-- <table class="table table-striped table-hover">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -224,16 +229,14 @@
       <td>{{ user.specialMark }}</td>
     </tr>
   </tbody>
-</table>
-
+</table> -->
 
 <button (click)="getSelectedRows()">Get Selected Rows</button>
 <button (click)="delete()">dalete Selected Rows</button>
 <ag-grid-angular
-    style="width: 900px; height: 800px;"
-    class="ag-theme-alpine"
-    (gridReady)="gridReady($event)"
-    [gridOptions]="gridOptin"
-    [columnDefs]="columnDefs"
-    rowSelection="multiple"
-    ></ag-grid-angular>
+  style="width: 900px; height: 800px"
+  class="ag-theme-alpine"
+  (gridReady)="gridReady($event)"
+  [gridOptions]="gridOptin"
+  [columnDefs]="columnDefs"
+  rowSelection="multiple"></ag-grid-angular>
