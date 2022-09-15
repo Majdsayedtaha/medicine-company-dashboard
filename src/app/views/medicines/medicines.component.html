@@ -4,8 +4,12 @@
   <button class="btn" data-bs-toggle="modal" data-bs-target="#pharmaceuticalModal">New Pharmaceutical Form</button>
   <button class="btn" data-bs-toggle="modal" data-bs-target="#medicineModal">New Medicine</button>
     <!-- Update Medicine Table -->
-    <button class="btn   " (click)="updateMedicine()">
-      <fa-icon [icon]="faBookMedical" class="me-2"></fa-icon>update Medicine
+    <button class="btn" (click)="updateMedicine()">
+      <fa-icon [icon]="faBookMedical" class="me-2"></fa-icon>Update Medicine
+    </button>
+    <!-- Add Medicine Table -->
+    <button class="btn" (click)="deleteMedicine()">
+      <fa-icon [icon]="faBookMedical" class="me-2"></fa-icon>Delete Medicine
     </button>
 
   <button

@@ -1,7 +1,7 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { faDownload, faImages, faUpload,faBookMedical } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faImages, faUpload, faBookMedical } from '@fortawesome/free-solid-svg-icons';
 import { AgGridAngular } from 'ag-grid-angular';
 import { GetRowIdParams, GridOptions, GridReadyEvent } from 'ag-grid-community';
 import * as saveAs from 'file-saver';
@@ -56,7 +56,7 @@ export class MedicinesComponent implements OnInit {
   };
 
   faImages = faImages;
-  faDownload = faDownload;;
+  faDownload = faDownload;
   faUpload = faUpload;
   faBookMedical = faBookMedical;
 
@@ -95,32 +95,45 @@ export class MedicinesComponent implements OnInit {
     alert(`Selected nodes: ${selectedDataStringPresentation}`);
   }
 
-  // deleteRowMedicine() {
-  //   const selectedData = this.agGrid.api.getSelectedRows();
-  //   const id = parseInt(selectedData.map(user => user.id).toString());
-  //   this.agGrid.api.updateRowData({ remove: selectedData });
-  //   this.http.post('http://localhost/aphamea_project/web/index.php/site/delete', { id }).subscribe((res: any) => {
-  //     if (res.status == 'ok') {
-  //       this.notify.successNotification('Delete User Successfully');
-  //     }
-  //   });
-  // }
+  deleteMedicine() {
+    const selectedData = this.agGrid.api.getSelectedRows();
+    const id = parseInt(selectedData.map(medicine => medicine.id).toString());
+    this.agGrid.api.updateRowData({ remove: selectedData });
+
+    this.http.post(environment.base + '/medicine/delete', { id }).subscribe((res: any) => {
+      if (res.status == 'ok') {
+        this.notify.successNotification('Delete User Successfully');
+      }
+    });
+  }
 
   updateMedicine() {
     const selectedNodes = this.agGrid.api.getSelectedNodes();
     const selectedData = selectedNodes.map(node => node.data);
-
+    this.getAllMedicines();
     // convert array of object to one object
-    const obj = selectedData.reduce((obj, item) => Object.assign(obj, { [item.key]: item.value }));
-    console.log(obj);
-
-    this.http
-      .post('http://localhost/aphamea_project/web/index.php/medicine/update',{obj})
-      .subscribe((res: any) => {
+    selectedData.map((data:any) => {
+      console.log(data);
+      const medicine = {
+        productName: data.productName,
+        id: data.id,
+        indications: data.indications,
+        packing: parseInt(data.packing),
+        composition: data.composition,
+        expiredDate:parseInt( data.expiredDate),
+        price: parseInt(data.price),
+        netPrice: parseInt(data.netPrice),
+        pharmaceuticalFormId: parseInt(data.pharmaceuticalForms.map((resId:any)=>resId.id).toString()) ,
+        categoryId: parseInt(data.categories.map((resId:any)=>resId.id).toString()) ,
+        medicineImages: this.images,
+      };
+      console.log(medicine);
+      this.http.post(environment.base + '/medicine/update',medicine).subscribe((res: any) => {
         if (res.status == 'ok') {
           this.notify.successNotification('Update Medicine Successfully');
         }
       });
+    });
   }
 
   gridReady(params: GridReadyEvent) {
@@ -138,7 +151,7 @@ export class MedicinesComponent implements OnInit {
         },
       })
       .subscribe((response: any) => {
-        this.rowData = response.medicines;        ;
+        this.rowData = response.medicines;
         this.gridApi.setRowData(this.rowData);
       });
     colApi.autoSizeAllColumns();
@@ -192,6 +205,12 @@ export class MedicinesComponent implements OnInit {
         this.getAllMedicines();
         this.getAllCategories();
         this.getAllPharmaceuticalForms();
+
+        // Update Table
+        const res = this.gridOption.api!.applyTransaction({
+          add: [medicine],
+          addIndex: 0,
+        })!;
       } else {
         console.log(res);
       }
@@ -310,6 +329,7 @@ export class MedicinesComponent implements OnInit {
         if (res.status == 'ok') {
           console.log(res);
           this.medicines = res.medicines;
+          console.log(this.medicines);
         } else {
           console.log(res);
         }
