@@ -19,12 +19,13 @@
     data-bs-target="#offerDetailsModal"
     (click)="getOfferDetails(offer.id)">
     <c-widget-stat-b
+      style="cursor: pointer;"
       #widgetStatB2inv="cWidgetStatB"
       [title]="shortDate(offer.creationDate)"
       class="mb-4"
       [color]="offer.offerStatus == 1 ? 'info' : 'warning'"
       inverse
-      [text]="offer.offerStatus == 1 ? 'the offer is active now!' : 'the offer is inactive!'"
+      [text]="offer.offerStatus == 1 ? 'the offer is available now!' : 'the offer is not available!'"
       [value]="offer.name">
     </c-widget-stat-b>
   </c-col>

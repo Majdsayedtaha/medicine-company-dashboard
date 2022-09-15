@@ -10,7 +10,77 @@
   Add New Event
 </button>
 
+<c-row>
+  <c-col
+    lg="3"
+    md="6"
+    xs="12"
+    *ngFor="let event of events"
+    data-bs-toggle="modal"
+    data-bs-target="#eventDetailsModal"
+    (click)="getEventDetails(event.id)">
+    <c-widget-stat-b
+      style="cursor: pointer"
+      #widgetStatB2inv="cWidgetStatB"
+      [title]="shortDate(event.publishedDate)"
+      class="mb-4"
+      [color]="'danger'"
+      inverse
+      [text]="event.content"
+      [value]="event.title">
+    </c-widget-stat-b>
+  </c-col>
+</c-row>
+
 <!-- Event Modal -->
+<div class="modal fade" id="eventDetailsModal" tabindex="-1" aria-labelledby="eventDetailsModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="eventDetailsModalHeader">Event Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="eventForm">
+          <div class="row mb-3">
+            <label for="eventName"
+              >Event Name
+              <input
+                type="text"
+                class="form-control mt-2"
+                formControlName="name"
+                id="eventName"
+                [value]="activeEvent?.title" />
+            </label>
+            <label for="eventcontent"
+              >Event Content
+              <textarea
+                type="text"
+                class="form-control mt-2"
+                formControlName="content"
+                id="eventcontent"
+                [value]="activeEvent?.content">
+              </textarea>
+            </label>
+          </div>
+          <!-- <fa-icon [icon]="faSquarePlus"></fa-icon> -->
+          <br />
+          <br />
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="updateEvent(activeEvent.id)">
+          Save Changes
+        </button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteEvent(activeEvent.id)">
+          <fa-icon [icon]="faTrashAlt"></fa-icon>Delete
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
