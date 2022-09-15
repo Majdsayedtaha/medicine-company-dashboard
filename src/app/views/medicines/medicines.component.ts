@@ -19,6 +19,19 @@ import { environment } from 'src/environments/environment';
 export class MedicinesComponent implements OnInit {
   @ViewChild('agGrid') agGrid!: AgGridAngular;
 
+  faImages = faImages;
+  faDownload = faDownload;
+  faUpload = faUpload;
+  faBookMedical = faBookMedical;
+
+  medicineForm!: FormGroup;
+  images: any = [];
+  userModel?: User;
+  categories: { id: number; name: string }[] = [];
+  pharmaceuticalForms: { id: number; name: string }[] = [];
+  medicines: any[] = [];
+  rowData: any[] = [];
+
   columnDefs = [
     // { headerName: 'medicineImages', field: 'medicineImages', sortable: true, filter: true },
     { headerName: 'productName', field: 'productName', sortable: true, filter: true, editable: true },
@@ -32,8 +45,6 @@ export class MedicinesComponent implements OnInit {
     { headerName: 'indications', field: 'indications', sortable: true, editable: true },
   ];
 
-  rowData: any[] = [];
-
   gridApi: any;
   gridOption: GridOptions = {
     defaultColDef: {
@@ -41,7 +52,7 @@ export class MedicinesComponent implements OnInit {
       lockPinned: true,
       wrapText: true,
       autoHeight: true,
-      suppressMovable: true,
+      suppressMovable: false,
       headerClass: 'headerCell',
     },
 
@@ -54,18 +65,6 @@ export class MedicinesComponent implements OnInit {
       return params.data.id;
     },
   };
-
-  faImages = faImages;
-  faDownload = faDownload;
-  faUpload = faUpload;
-  faBookMedical = faBookMedical;
-
-  medicineForm!: FormGroup;
-  images: any = [];
-  userModel?: User;
-  categories: { id: number; name: string }[] = [];
-  pharmaceuticalForms: { id: number; name: string }[] = [];
-  medicines: any[] = [];
 
   constructor(private http: ApiService, private fb: FormBuilder, private notify: NotifierService) {}
 
@@ -112,7 +111,7 @@ export class MedicinesComponent implements OnInit {
     const selectedData = selectedNodes.map(node => node.data);
     this.getAllMedicines();
     // convert array of object to one object
-    selectedData.map((data:any) => {
+    selectedData.map((data: any) => {
       console.log(data);
       const medicine = {
         productName: data.productName,
@@ -120,15 +119,15 @@ export class MedicinesComponent implements OnInit {
         indications: data.indications,
         packing: parseInt(data.packing),
         composition: data.composition,
-        expiredDate:parseInt( data.expiredDate),
+        expiredDate: parseInt(data.expiredDate),
         price: parseInt(data.price),
         netPrice: parseInt(data.netPrice),
-        pharmaceuticalFormId: parseInt(data.pharmaceuticalForms.map((resId:any)=>resId.id).toString()) ,
-        categoryId: parseInt(data.categories.map((resId:any)=>resId.id).toString()) ,
+        pharmaceuticalFormId: parseInt(data.pharmaceuticalForms.map((resId: any) => resId.id).toString()),
+        categoryId: parseInt(data.categories.map((resId: any) => resId.id).toString()),
         medicineImages: this.images,
       };
       console.log(medicine);
-      this.http.post(environment.base + '/medicine/update',medicine).subscribe((res: any) => {
+      this.http.post(environment.base + '/medicine/update', medicine).subscribe((res: any) => {
         if (res.status == 'ok') {
           this.notify.successNotification('Update Medicine Successfully');
         }
@@ -209,7 +208,7 @@ export class MedicinesComponent implements OnInit {
         // Update Table
         const res = this.gridOption.api!.applyTransaction({
           add: [medicine],
-          addIndex: 0,
+          addIndex: this.medicines.length,
         })!;
       } else {
         console.log(res);
@@ -236,22 +235,25 @@ export class MedicinesComponent implements OnInit {
         this.getAllMedicines();
         this.getAllCategories();
         this.getAllPharmaceuticalForms();
-        console.log(data);
-        // if (data.errorDetails.length > 0) {
-        //   //Handle ERROR
-        //   let tx = '';
-        //   data.errorDetails.forEach((d: any) => {
-        //     console.log(d);
-        //     tx = tx + '<li>' + d.error + '</li>' + '</br>';
-        //     this.notify.errorNotification(tx, 'Errors');
-        //     //Handle ERROR Email if Found
-        //     // if (d.details?.email) {
-        //     //   tx = tx + '<li>' + d.details?.email + '</li>';
-        //     // }
-        //   });
-        // } else {
-        //   this.notify.successNotification('Upload File successfully');
-        // }
+        const res = this.gridOption.api!.applyTransaction({
+          add: this.medicines,
+          addIndex: this.medicines.length,
+        })!;
+        if (data.errorDetails.length > 0) {
+          //Handle ERROR
+          let tx = '';
+          data.errorDetails.forEach((d: any) => {
+            console.log(d);
+            tx = tx + '<li>' + d.error + '</li>' + '</br>';
+            this.notify.errorNotification(tx, 'Errors');
+            //Handle ERROR Email if Found
+            // if (d.details?.email) {
+            //   tx = tx + '<li>' + d.details?.email + '</li>';
+            // }
+          });
+        } else {
+          this.notify.successNotification('Upload File successfully');
+        }
       }
       ((<HTMLInputElement>document.getElementById('input_file_medicine')) as any).value = null;
     });

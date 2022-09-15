@@ -3,24 +3,22 @@
   <button class="btn" data-bs-toggle="modal" data-bs-target="#categoryModal">New Category</button>
   <button class="btn" data-bs-toggle="modal" data-bs-target="#pharmaceuticalModal">New Pharmaceutical Form</button>
   <button class="btn" data-bs-toggle="modal" data-bs-target="#medicineModal">New Medicine</button>
-    <!-- Update Medicine Table -->
-    <button class="btn" (click)="updateMedicine()">
-      <fa-icon [icon]="faBookMedical" class="me-2"></fa-icon>Update Medicine
-    </button>
-    <!-- Add Medicine Table -->
-    <button class="btn" (click)="deleteMedicine()">
-      <fa-icon [icon]="faBookMedical" class="me-2"></fa-icon>Delete Medicine
-    </button>
+  <!-- Update Medicine Table -->
+  <button class="btn" (click)="updateMedicine()">
+    <fa-icon [icon]="faBookMedical" class="me-2"></fa-icon>Update Medicine
+  </button>
+  <!-- Add Medicine Table -->
+  <button class="btn" (click)="deleteMedicine()">
+    <fa-icon [icon]="faBookMedical" class="me-2"></fa-icon>Delete Medicine
+  </button>
 
   <button
     type="button"
-    class="btn excel-btn dropdown-toggle dropdown-toggle-split rounded-0"
+    class="btn excel-btn rounded-0"
     id="dropdownMenuReference1"
     data-toggle="tooltip"
     data-placement="top"
     title="Import Excel Template"
-    data-bs-toggle="dropdown"
-    aria-expanded="false"
     (click)="importTemplateToEXCEL()">
     <fa-icon [icon]="faDownload"></fa-icon>
   </button>
@@ -36,8 +34,6 @@
       <input class="pointer d-none" id="input_file_medicine" type="file" (change)="importingExcel($event)" />
     </label>
   </button>
-
-
 
   <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
     <li (click)="importTemplateToEXCEL('/category/generate-excel-file-template')">
@@ -90,7 +86,8 @@
   (gridReady)="gridReady($event)"
   [gridOptions]="gridOption"
   [columnDefs]="columnDefs"
-  rowSelection="multiple"></ag-grid-angular>
+  rowSelection="single">
+</ag-grid-angular>
 
 <!-- Category Modal -->
 <div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModal" aria-hidden="true">
@@ -156,7 +153,7 @@
       </div>
       <div class="modal-body">
         Please Provide Us Your New Medicine Details
-        <form [formGroup]="medicineForm">
+        <form [formGroup]="medicineForm" >
           <div class="form-floating mb-3">
             <input type="text" class="form-control mt-3" formControlName="productName" />
             <label for="floatingInput">Medicine Name</label>

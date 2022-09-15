@@ -127,7 +127,7 @@ export class OffersComponent implements OnInit {
   }
   deleteOffer(id: number) {
     console.log(id);
-    this.http.post(environment.base + '/offer/delete', id).subscribe((res: any) => {
+    this.http.post(environment.base + '/offer/delete', { id }).subscribe((res: any) => {
       if (res.status === 'ok') {
         this.getAllOffers();
         console.log(res);

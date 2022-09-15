@@ -51,6 +51,7 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
   }
 
   processFile(event: any) {
+    console.log(event);
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0] as File;
       this.upload(file);
@@ -71,7 +72,7 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
   onSaveUserInfo() {
     const formData: any = new FormData();
     formData.append('role', 5);
-    formData.append('img', this.file);
+    formData.append('userImage', this.file);
     formData.append('email', this.userDetails.email);
     this.submitted = true;
     // stop here if form is invalid
@@ -79,16 +80,42 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
       return;
     }
     const accessToken = this.userDetails?.getToken;
-
-    this.http.post(environment.base + '/site/save-user-info', formData).subscribe((res: any) => {
-      if (res.status === 'ok') {
-        // TODO HERE SET DYNAMIC VALUES
-        this.auth.autoLogin('admin@admin.com', '12345678');
-        this.auth.user.subscribe(value => {
-          console.log(value);
-        });
-      }
-    });
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'multipart/form-data',
+      }),
+    };
+    this.http
+      .post(environment.base + '/site/save-user-info', formData, {
+        httpOptions,
+      })
+      .subscribe((res: any) => {
+        if (res.status === 'ok') {
+          // TODO HERE SET DYNAMIC VALUES To email and password by using update profile request.
+          this.http
+            .post(environment.base + '/site/login', { email: 'admin@admin.com', password: '11111111' })
+            .subscribe((res: any) => {
+              if (res.status === 'ok') {
+                this.auth.handleAuthentication(
+                  res.userInfo.accessToken,
+                  res.userInfo.email,
+                  res.userInfo.firstName,
+                  res.userInfo.lastName,
+                  res.userInfo.id,
+                  res.userInfo.img,
+                  res.userInfo.regionId,
+                  res.userInfo.role,
+                  res.userInfo.userContacts
+                );
+              } else {
+                console.log(res.details);
+              }
+            });
+          this.auth.user.subscribe(value => {
+            console.log(value);
+          });
+        }
+      });
   }
   deleteBackdrop() {
     const e = document.querySelector('.modal-backdrop');

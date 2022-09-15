@@ -93,8 +93,7 @@
                   id="file-input"
                   formControlName="img"
                   class="file-input__input"
-                  #imgInput
-                  (change)="processFile(imgInput)" />
+                  (change)="processFile($event)" />
                 <label class="file-input__label" for="file-input">
                   <div class="user-img">
                     <c-avatar
