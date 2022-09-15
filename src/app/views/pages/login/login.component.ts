@@ -28,7 +28,6 @@ export class LoginComponent {
   }
 
   onLogin(): void {
-
     this.submitted = true;
     if (this.loginForm.valid) {
       const email = this.loginForm.controls['email'].value;
