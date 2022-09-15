@@ -139,4 +139,11 @@ export class OffersComponent implements OnInit {
   shortDate(value: string): string {
     return value.substring(0, 10);
   }
+  onResetOfferForm() {
+    this.offerForm.reset();
+  }
+  onResetOfferDetailsForm() {
+      // TODO Save status checkbox
+    this.offerDetails.reset();
+  }
 }

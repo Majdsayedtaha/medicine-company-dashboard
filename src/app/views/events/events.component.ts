@@ -103,4 +103,8 @@ export class EventsComponent implements OnInit {
         }
       });
   }
+
+  onReset() {
+    this.eventForm.reset();
+  }
 }

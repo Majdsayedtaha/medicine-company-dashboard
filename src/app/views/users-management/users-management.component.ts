@@ -226,4 +226,9 @@ export class UsersManagementComponent implements OnInit {
     });
     saveAs(file);
   }
+
+  onReset(userForm:any) {
+    userForm.reset();
+  }
+
 }

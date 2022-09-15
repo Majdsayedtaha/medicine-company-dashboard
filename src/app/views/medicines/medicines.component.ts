@@ -337,4 +337,12 @@ export class MedicinesComponent implements OnInit {
         }
       });
   }
+
+  onReset() {
+    this.medicineForm.reset();
+  }
+
+  onResetPartForm(valueForm:any){
+    valueForm.value='';
+  }
 }

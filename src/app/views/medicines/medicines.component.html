@@ -105,7 +105,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onResetPartForm(categoryName)">Close</button>
         <button type="button" class="btn btn-primary" (click)="addCategory(categoryName.value)" data-bs-dismiss="modal">
           Add
         </button>
@@ -130,7 +130,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onResetPartForm(pharmaceuticalFormName)">Close</button>
         <button
           type="button"
           class="btn btn-primary"
@@ -209,7 +209,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onReset()">Close</button>
         <button type="button" class="btn btn-primary" (click)="addMedicine()" data-bs-dismiss="modal">Add</button>
       </div>
     </div>
