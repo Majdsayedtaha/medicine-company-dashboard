@@ -71,46 +71,27 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
   }
   onSaveUserInfo() {
     const formData: any = new FormData();
-    formData.append('role', 5);
-    formData.append('userImage', this.file);
-    formData.append('email', this.userDetails.email);
-    this.submitted = true;
-    // stop here if form is invalid
-    if (this.saveUserInfoForm.invalid) {
-      return;
-    }
-    const accessToken = this.userDetails?.getToken;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'multipart/form-data',
       }),
     };
+    formData.append('role', 5);
+    formData.append('userImage', this.file);
+    formData.append('email', this.userDetails.email);
+    formData.append('id', this.userDetails.id);
+    this.submitted = true;
+    if (this.saveUserInfoForm.invalid) {
+      return;
+    }
+
     this.http
-      .post(environment.base + '/site/save-user-info', formData, {
+      .post(environment.base + '/site/update-user-info', formData, {
         httpOptions,
       })
       .subscribe((res: any) => {
+        // this.auth.user.next();
         if (res.status === 'ok') {
-          // TODO HERE SET DYNAMIC VALUES To email and password by using update profile request.
-          this.http
-            .post(environment.base + '/site/login', { email: 'admin@admin.com', password: '11111111' })
-            .subscribe((res: any) => {
-              if (res.status === 'ok') {
-                this.auth.handleAuthentication(
-                  res.userInfo.accessToken,
-                  res.userInfo.email,
-                  res.userInfo.firstName,
-                  res.userInfo.lastName,
-                  res.userInfo.id,
-                  res.userInfo.img,
-                  res.userInfo.regionId,
-                  res.userInfo.role,
-                  res.userInfo.userContacts
-                );
-              } else {
-                console.log(res.details);
-              }
-            });
           this.auth.user.subscribe(value => {
             console.log(value);
           });

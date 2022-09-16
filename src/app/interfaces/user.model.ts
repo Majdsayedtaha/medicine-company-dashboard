@@ -10,7 +10,7 @@ export class User {
     public role: string,
     public userContacts: string[],
     public isAuth?: boolean,
-  ) // public lang?: string
+  )
   {}
   getToken() {
     return this.accessToken;

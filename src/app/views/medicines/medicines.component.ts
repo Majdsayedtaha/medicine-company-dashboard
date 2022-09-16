@@ -102,11 +102,16 @@ export class MedicinesComponent implements OnInit {
   deleteMedicine() {
     const selectedData = this.agGrid.api.getSelectedRows();
     const id = parseInt(selectedData.map(medicine => medicine.id).toString());
-    this.agGrid.api.updateRowData({ remove: selectedData });
+    //  const ids = selectedData.map((m:any) => {
+    //     m.id;
+    //     console.log(m);
+    //   });
 
-    this.http.post(environment.base + '/medicine/delete', { id }).subscribe((res: any) => {
+    console.log(selectedData);
+    this.agGrid.api.updateRowData({ remove: selectedData });
+    this.http.post(environment.base + '/medicine/delete', { ids: [id] }).subscribe((res: any) => {
       if (res.status == 'ok') {
-        this.notify.successNotification('Delete User Successfully');
+        this.notify.successNotification('Delete Medicine Successfully');
       }
     });
   }
@@ -156,21 +161,22 @@ export class MedicinesComponent implements OnInit {
         },
       })
       .subscribe((res: any) => {
-        const mds = res.medicines.map((m: any) => {
-          return {
-            categories: m.categories?.map((catName: any) => catName.name),
-            pharmaceuticalForms: m.pharmaceuticalForms?.map((phName: any) => phName.name),
-            composition: m.composition,
-            expiredDate: m.expiredDate,
-            indications: m.indications,
-            netPrice: m.netPrice,
-            packing: m.packing,
-            price: m.price,
-            productName: m.productName,
-          };
-        });
-        console.log(mds);
-        this.rowData = mds;
+        // const mds = res.medicines.map((m: any) => {
+        //   return {
+        //     categories: m.categories?.map((catName: any) => catName.name),
+        //     pharmaceuticalForms: m.pharmaceuticalForms?.map((phName: any) => phName.name),
+        //     composition: m.composition,
+        //     expiredDate: m.expiredDate,
+        //     indications: m.indications,
+        //     netPrice: m.netPrice,
+        //     packing: m.packing,
+        //     price: m.price,
+        //     productName: m.productName,
+        //     id: m.id,
+        //   };
+        // });
+        // console.log(mds);
+        this.rowData = this.medicines;
         this.gridApi.setRowData(this.rowData);
       });
     colApi.autoSizeAllColumns();
