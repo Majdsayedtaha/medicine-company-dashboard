@@ -6,13 +6,9 @@ import { catchError } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { throwError } from 'rxjs';
 import { User } from './user.model';
-// import { ToastrService } from 'ngx-toastr';
-
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
-  constructor(
-    private authService: AuthService // private toastr: ToastrService
-  ) {}
+  constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     return this.authService.user.pipe(
@@ -21,7 +17,6 @@ export class AuthInterceptorService implements HttpInterceptor {
         if (!user) {
           return next.handle(req).pipe(
             catchError(err => {
-              // this.toastr.error('Something went wrong');
               return throwError(() => err.error.message);
             })
           );
@@ -37,10 +32,6 @@ export class AuthInterceptorService implements HttpInterceptor {
         });
         return next.handle(modifiedReq).pipe(
           catchError(err => {
-            // if (user.lang === 'en-US')
-            //   this.toastr.error('Something went wrong');
-            // else
-            //  this.toastr.error('حدث خطأ ما');
             return throwError(() => err.error.message);
           })
         );
