@@ -25,6 +25,7 @@ import {
 } from '@coreui/angular';
 
 import { IconModule } from '@coreui/icons-angular';
+import { NgxFileDropModule } from 'ngx-file-drop';
 
 @NgModule({
   declarations: [],
@@ -51,7 +52,8 @@ import { IconModule } from '@coreui/icons-angular';
     BadgeModule,
     ListGroupModule,
     CardModule,
-    ModalModule
+    ModalModule,
+    NgxFileDropModule,
   ],
   exports: [
     AvatarModule,
@@ -77,20 +79,8 @@ import { IconModule } from '@coreui/icons-angular';
     ListGroupModule,
     FontAwesomeModule,
     CardModule,
-
-    ModalModule
+    ModalModule,
+    NgxFileDropModule,
   ],
-  //   providers: [
-  //     {
-  //       provide: LocationStrategy,
-  //       useClass: HashLocationStrategy,
-  //     },
-  //     {
-  //       provide: PERFECT_SCROLLBAR_CONFIG,
-  //       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
-  //     },
-  //     IconSetService,
-  //     Title,
-  //   ],
 })
 export class SharedModule {}

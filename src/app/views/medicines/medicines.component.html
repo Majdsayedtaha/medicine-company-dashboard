@@ -104,7 +104,9 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onResetPartForm(categoryName)">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onResetPartForm(categoryName)">
+          Close
+        </button>
         <button type="button" class="btn btn-primary" (click)="addCategory(categoryName.value)" data-bs-dismiss="modal">
           Add
         </button>
@@ -129,7 +131,13 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onResetPartForm(pharmaceuticalFormName)">Close</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          (click)="onResetPartForm(pharmaceuticalFormName)">
+          Close
+        </button>
         <button
           type="button"
           class="btn btn-primary"
@@ -152,13 +160,13 @@
       </div>
       <div class="modal-body">
         Please Provide Us Your New Medicine Details
-        <form [formGroup]="medicineForm" >
+        <form [formGroup]="medicineForm">
           <div class="form-floating mb-3">
             <input type="text" class="form-control mt-3" formControlName="productName" />
             <label for="floatingInput">Medicine Name</label>
           </div>
           <div class="row mb-3">
-            <label for="medicineImages"
+            <!-- <label for="medicineImages"
               >Select Your New Medicine Image/s please
               <input
                 type="file"
@@ -168,7 +176,33 @@
                 class="d-none"
                 (change)="processFile($event)" />
               <fa-icon class="imgs-icon" [icon]="faImages"></fa-icon>
-            </label>
+            </label> -->
+            <div class="center">
+              <ngx-file-drop
+                dropZoneLabel="Drop files here"
+                (onFileDrop)="dropped($event)">
+                <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+                  Drag Your Images Of This Medicines
+                  <button type="button" (click)="openFileSelector()">Browse Files</button>
+                </ng-template>
+              </ngx-file-drop>
+              <div class="upload-table">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Images Uploaded</th>
+                    </tr>
+                  </thead>
+                  <tbody class="upload-name-style">
+                    <tr *ngFor="let item of files; let i = index">
+                      <td>
+                        <strong>{{ item.relativePath }}</strong>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
           <div class="form-floating mb-3">
             <input type="text" class="form-control" formControlName="indications" />

@@ -5,6 +5,7 @@ import { faDownload, faImages, faUpload, faBookMedical } from '@fortawesome/free
 import { AgGridAngular } from 'ag-grid-angular';
 import { GetRowIdParams, GridOptions, GridReadyEvent } from 'ag-grid-community';
 import * as saveAs from 'file-saver';
+import { NgxFileDropEntry } from 'ngx-file-drop';
 import { Observable } from 'rxjs/internal/Observable';
 import { User } from 'src/app/interfaces/user.model';
 import { ApiService } from 'src/app/services/api.service';
@@ -17,6 +18,26 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./medicines.component.scss'],
 })
 export class MedicinesComponent implements OnInit {
+  globalFormData = new FormData();
+  // ! UPLOADER START
+  public files: NgxFileDropEntry[] = [];
+
+  public dropped(files: NgxFileDropEntry[]) {
+    this.files = files;
+    for (const droppedFile of files) {
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+          this.globalFormData.append('medicineImages', file, droppedFile.relativePath);
+        });
+      } else {
+        // It was a directory (empty directories are added, otherwise only files)
+        const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
+        console.log(droppedFile.relativePath, fileEntry);
+      }
+    }
+  }
+  // ! UPLOADER END
   @ViewChild('agGrid') agGrid!: AgGridAngular;
 
   faImages = faImages;
@@ -25,7 +46,6 @@ export class MedicinesComponent implements OnInit {
   faBookMedical = faBookMedical;
 
   medicineForm!: FormGroup;
-  images: any = [];
   userModel?: User;
   categories: { id: number; name: string }[] = [];
   pharmaceuticalForms: { id: number; name: string }[] = [];
@@ -35,14 +55,46 @@ export class MedicinesComponent implements OnInit {
   columnDefs = [
     // { headerName: 'medicineImages', field: 'medicineImages', sortable: true, filter: true },
     { headerName: 'Medicine Name', field: 'productName', sortable: true, filter: true, editable: true },
-    { headerName: 'category', field: 'categories', sortable: true, filter: true, editable: true },
-    { headerName: 'pharmaceutical Form', field: 'pharmaceuticalForms', sortable: true, editable: true },
+    {
+      headerName: 'category',
+      field: 'categories',
+      cellRenderer: (params: any) => {
+        return params.value[0].name;
+      },
+      sortable: true,
+      filter: true,
+      editable: true,
+    },
+    {
+      headerName: 'pharmaceutical Form',
+      field: 'pharmaceuticalForms',
+      cellRenderer: (params: any) => {
+        return params.value[0].name;
+      },
+      sortable: true,
+      editable: true,
+    },
     { headerName: 'Price', field: 'price', sortable: true, editable: true },
     { headerName: 'Net Price', field: 'netPrice', sortable: true, editable: true },
-    { headerName: 'expired Date(Years)', field: 'expiredDate', sortable: true, editable: true },
+    {
+      headerName: 'expired Date(Years)',
+      field: 'expiredDate',
+      cellRenderer: (params: any) => {
+        return params.value + ' Years';
+      },
+      sortable: true,
+      editable: true,
+    },
     { headerName: 'Composition', field: 'composition', sortable: true, editable: true },
     { headerName: 'Packing', field: 'packing', sortable: true, editable: true },
     { headerName: 'Indications', field: 'indications', sortable: true, editable: true },
+    {
+      headerName: 'images',
+      field: 'imgs',
+      cellRenderer: (params: any) => {
+        return `<img src="${params.value[0]}" width="100" height="100">`;
+      },
+    },
   ];
 
   gridApi: any;
@@ -107,7 +159,6 @@ export class MedicinesComponent implements OnInit {
     //     console.log(m);
     //   });
 
-    console.log(selectedData);
     this.agGrid.api.updateRowData({ remove: selectedData });
     this.http.post(environment.base + '/medicine/delete', { ids: [id] }).subscribe((res: any) => {
       if (res.status == 'ok') {
@@ -122,7 +173,6 @@ export class MedicinesComponent implements OnInit {
     this.getAllMedicines();
     // convert array of object to one object
     selectedData.map((data: any) => {
-      console.log(data);
       const medicine = {
         productName: data.productName,
         id: data.id,
@@ -134,7 +184,7 @@ export class MedicinesComponent implements OnInit {
         netPrice: parseInt(data.netPrice),
         pharmaceuticalFormId: parseInt(data.pharmaceuticalForms.map((resId: any) => resId.id).toString()),
         categoryId: parseInt(data.categories.map((resId: any) => resId.id).toString()),
-        medicineImages: this.images,
+        // medicineImages: this.images,
       };
       console.log(medicine);
       this.http.post(environment.base + '/medicine/update', medicine).subscribe((res: any) => {
@@ -175,7 +225,6 @@ export class MedicinesComponent implements OnInit {
         //     id: m.id,
         //   };
         // });
-        // console.log(mds);
         this.rowData = this.medicines;
         this.gridApi.setRowData(this.rowData);
       });
@@ -213,6 +262,11 @@ export class MedicinesComponent implements OnInit {
   }
 
   addMedicine() {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'multipart/form-data',
+      }),
+    };
     const medicine = {
       productName: this.medicineForm.get('productName')?.value,
       indications: this.medicineForm.get('indications')?.value,
@@ -223,9 +277,18 @@ export class MedicinesComponent implements OnInit {
       netPrice: this.medicineForm.get('netPrice')?.value,
       pharmaceuticalFormId: this.medicineForm.get('categoryId')?.value,
       categoryId: this.medicineForm.get('pharmaceuticalFormId')?.value,
-      medicineImages: this.images,
+      // medicineImages: this.images,
     };
-    this.http.post(environment.base + '/medicine/add', medicine).subscribe((res: any) => {
+    this.globalFormData.append('categoryId', medicine.categoryId);
+    this.globalFormData.append('composition', medicine.composition);
+    this.globalFormData.append('indications', medicine.indications);
+    this.globalFormData.append('netPrice', medicine.netPrice);
+    this.globalFormData.append('packing', medicine.packing);
+    this.globalFormData.append('pharmaceuticalFormId', medicine.pharmaceuticalFormId);
+    this.globalFormData.append('price', medicine.price);
+    this.globalFormData.append('productName', medicine.productName);
+
+    this.http.post(environment.base + '/medicine/add', this.globalFormData, { httpOptions }).subscribe((res: any) => {
       if (res.status === 'ok') {
         this.getAllMedicines();
         // Update Table
@@ -239,17 +302,17 @@ export class MedicinesComponent implements OnInit {
     });
   }
 
-  processFile(event: any) {
-    for (let i = 0; i < event.target.files.length; i++) {
-      this.uploadImages(event.target.files[i]);
-    }
-  }
+  // processFile(event: any) {
+  //   for (let i = 0; i < event.target.files.length; i++) {
+  //     this.uploadImages(event.target.files[i]);
+  //   }
+  // }
 
-  uploadImages(file: any) {
-    const formData = new FormData();
-    formData.append(file.name, file);
-    this.images.push(formData.get(file.name));
-  }
+  // uploadImages(file: any) {
+  //   const formData = new FormData();
+  //   formData.append(file.name, file);
+  //   this.images.push(formData.get(file.name));
+  // }
 
   // Handling Import Excel Template For Adding New Users
   importingExcel(event: any) {
@@ -258,7 +321,6 @@ export class MedicinesComponent implements OnInit {
         this.getAllMedicines();
         this.getAllCategories();
         this.getAllPharmaceuticalForms();
-        console.log(this.medicines);
         const res = this.gridOption.api!.applyTransaction({
           add: this.medicines,
           addIndex: this.gridApi.getLastDisplayedRow() + 1,
@@ -355,7 +417,6 @@ export class MedicinesComponent implements OnInit {
       })
       .subscribe((res: any) => {
         if (res.status == 'ok') {
-          // console.log(res);
           this.medicines = res.medicines;
         } else {
           console.log(res);
