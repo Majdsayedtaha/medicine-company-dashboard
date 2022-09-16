@@ -34,6 +34,7 @@ export class EventsComponent implements OnInit {
             { name: 'content', status: false },
           ],
           searchText: '',
+           platform: 0,
         },
       })
       .subscribe((res: any) => {

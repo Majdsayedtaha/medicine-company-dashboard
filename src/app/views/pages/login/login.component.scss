@@ -1,9 +1,12 @@
 .body {
-  background: linear-gradient(90deg, #03a9f4, #c7c5f4, #776bcc, #03a9f4);
+  background-image:url('../../../../assets/images/bg2.jpg');
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
   .login-form {
     padding: 60px;
     border-radius: 10px;
@@ -11,8 +14,9 @@
       color: #776bcc;
     }
     .card {
-      padding: 20px;
-      height: 510px;
+      padding: 50px;
+      height: 500px;
+      width: 700px;
       h2 {
         color: #6a679e;
         text-align: center;

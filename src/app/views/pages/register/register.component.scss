@@ -1,19 +1,21 @@
 .body {
-  background: linear-gradient(90deg, #03a9f4, #c7c5f4, #776bcc, #03a9f4);
-  height: 150vh;
+  background-image: url('../../../../assets/images/bg2.jpg');
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   .card {
-    padding: 0;
-    height: 700px;
+    padding: 10px 30px 30px 30px;
+
     h5 {
       color: #6a679e;
       text-align: center;
     }
   }
   form {
-    input[type=file]{
+    input[type='file'] {
       display: none;
     }
     label,
@@ -46,12 +48,14 @@
 
 .buttons {
   height: 60px;
-  position: relative;
-  top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 button {
   text-decoration: none;
-  position: absolute;
   &.left {
     top: 6px;
     left: 3px;
@@ -90,7 +94,7 @@ button:hover {
 
 button:before {
   content: '';
-  position: absolute;
+  // position: absolute;
   top: -5px;
   left: -5px;
   right: -5px;

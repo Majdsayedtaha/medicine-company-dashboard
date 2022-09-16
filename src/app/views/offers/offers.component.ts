@@ -50,6 +50,7 @@ export class OffersComponent implements OnInit {
             { name: 'composition', status: false },
           ],
           searchText: '',
+          platform: 0,
         },
       })
       .subscribe((res: any) => {
@@ -143,7 +144,7 @@ export class OffersComponent implements OnInit {
     this.offerForm.reset();
   }
   onResetOfferDetailsForm() {
-      // TODO Save status checkbox
+    // TODO Save status checkbox
     this.offerDetails.reset();
   }
 }

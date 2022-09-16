@@ -1,5 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faDownload, faImages, faUpload, faBookMedical } from '@fortawesome/free-solid-svg-icons';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -34,21 +34,21 @@ export class MedicinesComponent implements OnInit {
 
   columnDefs = [
     // { headerName: 'medicineImages', field: 'medicineImages', sortable: true, filter: true },
-    { headerName: 'productName', field: 'productName', sortable: true, filter: true, editable: true },
-    { headerName: 'categoryId', field: 'categoryId', sortable: true, filter: true, editable: true },
-    { headerName: 'pharmaceuticalFormId', field: 'pharmaceuticalFormId', sortable: true, editable: true },
-    { headerName: 'netPrice', field: 'netPrice', sortable: true, editable: true },
-    { headerName: 'price', field: 'price', sortable: true, editable: true },
-    { headerName: 'expiredDate', field: 'expiredDate', sortable: true, editable: true },
-    { headerName: 'composition', field: 'composition', sortable: true, editable: true },
-    { headerName: 'packing', field: 'packing', sortable: true, editable: true },
-    { headerName: 'indications', field: 'indications', sortable: true, editable: true },
+    { headerName: 'Medicine Name', field: 'productName', sortable: true, filter: true, editable: true },
+    { headerName: 'category', field: 'categories', sortable: true, filter: true, editable: true },
+    { headerName: 'pharmaceutical Form', field: 'pharmaceuticalForms', sortable: true, editable: true },
+    { headerName: 'Price', field: 'price', sortable: true, editable: true },
+    { headerName: 'Net Price', field: 'netPrice', sortable: true, editable: true },
+    { headerName: 'expired Date(Years)', field: 'expiredDate', sortable: true, editable: true },
+    { headerName: 'Composition', field: 'composition', sortable: true, editable: true },
+    { headerName: 'Packing', field: 'packing', sortable: true, editable: true },
+    { headerName: 'Indications', field: 'indications', sortable: true, editable: true },
   ];
 
   gridApi: any;
   gridOption: GridOptions = {
     defaultColDef: {
-      resizable: false,
+      resizable: true,
       lockPinned: true,
       wrapText: true,
       autoHeight: true,
@@ -59,14 +59,19 @@ export class MedicinesComponent implements OnInit {
     columnDefs: this.columnDefs,
 
     animateRows: true,
-    rowSelection: 'single',
+    rowSelection: 'multiple',
     rowMultiSelectWithClick: true,
     getRowId: (params: GetRowIdParams) => {
       return params.data.id;
     },
   };
 
-  constructor(private http: ApiService, private fb: FormBuilder, private notify: NotifierService) {}
+  constructor(
+    private http: ApiService,
+    private fb: FormBuilder,
+    private notify: NotifierService,
+    private cdRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.getAllMedicines();
@@ -147,10 +152,25 @@ export class MedicinesComponent implements OnInit {
             { name: 'composition', status: false },
           ],
           searchText: '',
+          platform: 0,
         },
       })
-      .subscribe((response: any) => {
-        this.rowData = response.medicines;
+      .subscribe((res: any) => {
+        const mds = res.medicines.map((m: any) => {
+          return {
+            categories: m.categories?.map((catName: any) => catName.name),
+            pharmaceuticalForms: m.pharmaceuticalForms?.map((phName: any) => phName.name),
+            composition: m.composition,
+            expiredDate: m.expiredDate,
+            indications: m.indications,
+            netPrice: m.netPrice,
+            packing: m.packing,
+            price: m.price,
+            productName: m.productName,
+          };
+        });
+        console.log(mds);
+        this.rowData = mds;
         this.gridApi.setRowData(this.rowData);
       });
     colApi.autoSizeAllColumns();
@@ -202,9 +222,6 @@ export class MedicinesComponent implements OnInit {
     this.http.post(environment.base + '/medicine/add', medicine).subscribe((res: any) => {
       if (res.status === 'ok') {
         this.getAllMedicines();
-        this.getAllCategories();
-        this.getAllPharmaceuticalForms();
-
         // Update Table
         const res = this.gridOption.api!.applyTransaction({
           add: [medicine],
@@ -235,9 +252,10 @@ export class MedicinesComponent implements OnInit {
         this.getAllMedicines();
         this.getAllCategories();
         this.getAllPharmaceuticalForms();
+        console.log(this.medicines);
         const res = this.gridOption.api!.applyTransaction({
           add: this.medicines,
-          addIndex: this.medicines.length,
+          addIndex: this.gridApi.getLastDisplayedRow() + 1,
         })!;
         if (data.errorDetails.length > 0) {
           //Handle ERROR
@@ -253,6 +271,7 @@ export class MedicinesComponent implements OnInit {
           });
         } else {
           this.notify.successNotification('Upload File successfully');
+          this.gridApi.setRowData(this.rowData);
         }
       }
       ((<HTMLInputElement>document.getElementById('input_file_medicine')) as any).value = null;
@@ -325,13 +344,13 @@ export class MedicinesComponent implements OnInit {
             { name: 'composition', status: false },
           ],
           searchText: '',
+          platform: 0,
         },
       })
       .subscribe((res: any) => {
         if (res.status == 'ok') {
-          console.log(res);
+          // console.log(res);
           this.medicines = res.medicines;
-          console.log(this.medicines);
         } else {
           console.log(res);
         }
@@ -342,7 +361,7 @@ export class MedicinesComponent implements OnInit {
     this.medicineForm.reset();
   }
 
-  onResetPartForm(valueForm:any){
-    valueForm.value='';
+  onResetPartForm(valueForm: any) {
+    valueForm.value = '';
   }
 }
