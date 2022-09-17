@@ -32,7 +32,14 @@ export class UsersManagementComponent implements OnInit {
   @ViewChild('agGrid') agGrid!: AgGridAngular;
 
   columnDefs = [
-    // { headerName: '#', field: '#', sortable: true, filter: true },
+    {
+      headerName: '#',
+      field: '#',
+      minWidth: 180,
+      headerCheckboxSelection: true,
+      headerCheckboxSelectionFilteredOnly: true,
+      checkboxSelection: true,
+    },
     { headerName: 'First Name', field: 'firstName', sortable: true, filter: true, editable: true },
     { headerName: 'Last Name', field: 'lastName', sortable: true, editable: true },
     { headerName: 'Email', field: 'email', sortable: true, editable: true },
@@ -134,6 +141,11 @@ export class UsersManagementComponent implements OnInit {
       }
     });
   }
+
+  onQuickFilterChanged(txt:any) {
+    this.gridApi.setQuickFilter(txt.value);
+  }
+
 
   gridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
