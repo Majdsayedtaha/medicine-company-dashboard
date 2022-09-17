@@ -205,7 +205,12 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onReset(userForm)">
           Close
         </button>
-        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" (click)="onSubmit(userForm)">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          data-bs-dismiss="modal"
+          [disabled]="!userForm.valid"
+          (click)="onSubmit(userForm)">
           Save user
         </button>
       </div>
@@ -213,15 +218,14 @@
   </div>
 </div>
 
-<div style="width: 300px;">
+<div style="width: 300px">
   <input
     type="text"
     (input)="onQuickFilterChanged(txt)"
     id="quickFilter"
     #txt
     class="form-control mb-3"
-    placeholder=" quick filter all table..."
-  />
+    placeholder=" quick filter all table..." />
 </div>
 <ag-grid-angular
   #agGrid
@@ -233,5 +237,4 @@
   [suppressRowClickSelection]="true"
   [rowSelection]="'multiple'"
   [pagination]="true"
-  [paginationAutoPageSize]="true"
-  ></ag-grid-angular>
+  [paginationAutoPageSize]="true"></ag-grid-angular>
