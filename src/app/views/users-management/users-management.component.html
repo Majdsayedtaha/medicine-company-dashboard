@@ -139,9 +139,9 @@
           <!--Region & City & Country  -->
           <div class="d-flex mt-2">
             <!-- Region -->
-            <label for="inputRegion" class="form-label me-2">Region</label>
+            <label for="inputRegion2" class="form-label me-2">Region</label>
             <select
-              id="inputRegion"
+              id="inputRegion2"
               class="form-select"
               required
               name="region"
@@ -152,16 +152,16 @@
             </select>
 
             <!-- City -->
-            <label for="inputCity" class="form-label  me-2">City</label>
-            <select id="inputCity" class="form-select" required name="city" [(ngModel)]="user.city" #city="ngModel">
+            <label for="inputCity2" class="form-label  me-2">City</label>
+            <select id="inputCity2" class="form-select" required name="city" [(ngModel)]="user.city" #city="ngModel">
               <option selected>Choose...</option>
               <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
             </select>
 
             <!-- Country -->
-            <label for="inputCountry" class="form-label  me-2">Country</label>
+            <label for="inputCountry2" class="form-label  me-2">Country</label>
             <select
-              id="inputCountry"
+              id="inputCountry2"
               class="form-select"
               required
               name="country"
@@ -180,11 +180,11 @@
             <p class="text-danger" *ngIf="!country.valid && country.touched">You must select country</p>
           </div>
           <!-- Special Mark-->
-          <label for="inputSpecialMark" class="col-sm-1 col-form-label">SpecialMark</label>
+          <label for="inputSpecialMark2" class="col-sm-1 col-form-label">SpecialMark</label>
           <input
             type="text"
             class="form-control"
-            id="inputSpecialMark"
+            id="inputSpecialMark2"
             placeholder="SpecialMark"
             name="specialMark"
             #specialMark="ngModel"

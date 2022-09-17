@@ -59,7 +59,7 @@ export class MedicinesComponent implements OnInit {
       headerName: 'category',
       field: 'categories',
       cellRenderer: (params: any) => {
-        return params.value[0].name;
+        return params.value[0]?.name;
       },
       sortable: true,
       filter: true,
@@ -69,7 +69,7 @@ export class MedicinesComponent implements OnInit {
       headerName: 'pharmaceutical Form',
       field: 'pharmaceuticalForms',
       cellRenderer: (params: any) => {
-        return params.value[0].name;
+        return params.value[0]?.name;
       },
       sortable: true,
       editable: true,
@@ -89,10 +89,12 @@ export class MedicinesComponent implements OnInit {
     { headerName: 'Packing', field: 'packing', sortable: true, editable: true },
     { headerName: 'Indications', field: 'indications', sortable: true, editable: true },
     {
-      headerName: 'images',
+      headerName: 'Medicine Image',
       field: 'imgs',
       cellRenderer: (params: any) => {
-        return `<img src="${params.value[0]}" width="100" height="100">`;
+        return `<img src="${
+          params?.value[0] === undefined ? '../../../assets/images/medicine-default.png' : params?.value[0]
+        }" width="50" height="50">`;
       },
     },
   ];
@@ -153,16 +155,16 @@ export class MedicinesComponent implements OnInit {
 
   deleteMedicine() {
     const selectedData = this.agGrid.api.getSelectedRows();
-    const id = parseInt(selectedData.map(medicine => medicine.id).toString());
-    //  const ids = selectedData.map((m:any) => {
-    //     m.id;
-    //     console.log(m);
-    //   });
+    const ids = selectedData.map(medicine => medicine.id);
 
-    this.agGrid.api.updateRowData({ remove: selectedData });
-    this.http.post(environment.base + '/medicine/delete', { ids: [id] }).subscribe((res: any) => {
+    this.http.post(environment.base + '/medicine/delete', { ids: ids }).subscribe((res: any) => {
       if (res.status == 'ok') {
-        this.notify.successNotification('Delete Medicine Successfully');
+        this.agGrid.api.applyTransaction({ remove: selectedData });
+        this.notify.successNotification('Medicine Deleted Successfully');
+      } else {
+        this.notify.warningNotification(
+          "Sorry, You Can't Complete This Action, there is a medicine related to an offer"
+        );
       }
     });
   }
@@ -287,6 +289,7 @@ export class MedicinesComponent implements OnInit {
     this.globalFormData.append('pharmaceuticalFormId', medicine.pharmaceuticalFormId);
     this.globalFormData.append('price', medicine.price);
     this.globalFormData.append('productName', medicine.productName);
+    this.globalFormData.append('expiredDate', medicine.expiredDate);
 
     this.http.post(environment.base + '/medicine/add', this.globalFormData, { httpOptions }).subscribe((res: any) => {
       if (res.status === 'ok') {
@@ -302,29 +305,11 @@ export class MedicinesComponent implements OnInit {
     });
   }
 
-  // processFile(event: any) {
-  //   for (let i = 0; i < event.target.files.length; i++) {
-  //     this.uploadImages(event.target.files[i]);
-  //   }
-  // }
-
-  // uploadImages(file: any) {
-  //   const formData = new FormData();
-  //   formData.append(file.name, file);
-  //   this.images.push(formData.get(file.name));
-  // }
-
   // Handling Import Excel Template For Adding New Users
   importingExcel(event: any) {
     this.upload(event.target.files[0]).subscribe((data: any) => {
       if (data.status == 'ok') {
-        this.getAllMedicines();
-        this.getAllCategories();
-        this.getAllPharmaceuticalForms();
-        const res = this.gridOption.api!.applyTransaction({
-          add: this.medicines,
-          addIndex: this.gridApi.getLastDisplayedRow() + 1,
-        })!;
+        this.gridApi.setRowData([]);
         if (data.errorDetails.length > 0) {
           //Handle ERROR
           let tx = '';
@@ -339,7 +324,17 @@ export class MedicinesComponent implements OnInit {
           });
         } else {
           this.notify.successNotification('Upload File successfully');
-          this.gridApi.setRowData(this.rowData);
+          this.getAllMedicines();
+          this.getAllCategories();
+          this.getAllPharmaceuticalForms();
+          console.log(this.medicines);
+          setTimeout(() => {
+            this.gridOption.api!.applyTransaction({
+              add: this.medicines,
+              addIndex: this.gridApi.getLastDisplayedRow() + 1,
+            })!;
+            this.gridApi.setRowData(this.medicines);
+          }, 1000);
         }
       }
       ((<HTMLInputElement>document.getElementById('input_file_medicine')) as any).value = null;

@@ -33,14 +33,22 @@ export class UsersManagementComponent implements OnInit {
 
   columnDefs = [
     // { headerName: '#', field: '#', sortable: true, filter: true },
-    { headerName: 'firstName', field: 'firstName', sortable: true, filter: true, editable: true },
-    { headerName: 'lastName', field: 'lastName', sortable: true, editable: true },
-    { headerName: 'email', field: 'email', sortable: true, editable: true },
-    { headerName: 'role', field: 'role', sortable: true, editable: true },
-    { headerName: 'region', field: 'region', sortable: true, editable: true },
-    { headerName: 'country', field: 'country', sortable: true, editable: true },
-    { headerName: 'city', field: 'city', sortable: true, editable: true },
-    { headerName: 'specialMark', field: 'specialMark', sortable: true, editable: true },
+    { headerName: 'First Name', field: 'firstName', sortable: true, filter: true, editable: true },
+    { headerName: 'Last Name', field: 'lastName', sortable: true, editable: true },
+    { headerName: 'Email', field: 'email', sortable: true, editable: true },
+    {
+      headerName: 'Role',
+      field: 'role',
+      cellRenderer: (params: any) => {
+        return this.roles[params.value];
+      },
+      sortable: true,
+      editable: true,
+    },
+    { headerName: 'Region', field: 'region', sortable: true, editable: true },
+    { headerName: 'Country', field: 'country', sortable: true, editable: true },
+    { headerName: 'City', field: 'city', sortable: true, editable: true },
+    { headerName: 'Special Mark', field: 'specialMark', sortable: true, editable: true },
   ];
 
   rowData: any[] = [];
@@ -48,11 +56,11 @@ export class UsersManagementComponent implements OnInit {
   gridApi: any;
   gridOption: GridOptions = {
     defaultColDef: {
-      resizable: false,
+      resizable: true,
       lockPinned: true,
       wrapText: true,
       autoHeight: true,
-      suppressMovable: true,
+      suppressMovable: false,
       headerClass: 'headerCell',
     },
 
@@ -102,10 +110,12 @@ export class UsersManagementComponent implements OnInit {
   deleteRowUser() {
     const selectedData = this.agGrid.api.getSelectedRows();
     const id = parseInt(selectedData.map(user => user.id).toString());
-    this.agGrid.api.updateRowData({ remove: selectedData });
     this.http.post(environment.base + '/site/delete', { id }).subscribe((res: any) => {
       if (res.status == 'ok') {
+        this.agGrid.api.applyTransaction({ remove: selectedData });
         this.notify.successNotification('Delete User Successfully');
+      } else {
+        this.notify.warningNotification("Sorry, You Can't Complete This Action, This User Related To An Order");
       }
     });
   }
@@ -139,7 +149,6 @@ export class UsersManagementComponent implements OnInit {
     this.http.get(environment.base + '/site/get-all-users').subscribe((res: any) => {
       if (res.status === 'ok') {
         this.users = res.users;
-        console.log(this.users);
       } else {
         this.notify.errorNotification(res.error);
       }
@@ -227,8 +236,7 @@ export class UsersManagementComponent implements OnInit {
     saveAs(file);
   }
 
-  onReset(userForm:any) {
+  onReset(userForm: any) {
     userForm.reset();
   }
-
 }
