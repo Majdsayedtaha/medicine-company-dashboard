@@ -46,6 +46,7 @@ export class EventsComponent implements OnInit {
         }
       });
   }
+
   getEventDetails(id: number) {
     this.http.get(environment.base + '/activity/get?id=' + id).subscribe((res: any) => {
       if (res.status == 'ok') {
@@ -55,9 +56,11 @@ export class EventsComponent implements OnInit {
       }
     });
   }
+
   shortDate(value: string): string {
     return value.substring(0, 10);
   }
+
   updateEvent(id: number) {
     this.http
       .post(environment.base + '/activity/update', {
@@ -75,6 +78,7 @@ export class EventsComponent implements OnInit {
         }
       });
   }
+
   deleteEvent(id: number) {
     this.http
       .post(environment.base + '/activity/delete', {
@@ -88,6 +92,7 @@ export class EventsComponent implements OnInit {
         }
       });
   }
+
   addNewEvent() {
     this.http
       .post(environment.base + '/activity/add', {
@@ -99,6 +104,7 @@ export class EventsComponent implements OnInit {
       .subscribe((res: any) => {
         if (res.status == 'ok') {
           this.getAllEvents();
+          this.eventForm.reset();
         } else {
           console.log(res);
         }

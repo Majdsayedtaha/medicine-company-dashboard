@@ -6,6 +6,7 @@ import { LoginComponent } from './views/pages/login/login.component';
 import { Page404Component } from './views/pages/page404/page404.component';
 import { RegisterComponent } from './views/pages/register/register.component';
 import { AuthGuard } from '../app/services/auth.guard';
+import { RoleGuard } from '../app/services/role.guard';
 const routes: Routes = [
   {
     path: '',
@@ -22,7 +23,7 @@ const routes: Routes = [
       {
         path: 'dashboard',
         loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule),
-        canActivate: [AuthGuard],
+        canActivate: [AuthGuard,RoleGuard],
       },
 
       {

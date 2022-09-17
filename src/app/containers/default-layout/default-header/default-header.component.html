@@ -111,47 +111,17 @@
                   </div>
                 </label>
               </div>
-              <!--Region & City & Country  -->
-              <div class="d-flex mt-3 region">
-                <!-- Region -->
-                <label for="inputRegion1" class="form-label">Region</label>
-                <select id="inputRegion1" class="form-select" formControlName="regionId">
-                  <option selected>Choose...</option>
-                  <option>m</option>
-                  <option>m</option>
-                  <option>m</option>
-                  <option>m</option>
-                </select>
-
-                <!-- City -->
-                <label for="inputCity1" class="form-label ms-2">City</label>
-                <select id="inputCity1" class="form-select" formControlName="cityId">
-                  <option selected>Choose...</option>
-                  <option>m</option>
-                  <option>m</option>
-                  <option>m</option>
-                  <option>m</option>
-                </select>
-
-                <!-- Country -->
-                <label for="inputCountry1" class="form-label ms-2">Country</label>
-                <select id="inputCountry1" class="form-select" formControlName="countryId">
-                  <option selected>Choose...</option>
-                  <option>m</option>
-                  <option>m</option>
-                  <option>m</option>
-                  <option>m</option>
-                </select>
+              <!-- FirstName -->
+              <div class="w-100 mb-3">
+                <input type="text" formControlName="firstName" class="form-control" placeholder="FirstName" />
               </div>
-              <!-- Special Mark-->
-              <div class="row">
-                <label for="inputSpecialMark1" class="col-form-label label">SpecialMark</label>
-                <input
-                  type="text"
-                  class="form-control mt-2"
-                  id="inputSpecialMark1"
-                  placeholder="SpecialMark"
-                  formControlName="specialMark" />
+              <!-- LastName -->
+              <div class="w-100 mb-3">
+                <input type="text" formControlName="lastName" class="form-control" placeholder="lastName" />
+              </div>
+              <!-- Email -->
+              <div class="w-100">
+                <input type="email" formControlName="email" name="email" class="form-control" placeholder="Email" />
               </div>
             </div>
           </div>
@@ -161,7 +131,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" type="reset" (click)="onReset()">
           Close
         </button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" type="submit" (click)="onSaveUserInfo()">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" type="submit" (click)="updateUser()">
           Save changes
         </button>
       </div>

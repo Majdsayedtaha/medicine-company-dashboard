@@ -40,6 +40,7 @@ export class OffersComponent implements OnInit {
       ]),
     });
   }
+  
   getAllMedicines() {
     this.http
       .post(environment.base + '/medicine/get-all', {
@@ -79,6 +80,7 @@ export class OffersComponent implements OnInit {
       if (res.status === 'ok') {
         console.log(res);
         this.getAllOffers();
+        this.offerForm.reset();
       } else {
         console.log(res);
       }
@@ -94,6 +96,7 @@ export class OffersComponent implements OnInit {
       }
     });
   }
+
   getOfferDetails(id: number) {
     this.http.get(environment.base + '/offer/get?id=' + id).subscribe((res: any) => {
       if (res.status === 'ok') {
@@ -115,6 +118,7 @@ export class OffersComponent implements OnInit {
       }
     });
   }
+
   changeOfferStatus(e: any, id: number) {
     e.target.value == 'on' ? (e.target.value = 'off') : (e.target.value = 'on');
     let status = e.target.value == 'on' ? 1 : 0;
@@ -126,6 +130,7 @@ export class OffersComponent implements OnInit {
       }
     });
   }
+
   deleteOffer(id: number) {
     console.log(id);
     this.http.post(environment.base + '/offer/delete', { id }).subscribe((res: any) => {
@@ -137,12 +142,15 @@ export class OffersComponent implements OnInit {
       }
     });
   }
+
   shortDate(value: string): string {
     return value.substring(0, 10);
   }
+
   onResetOfferForm() {
     this.offerForm.reset();
   }
+
   onResetOfferDetailsForm() {
     // TODO Save status checkbox
     this.offerDetails.reset();
