@@ -27,10 +27,9 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
       this.userDetails = value;
     });
     this.saveUserInfoForm = this.fb.group({
-      regionId: [''],
-      cityId: [''],
-      countryId: [''],
-      specialMark: [''],
+      firstName: [this.userDetails.firstName],
+      lastName: [this.userDetails.lastName],
+      email: [this.userDetails.email],
       img: [null],
     });
   }
@@ -64,7 +63,7 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
     this.submitted = false;
     this.saveUserInfoForm.reset();
   }
-  onSaveUserInfo() {
+  updateUser() {
     const formData: any = new FormData();
     const httpOptions = {
       headers: new HttpHeaders({
@@ -79,36 +78,29 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
     if (this.saveUserInfoForm.invalid) {
       return;
     }
-
+    //TODO update user
     this.http
-      .post(environment.base + '/site/save-user-info', formData, {
+      .post(environment.base + '/site/update-user-info', formData, {
         httpOptions,
       })
       .subscribe((res: any) => {
-        // this.auth.user.next();
-        if (res.status === 'ok') {
-          this.http
-            .post(environment.base + '/site/login', { email: 'admin@admin.com', password: '11111111' })
-            .subscribe((res: any) => {
-              if (res.status === 'ok') {
-                this.auth.handleAuthentication(
-                  res.userInfo.accessToken,
-                  res.userInfo.email,
-                  res.userInfo.firstName,
-                  res.userInfo.lastName,
-                  res.userInfo.id,
-                  res.userInfo.img,
-                  res.userInfo.regionId,
-                  res.userInfo.role,
-                  res.userInfo.userContacts
-                );
-              } else {
-                console.log(res.details);
-              }
-            });
+        if (res.status == 'ok') {
+          this.auth.handleAuthentication(
+            this.userDetails.getToken(),
+            this.saveUserInfoForm.value.email,
+            this.saveUserInfoForm.value.firstName,
+            this.saveUserInfoForm.value.lastName,
+            this.userDetails.id,
+            this.saveUserInfoForm.value.userImage,
+            this.userDetails.value.regionId,
+            this.userDetails.value.role,
+            this.userDetails.value.contacts
+          );
+          console.log(this.userDetails);
         }
       });
   }
+
   deleteBackdrop() {
     const e = document.querySelector('.modal-backdrop');
     e?.remove();

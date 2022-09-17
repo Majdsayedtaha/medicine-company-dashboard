@@ -122,6 +122,7 @@ export class ArticlesComponent implements OnInit {
         if (res.status == 'ok') {
           this.restFormData();
           this.getAllArticles();
+          this.articleForm.reset();
         } else {
           console.log(res);
         }
@@ -159,6 +160,7 @@ export class ArticlesComponent implements OnInit {
         if (res.status == 'ok') {
           this.restFormData();
           this.getAllArticles();
+          this.articleForm.reset();
         } else {
           console.log(res);
         }
