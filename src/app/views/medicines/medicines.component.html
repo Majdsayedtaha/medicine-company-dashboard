@@ -36,15 +36,14 @@
   </button>
 </div>
 <!-- Medicine Table -->
-<div style="width: 300px;">
+<div style="width: 300px">
   <input
     type="text"
     (input)="onQuickFilterChanged(txt)"
     id="quickFilter"
     #txt
     class="form-control mb-3"
-    placeholder="quick filter all table..."
-  />
+    placeholder="quick filter all table..." />
 </div>
 <ag-grid-angular
   #agGrid
@@ -136,6 +135,9 @@
             <input type="text" class="form-control mt-3" formControlName="productName" />
             <label for="floatingInput">Medicine Name</label>
           </div>
+          <div *ngIf="submitted && formControl['productName'].errors" class="text-danger">
+            <span *ngIf="formControl['productName'].errors['required']">product Name is required.</span>
+          </div>
           <div class="row mb-3">
             <div class="center">
               <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)">
@@ -166,30 +168,51 @@
             <input type="text" class="form-control" formControlName="indications" />
             <label for="floatingInput">Indications</label>
           </div>
+          <div *ngIf="submitted && formControl['indications'].errors" class="text-danger">
+            <span *ngIf="formControl['indications'].errors['required']">indications Name is required.</span>
+          </div>
           <div class="form-floating mb-3">
             <input type="number" class="form-control" formControlName="packing" />
             <label for="floatingInput">Packing</label>
+          </div>
+          <div *ngIf="submitted && formControl['packing'].errors" class="text-danger">
+            <span *ngIf="formControl['packing'].errors['required']">packing Name is required.</span>
           </div>
           <div class="form-floating mb-3">
             <input type="text" class="form-control" formControlName="composition" />
             <label for="floatingInput">Composition</label>
           </div>
+          <div *ngIf="submitted && formControl['composition'].errors" class="text-danger">
+            <span *ngIf="formControl['composition'].errors['required']">composition Name is required.</span>
+          </div>
           <div class="form-floating mb-3">
             <input type="number" class="form-control" formControlName="expiredDate" />
             <label for="floatingInput">Expired Date (in years)</label>
+          </div>
+          <div *ngIf="submitted && formControl['expiredDate'].errors" class="text-danger">
+            <span *ngIf="formControl['expiredDate'].errors['required']">expired Date Name is required.</span>
           </div>
           <div class="form-floating mb-3">
             <input type="number" class="form-control" formControlName="price" />
             <label for="floatingInput">Public Price</label>
           </div>
+          <div *ngIf="submitted && formControl['price'].errors" class="text-danger">
+            <span *ngIf="formControl['price'].errors['required']">price Name is required.</span>
+          </div>
           <div class="form-floating mb-3">
             <input type="number" class="form-control" formControlName="netPrice" />
             <label for="floatingInput">Net Price</label>
+          </div>
+          <div *ngIf="submitted && formControl['netPrice'].errors" class="text-danger">
+            <span *ngIf="formControl['netPrice'].errors['required']">net Price Name is required.</span>
           </div>
           <select class="form-select mb-3" aria-label="Category Select" formControlName="categoryId">
             <option selected>Choose Category</option>
             <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
           </select>
+          <div *ngIf="submitted && formControl['categoryId'].errors" class="text-danger">
+            <span *ngIf="formControl['categoryId'].errors['required']">category Name is required.</span>
+          </div>
           <select
             class="form-select mb-3"
             aria-label="Pharmaceutical Form Select"
@@ -197,11 +220,16 @@
             <option selected>Choose Pharmaceutical Form</option>
             <option *ngFor="let pharm of pharmaceuticalForms" [value]="pharm.id">{{ pharm.name }}</option>
           </select>
+          <div *ngIf="submitted && formControl['pharmaceuticalFormId'].errors" class="text-danger">
+            <span *ngIf="formControl['pharmaceuticalFormId'].errors['required']"
+              >pharmaceutical Form Name is required.</span
+            >
+          </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onReset()">Close</button>
-        <button type="button" class="btn btn-primary" (click)="addMedicine()" data-bs-dismiss="modal">Add</button>
+        <button type="button" class="btn btn-primary" (click)="addMedicine()" [disabled]="!medicineForm.valid" data-bs-dismiss="modal">Add</button>
       </div>
     </div>
   </div>

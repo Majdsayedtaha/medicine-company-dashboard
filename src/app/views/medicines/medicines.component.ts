@@ -30,7 +30,11 @@ export class MedicinesComponent implements OnInit {
   pharmaceuticalForms: { id: number; name: string }[] = [];
   medicines: any[] = [];
   rowData: any[] = [];
+  submitted = false;
 
+  get formControl() {
+    return this.medicineForm.controls;
+  }
   // ! UPLOADER START
   public files: NgxFileDropEntry[] = [];
 
@@ -65,7 +69,7 @@ export class MedicinesComponent implements OnInit {
       headerName: 'category',
       field: 'categories',
       cellRenderer: (params: any) => {
-        return params.value[0]?.name;
+        return params.data.categories[0]?.name;
       },
       sortable: true,
       filter: true,
@@ -75,7 +79,7 @@ export class MedicinesComponent implements OnInit {
       headerName: 'pharmaceutical Form',
       field: 'pharmaceuticalForms',
       cellRenderer: (params: any) => {
-        return params.value[0]?.name;
+        return params.data.pharmaceuticalForms[0]?.name;
       },
       sortable: true,
       editable: true,
@@ -86,7 +90,7 @@ export class MedicinesComponent implements OnInit {
       headerName: 'expired Date(Years)',
       field: 'expiredDate',
       cellRenderer: (params: any) => {
-        return params.value + ' Years';
+        return params.data?.expiredDate + ' Years';
       },
       sortable: true,
       editable: true,
@@ -99,7 +103,7 @@ export class MedicinesComponent implements OnInit {
       field: 'imgs',
       cellRenderer: (params: any) => {
         return `<img src="${
-          params?.value[0] === undefined ? '../../../assets/images/medicine-default.png' : params?.value[0]
+          params.data?.imgs[0] === undefined ? '../../../assets/images/medicine-default.png' : params?.value[0]
         }" width="50" height="50">`;
       },
     },
@@ -265,6 +269,8 @@ export class MedicinesComponent implements OnInit {
   }
 
   addMedicine() {
+    this.submitted = true;
+    if (this.medicineForm.status === 'INVALID') return;
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'multipart/form-data',
@@ -294,9 +300,7 @@ export class MedicinesComponent implements OnInit {
     this.http.post(environment.base + '/medicine/add', this.globalFormData, { httpOptions }).subscribe((res: any) => {
       if (res.status === 'ok') {
         this.getAllMedicines();
-        this.cdRef.detectChanges();
-        // Update Table
-        const res = this.gridOption.api!.applyTransaction({
+        this.gridOption.api!.applyTransaction({
           add: [medicine],
           addIndex: this.medicines.length,
         })!;
@@ -306,7 +310,6 @@ export class MedicinesComponent implements OnInit {
       }
     });
   }
-
   // Handling Import Excel Template For Adding New Users
   importingExcel(event: any) {
     this.upload(event.target.files[0]).subscribe((data: any) => {
