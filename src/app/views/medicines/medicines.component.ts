@@ -52,7 +52,14 @@ export class MedicinesComponent implements OnInit {
   // ! UPLOADER END
 
   columnDefs = [
-    // { headerName: 'medicineImages', field: 'medicineImages', sortable: true, filter: true },
+    {
+      headerName: '#',
+      field: '#',
+      minWidth: 180,
+      headerCheckboxSelection: true,
+      headerCheckboxSelectionFilteredOnly: true,
+      checkboxSelection: true,
+    },
     { headerName: 'Medicine Name', field: 'productName', sortable: true, filter: true, editable: true },
     {
       headerName: 'category',
@@ -194,6 +201,11 @@ export class MedicinesComponent implements OnInit {
         }
       });
     });
+  }
+
+
+  onQuickFilterChanged(txt:any) {
+    this.gridApi.setQuickFilter(txt.value);
   }
 
   gridReady(params: GridReadyEvent) {
