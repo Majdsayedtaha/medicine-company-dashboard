@@ -51,7 +51,6 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
   }
 
   processFile(event: any) {
-    console.log(event);
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0] as File;
       this.upload(file);
@@ -59,10 +58,6 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
   }
   file!: File;
   upload(fileTest: File) {
-    // this.saveUserInfoForm.patchValue({
-    //   img: file,
-    // });
-    // this.saveUserInfoForm.get('img')?.updateValueAndValidity();
     this.file = fileTest;
   }
   onReset() {
@@ -77,24 +72,40 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
       }),
     };
     formData.append('role', 5);
+    formData.append('email', 'admin@admin.com');
     formData.append('userImage', this.file);
-    formData.append('email', this.userDetails.email);
-    formData.append('id', this.userDetails.id);
+    // formData.append('id', this.userDetails?.id);
     this.submitted = true;
     if (this.saveUserInfoForm.invalid) {
       return;
     }
 
     this.http
-      .post(environment.base + '/site/update-user-info', formData, {
+      .post(environment.base + '/site/save-user-info', formData, {
         httpOptions,
       })
       .subscribe((res: any) => {
         // this.auth.user.next();
         if (res.status === 'ok') {
-          this.auth.user.subscribe(value => {
-            console.log(value);
-          });
+          this.http
+            .post(environment.base + '/site/login', { email: 'admin@admin.com', password: '11111111' })
+            .subscribe((res: any) => {
+              if (res.status === 'ok') {
+                this.auth.handleAuthentication(
+                  res.userInfo.accessToken,
+                  res.userInfo.email,
+                  res.userInfo.firstName,
+                  res.userInfo.lastName,
+                  res.userInfo.id,
+                  res.userInfo.img,
+                  res.userInfo.regionId,
+                  res.userInfo.role,
+                  res.userInfo.userContacts
+                );
+              } else {
+                console.log(res.details);
+              }
+            });
         }
       });
   }

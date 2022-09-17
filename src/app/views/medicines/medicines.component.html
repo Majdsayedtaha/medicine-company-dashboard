@@ -1,4 +1,4 @@
-<h3>Select Something To Add To Your Dashboard</h3>
+<h4>Select What You Want To Add To Your Dashboard</h4>
 <div class="btn-group mb-3" role="group">
   <button class="btn" data-bs-toggle="modal" data-bs-target="#categoryModal">New Category</button>
   <button class="btn" data-bs-toggle="modal" data-bs-target="#pharmaceuticalModal">New Pharmaceutical Form</button>
@@ -34,58 +34,17 @@
       <input class="pointer d-none" id="input_file_medicine" type="file" (change)="importingExcel($event)" />
     </label>
   </button>
-
-  <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference1">
-    <li (click)="importTemplateToEXCEL('/category/generate-excel-file-template')">
-      <a class="dropdown-item">Category Template</a>
-    </li>
-    <li (click)="importTemplateToEXCEL('/pharmaceutical-form/generat-excel-file-template')">
-      <a class="dropdown-item">Pharmaceutical Form Template</a>
-    </li>
-    <li >
-      <a class="dropdown-item">Medicine Template</a>
-    </li>
-  </ul> -->
 </div>
-
 <!-- Medicine Table -->
-<!-- <table class="table table-striped table-hover">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">productName</th>
-      <th scope="col">composition</th>
-      <th scope="col">expiredDate</th>
-      <th scope="col">packing</th>
-      <th scope="col">price</th>
-      <th scope="col">netPrice</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let medicine of medicines; let i = index">
-      <th scope="row">{{ i + 1 }}</th>
-      <td>{{ medicine.productName }}</td>
-      <td>{{ medicine.composition }}</td>
-      <td>{{ medicine.expiredDate }}</td>
-      <td>{{ medicine.packing }}</td>
-      <td>{{ medicine.price }}</td>
-      <td>{{ medicine.netPrice }}</td>
-    </tr>
-  </tbody>
-</table> -->
-
-<!-- <button class="btn btn-danger mb-3 excel-btn" (click)="deleteRowMedicine()">
-  <fa-icon [icon]="faDeleteLeft" class="me-2"></fa-icon>delete Medicine
-</button> -->
-
-<!--ag-grid Table  -->
 <ag-grid-angular
   #agGrid
   style="width: 1000px; height: 800px"
   class="ag-theme-alpine"
   (gridReady)="gridReady($event)"
   [gridOptions]="gridOption"
-  [columnDefs]="columnDefs">
+  [columnDefs]="columnDefs"
+  [pagination]="true"
+  [paginationAutoPageSize]="true">
 </ag-grid-angular>
 
 <!-- Category Modal -->
@@ -166,24 +125,11 @@
             <label for="floatingInput">Medicine Name</label>
           </div>
           <div class="row mb-3">
-            <!-- <label for="medicineImages"
-              >Select Your New Medicine Image/s please
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                id="medicineImages"
-                class="d-none"
-                (change)="processFile($event)" />
-              <fa-icon class="imgs-icon" [icon]="faImages"></fa-icon>
-            </label> -->
             <div class="center">
-              <ngx-file-drop
-                dropZoneLabel="Drop files here"
-                (onFileDrop)="dropped($event)">
+              <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)">
                 <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
-                  Drag Your Images Of This Medicines
-                  <button type="button" (click)="openFileSelector()">Browse Files</button>
+                  Drag Your Images Of This Medicines <br />
+                  <button type="button btn-primary d-block" (click)="openFileSelector()">Browse Files</button>
                 </ng-template>
               </ngx-file-drop>
               <div class="upload-table">

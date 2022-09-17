@@ -327,7 +327,6 @@ export class MedicinesComponent implements OnInit {
           this.getAllMedicines();
           this.getAllCategories();
           this.getAllPharmaceuticalForms();
-          console.log(this.medicines);
           setTimeout(() => {
             this.gridOption.api!.applyTransaction({
               add: this.medicines,
