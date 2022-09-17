@@ -21,7 +21,7 @@ export class RoleGuard implements CanActivate {
         if (user?.role=='5') {
           return true;
         }
-         this.notify.errorNotification('this user is not manger')
+         this.notify.errorNotification('Sorry, only managers authorized to login')
         return this.router.createUrlTree(['/login']);
       })
     );
