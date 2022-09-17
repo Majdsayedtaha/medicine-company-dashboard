@@ -41,17 +41,38 @@ export class MedicinesComponent implements OnInit {
   public dropped(files: NgxFileDropEntry[]) {
     this.files = files;
     for (const droppedFile of files) {
+      if (this.isFileAllowed(droppedFile.fileEntry.name) == false) {
+        this.files = [];
+        this.notify.warningNotification('Sorry, You Can Drop Just Images');
+        return;
+      }
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file((file: File) => {
           this.globalFormData.append('medicineImages[]', file, droppedFile.relativePath);
         });
       } else {
-        // It was a directory (empty directories are added, otherwise only files)
         const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
-        console.log(droppedFile.relativePath, fileEntry);
       }
     }
+  }
+
+  isFileAllowed(fileName: string) {
+    let isFileAllowed = false;
+    const allowedFiles = ['.png', '.jpg', '.jpeg', '.gif', '.tiff', '.bpg'];
+    const regex = /(?:\.([^.]+))?$/;
+    const extension = regex.exec(fileName);
+    // if (isDevMode()) {
+    //   console.log('extension du fichier : ', extension);
+    // }
+    if (undefined !== extension && null !== extension) {
+      for (const ext of allowedFiles) {
+        if (ext === extension[0]) {
+          isFileAllowed = true;
+        }
+      }
+    }
+    return isFileAllowed;
   }
   // ! UPLOADER END
 
@@ -201,6 +222,7 @@ export class MedicinesComponent implements OnInit {
       console.log(medicine);
       this.http.post(environment.base + '/medicine/update', medicine).subscribe((res: any) => {
         if (res.status == 'ok') {
+          this.restFormData();
           this.notify.successNotification('Update Medicine Successfully');
         }
       });
@@ -294,6 +316,7 @@ export class MedicinesComponent implements OnInit {
 
     this.http.post(environment.base + '/medicine/add', this.globalFormData, { httpOptions }).subscribe((res: any) => {
       if (res.status === 'ok') {
+        this.restFormData();
         this.getAllMedicines();
         this.gridOption.api!.applyTransaction({
           add: [medicine],
@@ -425,5 +448,13 @@ export class MedicinesComponent implements OnInit {
 
   onResetPartForm(valueForm: any) {
     valueForm.value = '';
+  }
+  restFormData() {
+    // this.globalFormData. .forEach((val: any, key: any, fD: any) => {
+    //   console.log(key, val, fD);
+    //   this.globalFormData.delete(key);
+    // });
+    this.globalFormData = new FormData();
+    this.files = [];
   }
 }

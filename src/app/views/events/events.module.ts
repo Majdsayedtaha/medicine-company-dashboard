@@ -9,6 +9,7 @@ import { GridModule, ProgressModule, BadgeModule, ListGroupModule, WidgetModule 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
+
 @NgModule({
   declarations: [
     EventsComponent

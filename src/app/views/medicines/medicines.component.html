@@ -140,8 +140,8 @@
           </div>
           <div class="row mb-3">
             <div class="center">
-              <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)">
-                <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+              <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)" accept="image/*">
+                <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector" accept="image/*">
                   Drag Your Images Of This Medicines <br />
                   <button type="button btn-primary d-block" (click)="openFileSelector()">Browse Files</button>
                 </ng-template>
