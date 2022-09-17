@@ -12,7 +12,7 @@ import { AuthService } from './services/auth.service';
   template: '<router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit {
-  title = 'CoreUI Free Angular Admin Template';
+  title = 'Aphamea Company';
 
   constructor(
     private router: Router,

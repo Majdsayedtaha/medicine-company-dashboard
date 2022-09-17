@@ -18,7 +18,19 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./medicines.component.scss'],
 })
 export class MedicinesComponent implements OnInit {
+  @ViewChild('agGrid') agGrid!: AgGridAngular;
   globalFormData = new FormData();
+  faImages = faImages;
+  faDownload = faDownload;
+  faUpload = faUpload;
+  faBookMedical = faBookMedical;
+  medicineForm!: FormGroup;
+  userModel?: User;
+  categories: { id: number; name: string }[] = [];
+  pharmaceuticalForms: { id: number; name: string }[] = [];
+  medicines: any[] = [];
+  rowData: any[] = [];
+
   // ! UPLOADER START
   public files: NgxFileDropEntry[] = [];
 
@@ -28,7 +40,7 @@ export class MedicinesComponent implements OnInit {
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file((file: File) => {
-          this.globalFormData.append('medicineImages', file, droppedFile.relativePath);
+          this.globalFormData.append('medicineImages[]', file, droppedFile.relativePath);
         });
       } else {
         // It was a directory (empty directories are added, otherwise only files)
@@ -38,19 +50,6 @@ export class MedicinesComponent implements OnInit {
     }
   }
   // ! UPLOADER END
-  @ViewChild('agGrid') agGrid!: AgGridAngular;
-
-  faImages = faImages;
-  faDownload = faDownload;
-  faUpload = faUpload;
-  faBookMedical = faBookMedical;
-
-  medicineForm!: FormGroup;
-  userModel?: User;
-  categories: { id: number; name: string }[] = [];
-  pharmaceuticalForms: { id: number; name: string }[] = [];
-  medicines: any[] = [];
-  rowData: any[] = [];
 
   columnDefs = [
     // { headerName: 'medicineImages', field: 'medicineImages', sortable: true, filter: true },
@@ -213,20 +212,6 @@ export class MedicinesComponent implements OnInit {
         },
       })
       .subscribe((res: any) => {
-        // const mds = res.medicines.map((m: any) => {
-        //   return {
-        //     categories: m.categories?.map((catName: any) => catName.name),
-        //     pharmaceuticalForms: m.pharmaceuticalForms?.map((phName: any) => phName.name),
-        //     composition: m.composition,
-        //     expiredDate: m.expiredDate,
-        //     indications: m.indications,
-        //     netPrice: m.netPrice,
-        //     packing: m.packing,
-        //     price: m.price,
-        //     productName: m.productName,
-        //     id: m.id,
-        //   };
-        // });
         this.rowData = this.medicines;
         this.gridApi.setRowData(this.rowData);
       });
@@ -279,7 +264,6 @@ export class MedicinesComponent implements OnInit {
       netPrice: this.medicineForm.get('netPrice')?.value,
       pharmaceuticalFormId: this.medicineForm.get('categoryId')?.value,
       categoryId: this.medicineForm.get('pharmaceuticalFormId')?.value,
-      // medicineImages: this.images,
     };
     this.globalFormData.append('categoryId', medicine.categoryId);
     this.globalFormData.append('composition', medicine.composition);
@@ -294,6 +278,7 @@ export class MedicinesComponent implements OnInit {
     this.http.post(environment.base + '/medicine/add', this.globalFormData, { httpOptions }).subscribe((res: any) => {
       if (res.status === 'ok') {
         this.getAllMedicines();
+        this.cdRef.detectChanges();
         // Update Table
         const res = this.gridOption.api!.applyTransaction({
           add: [medicine],
