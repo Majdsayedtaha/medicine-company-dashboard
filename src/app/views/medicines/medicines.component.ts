@@ -278,18 +278,21 @@ export class MedicinesComponent implements OnInit {
     this.http.post(environment.base + '/medicine/add', this.globalFormData, { httpOptions }).subscribe((res: any) => {
       if (res.status === 'ok') {
         this.getAllMedicines();
-        this.cdRef.detectChanges();
+        this.gridApi.setRowData([]);
+        setTimeout(() => {
+          this.gridOption.api!.applyTransaction({
+            add: [medicine],
+            addIndex: this.medicines.length,
+          })!;
+        }, 1000);
+        this.gridApi.setRowData(this.medicines);
+
         // Update Table
-        const res = this.gridOption.api!.applyTransaction({
-          add: [medicine],
-          addIndex: this.medicines.length,
-        })!;
       } else {
         console.log(res);
       }
     });
   }
-
   // Handling Import Excel Template For Adding New Users
   importingExcel(event: any) {
     this.upload(event.target.files[0]).subscribe((data: any) => {
