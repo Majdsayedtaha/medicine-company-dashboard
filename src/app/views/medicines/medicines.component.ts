@@ -168,13 +168,18 @@ export class MedicinesComponent implements OnInit {
     const ids = selectedData.map(medicine => medicine.id);
 
     this.http.post(environment.base + '/medicine/delete', { ids: ids }).subscribe((res: any) => {
-      if (res.status == 'ok') {
+      if (res.status == 'ok' && res.errors.length == 0) {
         this.agGrid.api.applyTransaction({ remove: selectedData });
         this.notify.successNotification('Medicine Deleted Successfully');
+      } else if (res.details == 'The array of ids is empty') {
+        this.notify.warningNotification('Please,select the medicine you want to delete ');
+      } else if (
+        res.status == 'ok' &&
+        res.errors[0] == 'You can not delete this medicine that has this id (3) because it belongs to an offer'
+      ) {
+        this.notify.warningNotification("Sorry, You Can't Complete This Action, This medicine Related To An Offer");
       } else {
-        this.notify.warningNotification(
-          "Sorry, You Can't Complete This Action, there is a medicine related to an offer"
-        );
+        this.notify.warningNotification("Sorry, You Can't Complete This Action, This medicine Related To An Offer");
       }
     });
   }
@@ -299,8 +304,7 @@ export class MedicinesComponent implements OnInit {
           add: [medicine],
           addIndex: this.medicines.length,
         })!;
-
-        // Update Table
+        this.medicineForm.reset();
       } else {
         console.log(res);
       }

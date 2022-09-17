@@ -104,6 +104,7 @@ export class ArticlesComponent implements OnInit {
       .subscribe((res: any) => {
         if (res.status == 'ok') {
           this.getAllArticles();
+          this.articleForm.reset();
         } else {
           console.log(res);
         }

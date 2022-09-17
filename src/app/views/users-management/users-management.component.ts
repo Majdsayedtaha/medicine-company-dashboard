@@ -116,12 +116,18 @@ export class UsersManagementComponent implements OnInit {
 
   deleteRowUser() {
     const selectedData = this.agGrid.api.getSelectedRows();
-    const id = parseInt(selectedData.map(user => user.id).toString());
-    this.http.post(environment.base + '/site/delete', { id }).subscribe((res: any) => {
+    const ids = selectedData.map(user => user.id);
+
+    this.http.post(environment.base + '/site/delete', { ids: ids }).subscribe((res: any) => {
       if (res.status == 'ok') {
         this.agGrid.api.applyTransaction({ remove: selectedData });
         this.notify.successNotification('Delete User Successfully');
-      } else {
+      } else if (res.details == 'The array of ids is empty') {
+        this.notify.warningNotification('Please,select the user you want to delete ');
+      } else if (
+        res.details ==
+        'SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`aphamea`.`order`, CONSTRAINT `fk_user_order_userId` FOREIGN KEY (`userId`) REFERENCES `user` (`id`))\nThe SQL being executed was: DELETE FROM `user` WHERE `id`=1'
+      ) {
         this.notify.warningNotification("Sorry, You Can't Complete This Action, This User Related To An Order");
       }
     });
@@ -142,10 +148,9 @@ export class UsersManagementComponent implements OnInit {
     });
   }
 
-  onQuickFilterChanged(txt:any) {
+  onQuickFilterChanged(txt: any) {
     this.gridApi.setQuickFilter(txt.value);
   }
-
 
   gridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
@@ -178,6 +183,7 @@ export class UsersManagementComponent implements OnInit {
         })!;
 
         this.notify.successNotification('user added successfully');
+        userForm.reset();
       } else {
         this.notify.errorNotification('error user added');
       }
