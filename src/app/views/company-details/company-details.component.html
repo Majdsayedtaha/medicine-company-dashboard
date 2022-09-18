@@ -1,1 +1,165 @@
-<p>company-details works!</p>
+<h1>company-details:</h1>
+<button
+  type="button"
+  class="btn company mb-5 mt-3"
+  data-toggle="tooltip"
+  data-placement="top"
+  title="Add New Details about company"
+  data-bs-toggle="modal"
+  data-bs-target="#companyModal">
+  Add New Details about company
+</button>
+
+<!-- modal company Details -->
+
+<!-- company Modal -->
+<div class="modal fade" id="companyModal" tabindex="-1" aria-labelledby="companyModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="companyModalHeader">Add New Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="companyForm">
+          <div class="row mb-3">
+            <div class="center">
+              <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)" accept="image/*">
+                <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector" accept="image/*">
+                  Drag Your Image Of This Company <br />
+                  <button type="button btn-primary d-block" (click)="openFileSelector()">Browse File</button>
+                </ng-template>
+              </ngx-file-drop>
+              <div class="upload-table">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Image Uploaded</th>
+                    </tr>
+                  </thead>
+                  <tbody class="upload-name-style">
+                    <tr *ngFor="let item of files; let i = index">
+                      <td>
+                        <strong>{{ item.relativePath }}</strong>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="cpmpanyName">
+              <input type="text" class="form-control mt-2" formControlName="name" id="companyName" placeholder="Name" />
+            </label>
+          </div>
+
+          <div class="row mb-3">
+            <label for="cpmpanyName">
+              <input
+                type="text"
+                class="form-control mt-2"
+                formControlName="description"
+                id="companyName"
+                placeholder="description" />
+            </label>
+          </div>
+
+          <h5>Add User To the Team</h5>
+
+          <div formArrayName="companyTeam">
+            <ng-container *ngFor="let user of companyTeam?.controls; let i = index">
+              <div class="mb-3" [formGroupName]="i">
+                <select class="form-select mt-2" aria-label="User Select" formControlName="userId">
+                  <option selected>Choose A User</option>
+                  <option *ngFor="let user of users" [value]="user?.id">{{ user?.firstName }}</option>
+                </select>
+
+                <input type="text" class="form-control mt-2" formControlName="position" placeholder="position" />
+                <input type="text" class="form-control mt-2" formControlName="description" placeholder="Description" />
+              </div>
+            </ng-container>
+          </div>
+
+          <button class="btn-input" (click)="addNewCompanyTeam()">
+            <fa-icon [icon]="faSquarePlus"></fa-icon>
+          </button>
+          <br />
+          <!-- <pre>{{ companyForm.value | json }}</pre> -->
+          <br />
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onResetCompanyForm()">
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addNewDetails()">
+          Add Details
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Team Company -->
+  <div class="team-all">
+    <!-- Team Member -->
+    <div
+      class="team-member"
+      *ngFor="let team of teams;let i=index"
+    >
+      <div class="image-wrapper">
+        <img
+          class="img-fluid"
+          [src]=" users[i].img ? users[i].img :'../../../assets/images/medicine-default.png' "
+          alt="alternative"
+        />
+      </div>
+      <!-- end of image-wrapper -->
+      <p class="p-large"><strong>{{ users[i].firstName? users[i].firstName :'Lacy Whitelong' }}</strong></p>
+      <p class="job-title">{{ team.position }}</p>
+      <p class="job-title">{{ team.description}}</p>
+      <span class="social-icons">
+        <span class="fa-stack">
+          <a href="#your-link">
+            <i class="bi bi-facebook"></i>
+          </a>
+        </span>
+        <span class="fa-stack">
+          <a href="#your-link">
+            <i class="bi bi-twitter"></i>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div
+      class="team-member"
+      *ngFor="let team of teams;let i=index"
+    >
+      <div class="image-wrapper">
+        <img
+          class="img-fluid"
+          [src]=" users[i].img ? users[i].img :'../../../assets/images/medicine-default.png' "
+          alt="alternative"
+        />
+      </div>
+      <!-- end of image-wrapper -->
+      <p class="p-large"><strong>{{ users[i].firstName? users[i].firstName :'Lacy Whitelong' }}</strong></p>
+      <p class="job-title">{{ team.position }}</p>
+      <p class="job-title">{{ team.description}}</p>
+      <span class="social-icons">
+        <span class="fa-stack">
+          <a href="#your-link">
+            <i class="bi bi-facebook"></i>
+          </a>
+        </span>
+        <span class="fa-stack">
+          <a href="#your-link">
+            <i class="bi bi-twitter"></i>
+          </a>
+        </span>
+      </span>
+    </div>
+
+  </div>
