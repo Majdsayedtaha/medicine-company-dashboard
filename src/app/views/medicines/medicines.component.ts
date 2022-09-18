@@ -62,9 +62,6 @@ export class MedicinesComponent implements OnInit {
     const allowedFiles = ['.png', '.jpg', '.jpeg', '.gif', '.tiff', '.bpg'];
     const regex = /(?:\.([^.]+))?$/;
     const extension = regex.exec(fileName);
-    // if (isDevMode()) {
-    //   console.log('extension du fichier : ', extension);
-    // }
     if (undefined !== extension && null !== extension) {
       for (const ext of allowedFiles) {
         if (ext === extension[0]) {
@@ -78,9 +75,6 @@ export class MedicinesComponent implements OnInit {
 
   columnDefs = [
     {
-      headerName: '#',
-      field: '#',
-      minWidth: 180,
       headerCheckboxSelection: true,
       headerCheckboxSelectionFilteredOnly: true,
       checkboxSelection: true,
@@ -90,7 +84,7 @@ export class MedicinesComponent implements OnInit {
       headerName: 'category',
       field: 'categories',
       cellRenderer: (params: any) => {
-        return params.data.categories[0]?.name;
+        return `${params.value[0]?.name}`;
       },
       sortable: true,
       filter: true,
@@ -100,7 +94,7 @@ export class MedicinesComponent implements OnInit {
       headerName: 'pharmaceutical Form',
       field: 'pharmaceuticalForms',
       cellRenderer: (params: any) => {
-        return params.data.pharmaceuticalForms[0]?.name;
+        return `${params.value[0]?.name}`;
       },
       sortable: true,
       editable: true,
@@ -123,9 +117,11 @@ export class MedicinesComponent implements OnInit {
       headerName: 'Medicine Image',
       field: 'imgs',
       cellRenderer: (params: any) => {
-        return `<img src="${
-          params.data?.imgs[0] === undefined ? '../../../assets/images/medicine-default.png' : params?.value[0]
-        }" width="50" height="50">`;
+        if (params.value) {
+          return `<img src="${
+            params.value.length == 0 ? '../../../assets/images/medicine-default.png' : params.value[0]
+          }" width="50" height="50">`;
+        } else return `<img src='../../../assets/images/medicine-default.png' width="50" height="50">`;
       },
     },
   ];
@@ -224,7 +220,6 @@ export class MedicinesComponent implements OnInit {
         categoryId: parseInt(data.categories.map((resId: any) => resId.id).toString()),
         // medicineImages: this.images,
       };
-      console.log(medicine);
       this.http.post(environment.base + '/medicine/update', medicine).subscribe((res: any) => {
         if (res.status == 'ok') {
           this.restFormData();
@@ -338,7 +333,7 @@ export class MedicinesComponent implements OnInit {
   importingExcel(event: any) {
     this.upload(event.target.files[0]).subscribe((data: any) => {
       if (data.status == 'ok') {
-        this.gridApi.setRowData([]);
+        // this.gridApi.setRowData([]);
         if (data.errorDetails.length > 0) {
           //Handle ERROR
           let tx = '';
@@ -351,19 +346,17 @@ export class MedicinesComponent implements OnInit {
             //   tx = tx + '<li>' + d.details?.email + '</li>';
             // }
           });
-        } else {
-          this.notify.successNotification('Upload File successfully');
-          this.getAllMedicines();
-          this.getAllCategories();
-          this.getAllPharmaceuticalForms();
-          setTimeout(() => {
-            this.gridOption.api!.applyTransaction({
-              add: this.medicines,
-              addIndex: this.gridApi.getLastDisplayedRow() + 1,
-            })!;
-            this.gridApi.setRowData(this.medicines);
-          }, 1000);
         }
+        // this.notify.successNotification('Upload File successfully');
+        const newMedicines = data.newAddedMedicines;
+        this.getAllMedicines();
+        this.getAllCategories();
+        this.getAllPharmaceuticalForms();
+        this.gridOption.api!.applyTransaction({
+          add: newMedicines,
+          addIndex: this.gridApi.getLastDisplayedRow() + 1,
+        })!;
+        // this.gridApi.setRowData(this.medicines);
       }
       ((<HTMLInputElement>document.getElementById('input_file_medicine')) as any).value = null;
     });
@@ -455,10 +448,6 @@ export class MedicinesComponent implements OnInit {
     valueForm.value = '';
   }
   restFormData() {
-    // this.globalFormData. .forEach((val: any, key: any, fD: any) => {
-    //   console.log(key, val, fD);
-    //   this.globalFormData.delete(key);
-    // });
     this.globalFormData = new FormData();
     this.files = [];
   }

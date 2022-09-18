@@ -61,7 +61,7 @@
           <!-- ERROR Massage First Name-->
           <p *ngIf="firstName.invalid && firstName.touched" class="text-danger">
             you must enter
-            <span *ngIf="firstName.errors?.['required']"> FirstName is required</span>
+            <span *ngIf="firstName.errors?.['required']"> Firs tName is required</span>
             <span *ngIf="firstName.errors?.['maxlength']">
               maximum must be
               {{firstName.errors?.['maxlength']?.['requiredLength'] }} letters At Least!
@@ -83,7 +83,7 @@
           <!-- ERROR Massage Last Name -->
           <p *ngIf="lastName.invalid && lastName.touched" class="text-danger">
             you must enter
-            <span *ngIf="lastName.errors?.['required']"> LastName is required</span>
+            <span *ngIf="lastName.errors?.['required']"> Last Name is required</span>
             <span *ngIf="lastName.errors?.['maxlength']">
               maximum must be
               {{lastName.errors?.['maxlength']?.['requiredLength'] }} letters At Least!
@@ -121,7 +121,7 @@
             maxlength="20" />
           <!-- ERROR Massage Password-->
           <p *ngIf="password.invalid && password.touched" class="text-danger">you must enter the password</p>
-          <span class="text-danger" *ngIf="password.errors?.['minlength'] &&password.touched">
+          <span class="text-danger" *ngIf="password.errors?.['minlength'] && password.touched">
             minimum must be 8 Numbers
           </span>
 

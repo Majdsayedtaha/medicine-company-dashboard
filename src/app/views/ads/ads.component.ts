@@ -21,8 +21,8 @@ export class AdsComponent implements OnInit {
   ngOnInit(): void {
     this.getAllAd();
     this.adForm = this.fb.group({
-      name: ['', [Validators.required]],
-      content: ['', [Validators.required]],
+      name: [this.activeAd?.title, [Validators.required]],
+      content: [this.activeAd?.content, [Validators.required]],
     });
   }
 

@@ -82,7 +82,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onResetOfferForm()">Close</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addNewOffer()">Add offer</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addNewOffer()" [disabled]="!offerForm.valid">Add offer</button>
       </div>
     </div>
   </div>
@@ -147,9 +147,6 @@
           <button class="btn-input" (click)="addNewMedicineOffer()">
             <fa-icon [icon]="faSquarePlus"></fa-icon>
           </button>
-          <br />
-          <!-- <pre>{{ offerForm.value | json }}</pre> -->
-          <br />
         </form>
       </div>
       <div class="modal-footer">

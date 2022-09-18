@@ -85,7 +85,7 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
       })
       .subscribe((res: any) => {
         if (res.status == 'ok') {
-          this.auth.user.next(res.user);
+          // this.auth.user.next(res.user);
           localStorage.setItem('userData', JSON.stringify(res.user));
           this.userDetails = res.user;
           console.log(this.userDetails)

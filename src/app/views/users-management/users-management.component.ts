@@ -33,9 +33,6 @@ export class UsersManagementComponent implements OnInit {
 
   columnDefs = [
     {
-      headerName: '#',
-      field: '#',
-      minWidth: 180,
       headerCheckboxSelection: true,
       headerCheckboxSelectionFilteredOnly: true,
       checkboxSelection: true,
@@ -123,11 +120,8 @@ export class UsersManagementComponent implements OnInit {
         this.agGrid.api.applyTransaction({ remove: selectedData });
         this.notify.successNotification('Delete User Successfully');
       } else if (res.details == 'The array of ids is empty') {
-        this.notify.warningNotification('Please,select the user you want to delete ');
-      } else if (
-        res.details ==
-        'SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`aphamea`.`order`, CONSTRAINT `fk_user_order_userId` FOREIGN KEY (`userId`) REFERENCES `user` (`id`))\nThe SQL being executed was: DELETE FROM `user` WHERE `id`=1'
-      ) {
+        this.notify.warningNotification('Please,select the user you want to delete');
+      } else {
         this.notify.warningNotification("Sorry, You Can't Complete This Action, This User Related To An Order");
       }
     });
@@ -176,10 +170,20 @@ export class UsersManagementComponent implements OnInit {
     console.log(userForm.value);
     this.http.post(environment.base + '/site/signup', JSON.stringify(userForm.value)).subscribe((res: any) => {
       if (res.status === 'ok') {
-        // Update Table
-        const res = this.gridOption.api!.applyTransaction({
-          add: [userForm.value],
-          addIndex: 0,
+        console.log(res);
+        // const newUser = {
+        //   firstName: res.firstName,
+        //   lastName: res.lastName,
+        //   email: res.email,
+        //   role: res.role,
+        //   region: res.region,
+        //   country: res.country,
+        //   city: res.city,
+        //   specialMark: res.specialMark,
+        // };
+        this.gridOption.api!.applyTransaction({
+          add: [res.user],
+          addIndex: this.gridApi.getLastDisplayedRow() + 1,
         })!;
 
         this.notify.successNotification('user added successfully');
@@ -195,7 +199,6 @@ export class UsersManagementComponent implements OnInit {
     this.upload(event.target.files[0]).subscribe({
       next: (data: any) => {
         if (data.status == 'ok') {
-          this.loadUsers();
           if (data.errorDetails.length > 0) {
             //Handle ERROR
             let tx = '';
@@ -207,9 +210,13 @@ export class UsersManagementComponent implements OnInit {
                 tx = tx + '<li>' + d.details?.email + '</li>';
               }
             });
-          } else {
-            this.notify.successNotification('Upload File successfully');
           }
+          const newUsers = data.newAddedUser;
+          this.gridOption.api!.applyTransaction({
+            add: newUsers,
+            addIndex: this.gridApi.getLastDisplayedRow() + 1,
+          })!;
+          // this.notify.successNotification('Upload File successfully');
         }
         ((<HTMLInputElement>document.getElementById('input_file')) as any).value = null;
       },

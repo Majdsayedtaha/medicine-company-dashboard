@@ -77,7 +77,12 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onResetPartForm(categoryName)">
           Close
         </button>
-        <button type="button" class="btn btn-primary" (click)="addCategory(categoryName.value)" data-bs-dismiss="modal">
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="addCategory(categoryName.value)"
+          data-bs-dismiss="modal"
+          [disabled]="categoryName.value == ''">
           Add
         </button>
       </div>
@@ -112,7 +117,8 @@
           type="button"
           class="btn btn-primary"
           (click)="addPharmaceuticalForm(pharmaceuticalFormName.value)"
-          data-bs-dismiss="modal">
+          data-bs-dismiss="modal"
+          [disabled]="pharmaceuticalFormName.value == ''">
           Add
         </button>
       </div>
@@ -229,7 +235,14 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onReset()">Close</button>
-        <button type="button" class="btn btn-primary" (click)="addMedicine()" [disabled]="!medicineForm.valid" data-bs-dismiss="modal">Add</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="addMedicine()"
+          [disabled]="!medicineForm.valid"
+          data-bs-dismiss="modal">
+          Add
+        </button>
       </div>
     </div>
   </div>

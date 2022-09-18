@@ -34,7 +34,7 @@ export class EventsComponent implements OnInit {
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file((file: File) => {
-          this.globalFormData.append('medicineImages[]', file, droppedFile.relativePath);
+          this.globalFormData.append('activityImages[]', file, droppedFile.relativePath);
         });
       } else {
         const fileEntry = droppedFile.fileEntry as FileSystemDirectoryEntry;
@@ -63,8 +63,8 @@ export class EventsComponent implements OnInit {
   ngOnInit(): void {
     this.getAllEvents();
     this.eventForm = this.fb.group({
-      name: ['', [Validators.required]],
-      content: ['', [Validators.required]],
+      name: [this.activeEvent?.title, [Validators.required]],
+      content: [this.activeEvent?.content, [Validators.required]],
     });
   }
   getAllEvents() {
@@ -103,7 +103,6 @@ export class EventsComponent implements OnInit {
   shortDate(value: string): string {
     return value.substring(0, 10);
   }
-
   updateEvent(id: number) {
     const httpOptions = {
       headers: new HttpHeaders({
@@ -166,10 +165,6 @@ export class EventsComponent implements OnInit {
     this.eventForm.reset();
   }
   restFormData() {
-    // this.globalFormData. .forEach((val: any, key: any, fD: any) => {
-    //   console.log(key, val, fD);
-    //   this.globalFormData.delete(key);
-    // });
     this.globalFormData = new FormData();
     this.files = [];
   }
