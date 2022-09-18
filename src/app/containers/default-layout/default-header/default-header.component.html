@@ -51,7 +51,7 @@
         cTextColor="primary"
         shape="rounded-1"
         size="md"
-        [src]="userDetails?.img !== null ? userDetails.img : './../../../../assets/img/avatars/avatar-default.jpg'"
+        [src]="userDetails?.img != null ? userDetails.img : './../../../../assets/img/avatars/avatar-default.jpg'"
         status="success">
       </c-avatar>
     </button>
@@ -91,7 +91,6 @@
                   type="file"
                   name="file-input"
                   id="file-input"
-                  formControlName="img"
                   class="file-input__input"
                   (change)="processFile($event)" />
                 <label class="file-input__label" for="file-input">
@@ -101,7 +100,7 @@
                       shape="rounded-1"
                       size="md"
                       [src]="
-                        userDetails?.img !== null
+                        userDetails?.img != null
                           ? userDetails.img
                           : './../../../../assets/img/avatars/avatar-default.jpg'
                       "
@@ -113,11 +112,11 @@
               </div>
               <!-- FirstName -->
               <div class="w-100 mb-3">
-                <input type="text" formControlName="firstName" class="form-control" placeholder="FirstName" />
+                <input type="text" formControlName="firstName" class="form-control" placeholder="First Name" />
               </div>
               <!-- LastName -->
               <div class="w-100 mb-3">
-                <input type="text" formControlName="lastName" class="form-control" placeholder="lastName" />
+                <input type="text" formControlName="lastName" class="form-control" placeholder="Last Name" />
               </div>
               <!-- Email -->
               <div class="w-100">
@@ -128,9 +127,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" type="reset" (click)="onReset()">
-          Close
-        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" type="reset">Close</button>
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal" type="submit" (click)="updateUser()">
           Save changes
         </button>

@@ -8,7 +8,7 @@ import { NotifierService } from './notifier.service';
 
 @Injectable({ providedIn: 'root' })
 export class RoleGuard implements CanActivate {
-  constructor(private auth: AuthService, private router: Router,private notify:NotifierService) {}
+  constructor(private auth: AuthService, private router: Router, private notify: NotifierService) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -18,10 +18,10 @@ export class RoleGuard implements CanActivate {
       take(1),
       map(user => {
         console.log(user);
-        if (user?.role=='5') {
+        if (user?.role == '5') {
           return true;
         }
-         this.notify.errorNotification('Sorry, only managers authorized to login')
+        this.notify.errorNotification('Sorry, only managers authorized to login');
         return this.router.createUrlTree(['/login']);
       })
     );

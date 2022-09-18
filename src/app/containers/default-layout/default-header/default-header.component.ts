@@ -30,12 +30,10 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
       firstName: [this.userDetails.firstName],
       lastName: [this.userDetails.lastName],
       email: [this.userDetails.email],
-      img: [null],
+      // img: [null],
     });
   }
-  ngOnDestroy(): void {
-    this.userSubscription$?.unsubscribe();
-  }
+
   @Input() sidebarId: string = 'sidebar';
 
   public newMessages = new Array(4);
@@ -71,32 +69,28 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
       }),
     };
     formData.append('role', 5);
-    formData.append('email', 'admin@admin.com');
+    formData.append('email', this.saveUserInfoForm.get('email')?.value);
     formData.append('userImage', this.file);
-    // formData.append('id', this.userDetails?.id);
+    formData.append('id', this.userDetails?.id);
+    formData.append('firstName', this.saveUserInfoForm.get('firstName')?.value);
+    formData.append('lastName', this.saveUserInfoForm.get('lastName')?.value);
+
     this.submitted = true;
     if (this.saveUserInfoForm.invalid) {
       return;
     }
-    //TODO update user
     this.http
       .post(environment.base + '/site/update-user-info', formData, {
         httpOptions,
       })
       .subscribe((res: any) => {
         if (res.status == 'ok') {
-          this.auth.handleAuthentication(
-            this.userDetails.getToken(),
-            this.saveUserInfoForm.value.email,
-            this.saveUserInfoForm.value.firstName,
-            this.saveUserInfoForm.value.lastName,
-            this.userDetails.id,
-            this.saveUserInfoForm.value.userImage,
-            this.userDetails.value.regionId,
-            this.userDetails.value.role,
-            this.userDetails.value.contacts
-          );
-          console.log(this.userDetails);
+          this.auth.user.next(res.user);
+          localStorage.setItem('userData', JSON.stringify(res.user));
+          this.userDetails = res.user;
+          console.log(this.userDetails)
+        } else {
+          console.log(res);
         }
       });
   }
@@ -104,5 +98,8 @@ export class DefaultHeaderComponent extends HeaderComponent implements OnInit, O
   deleteBackdrop() {
     const e = document.querySelector('.modal-backdrop');
     e?.remove();
+  }
+  ngOnDestroy(): void {
+    this.userSubscription$?.unsubscribe();
   }
 }

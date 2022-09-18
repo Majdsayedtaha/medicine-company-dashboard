@@ -34,7 +34,7 @@ export class AuthService {
     // this.translate.use(lang);
     const user = new User(accessToken, email, firstName, lastName, id, img, regionId, role, userContacts);
     this.user.next(user);
-    user.isAuth=true;
+    user.isAuth = true;
     localStorage.setItem('userData', JSON.stringify(user));
   }
 
@@ -67,7 +67,7 @@ export class AuthService {
         userData.userContacts
       );
       this.user.next(loadedUser);
-      loadedUser.isAuth=true;
+      loadedUser.isAuth = true;
       // this.router.navigate(['/dashboard']);
     } else if (email && password) {
       this.http.post(environment.base + '/site/login', { email, password }).subscribe((res: any) => {
@@ -80,7 +80,7 @@ export class AuthService {
             res.userInfo.id,
             res.userInfo.img,
             res.userInfo.regionId,
-            res.userInfo.role,
+            '5',
             res.userInfo.userContacts
           );
           this.router.navigate(['/dashboard']);
