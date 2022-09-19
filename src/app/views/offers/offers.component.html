@@ -124,15 +124,15 @@
               <div class="mb-3" [formGroupName]="i">
                 <select class="form-select mt-2" aria-label="Category Select" formControlName="medicineId">
                   <option selected>Choose A Medicine</option>
-                  <option *ngFor="let medicine of medicines" [value]="medicine?.id">{{ medicine.productName }}</option>
+                  <option *ngFor="let medicine of medicines" [selected]="activeOffer[i]?.offerDetails.medicine.id" [value]="medicine?.id">{{ medicine.productName }}</option>
                 </select>
-                <input type="number" class="form-control mt-2" formControlName="quantity" placeholder="Quantity" />
+                <input type="number" class="form-control mt-2" formControlName="quantity" placeholder="Quantity" [value]="activeOffer[i]?.offerDetails.medicine.quantity">
                 <select
                   class="form-select mt-2"
                   aria-label="Pharmaceutical Form Select"
                   formControlName="extraMedicineId">
                   <option selected>No Extra</option>
-                  <option *ngFor="let extraMedicine of medicines" [value]="extraMedicine?.id">
+                  <option *ngFor="let extraMedicine of medicines" [selected]="activeOffer[i]?.offerDetails.extraMedicine.id" [value]="extraMedicine?.id">
                     {{ extraMedicine.productName }}
                   </option>
                 </select>
@@ -140,7 +140,8 @@
                   type="number"
                   class="form-control mt-2"
                   formControlName="extraQuantity"
-                  placeholder="Extra Quantity" />
+                  placeholder="Extra Quantity"
+                  [value]="activeOffer[i]?.offerDetails.extraQuantity.quantity" />
               </div>
             </ng-container>
           </div>
@@ -150,8 +151,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="onResetOfferDetailsForm()">Close</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="addNewOffer()">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="updateOffer(activeOffer?.id)">
           Save Changes
         </button>
 

@@ -29,8 +29,8 @@ export class CompanyDetailsComponent implements OnInit {
       description: ['', [Validators.required]],
       name: ['', [Validators.required]],
       img: [''],
-      numOfEmployee: [],
-      companyTeam: this.fb.array([]),
+      numOfEmployee: [null, [Validators.required]],
+      companyTeams: this.fb.array([]),
     });
   }
 
@@ -75,13 +75,14 @@ export class CompanyDetailsComponent implements OnInit {
   }
   // ! UPLOADER END
 
-  get companyTeam(): FormArray {
-    return this.companyForm.get('companyTeam') as FormArray;
+  get companyTeams(): FormArray {
+    return this.companyForm.get('companyTeams') as FormArray;
   }
 
   addNewCompanyTeam() {
-    this.companyTeam.push(
+    this.companyTeams.push(
       this.fb.group({
+        id: [17],
         position: ['', [Validators.required]],
         userId: ['', [Validators.required]],
         description: ['', [Validators.required]],
@@ -105,7 +106,7 @@ export class CompanyDetailsComponent implements OnInit {
         this.teams = res.company.companyTeams;
         console.log(this.teams);
       } else {
-        this.notify.errorNotification(res.error);
+        // this.notify.errorNotification(res.error);
       }
     });
   }
@@ -117,7 +118,7 @@ export class CompanyDetailsComponent implements OnInit {
       description: this.companyForm.get('description')?.value,
       name: this.companyForm.get('name')?.value,
       numOfEmployee: this.companyForm.get('numOfEmployee')?.value,
-      companyTeam: this.companyForm.get('companyTeam')?.value,
+      companyTeams: this.companyForm.get('companyTeams')?.value,
     };
 
     const httpOptions = {
@@ -126,18 +127,21 @@ export class CompanyDetailsComponent implements OnInit {
       }),
     };
 
-    this.globalFormData.append('description', company.description);
     this.globalFormData.append('name', company.name);
+    this.globalFormData.append('description', company.description);
     this.globalFormData.append('numOfEmployee', company.numOfEmployee);
-    this.globalFormData.append('companyTeam', company.companyTeam);
+    // for (const cd of this.companyForm.value.companyTeams) {
+    this.globalFormData.append('companyTeams[]', this.companyForm.value.companyTeams);
+    console.log(this.companyForm.value.companyTeams);
+    // }
 
     this.api
       .post(environment.base + '/company/save-company-info', this.globalFormData, { httpOptions })
       .subscribe((res: any) => {
         console.log(res);
-        this.onResetCompanyForm()
+        this.onResetCompanyForm();
       });
-
+    
   }
 
   processFile(event: any) {

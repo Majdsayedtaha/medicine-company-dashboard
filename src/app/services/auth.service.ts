@@ -5,8 +5,6 @@ import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { User } from '../interfaces/user.model';
 
-// TODO: Adding Translation Pipe Library
-// TODO: Adding Toast Service
 // import { TranslateService } from '@ngx-translate/core';
 // import { LocalToasterService } from 'src/app/utils/localToaster';
 

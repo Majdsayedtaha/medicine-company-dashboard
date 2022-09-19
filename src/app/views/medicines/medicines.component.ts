@@ -84,7 +84,17 @@ export class MedicinesComponent implements OnInit {
       headerName: 'category',
       field: 'categories',
       cellRenderer: (params: any) => {
-        return `${params.value[0]?.name}`;
+        if (params.value instanceof Array) {
+          return `${params.value[0]?.name}`;
+        } else {
+          let name = '';
+          this.categories.forEach(item => {
+            if (params.data.categoryId == item.id) {
+              name = item.name;
+            }
+          });
+          return `${name}`;
+        }
       },
       sortable: true,
       filter: true,
@@ -94,7 +104,18 @@ export class MedicinesComponent implements OnInit {
       headerName: 'pharmaceutical Form',
       field: 'pharmaceuticalForms',
       cellRenderer: (params: any) => {
-        return `${params.value[0]?.name}`;
+        // console.log(params.value instanceof Array, params);
+        if (params.value instanceof Array) {
+          return `${params.value[0]?.name}`;
+        } else {
+          let name = '';
+          this.pharmaceuticalForms.forEach(item => {
+            if (params.data.pharmaceuticalFormId == item.id) {
+              name = item.name;
+            }
+          });
+          return `${name}`;
+        }
       },
       sortable: true,
       editable: true,
@@ -317,6 +338,7 @@ export class MedicinesComponent implements OnInit {
 
     this.http.post(environment.base + '/medicine/add', this.globalFormData, { httpOptions }).subscribe((res: any) => {
       if (res.status === 'ok') {
+        console.log(res);
         this.restFormData();
         this.getAllMedicines();
         this.gridOption.api!.applyTransaction({

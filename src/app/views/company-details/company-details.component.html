@@ -66,10 +66,22 @@
             </label>
           </div>
 
+          <div class="row mb-3">
+            <label for="numOfEmployee">
+              <input
+                type="number"
+                class="form-control mt-2"
+                formControlName="name"
+                id="numOfEmployee"
+                formControlName="numOfEmployee"
+                placeholder="Current num Of Employee" />
+            </label>
+          </div>
+
           <h5>Add User To the Team</h5>
 
-          <div formArrayName="companyTeam">
-            <ng-container *ngFor="let user of companyTeam?.controls; let i = index">
+          <div formArrayName="companyTeams">
+            <ng-container *ngFor="let ct of companyTeams?.controls; let i = index">
               <div class="mb-3" [formGroupName]="i">
                 <select class="form-select mt-2" aria-label="User Select" formControlName="userId">
                   <option selected>Choose A User</option>
@@ -103,63 +115,58 @@
 </div>
 
 <!-- Team Company -->
-  <div class="team-all">
-    <!-- Team Member -->
-    <div
-      class="team-member"
-      *ngFor="let team of teams;let i=index"
-    >
-      <div class="image-wrapper">
-        <img
-          class="img-fluid"
-          [src]=" users[i].img ? users[i].img :'../../../assets/images/medicine-default.png' "
-          alt="alternative"
-        />
-      </div>
-      <!-- end of image-wrapper -->
-      <p class="p-large"><strong>{{ users[i].firstName? users[i].firstName :'Lacy Whitelong' }}</strong></p>
-      <p class="job-title">{{ team.position }}</p>
-      <p class="job-title">{{ team.description}}</p>
-      <span class="social-icons">
-        <span class="fa-stack">
-          <a href="#your-link">
-            <i class="bi bi-facebook"></i>
-          </a>
-        </span>
-        <span class="fa-stack">
-          <a href="#your-link">
-            <i class="bi bi-twitter"></i>
-          </a>
-        </span>
-      </span>
+<div class="team-all">
+  <!-- Team Member -->
+  <div class="team-member" *ngFor="let team of teams; let i = index">
+    <div class="image-wrapper">
+      <img
+        class="img-fluid"
+        [src]="users[i].img ? users[i].img : '../../../assets/images/medicine-default.png'"
+        alt="alternative" />
     </div>
-    <div
-      class="team-member"
-      *ngFor="let team of teams;let i=index"
-    >
-      <div class="image-wrapper">
-        <img
-          class="img-fluid"
-          [src]=" users[i].img ? users[i].img :'../../../assets/images/medicine-default.png' "
-          alt="alternative"
-        />
-      </div>
-      <!-- end of image-wrapper -->
-      <p class="p-large"><strong>{{ users[i].firstName? users[i].firstName :'Lacy Whitelong' }}</strong></p>
-      <p class="job-title">{{ team.position }}</p>
-      <p class="job-title">{{ team.description}}</p>
-      <span class="social-icons">
-        <span class="fa-stack">
-          <a href="#your-link">
-            <i class="bi bi-facebook"></i>
-          </a>
-        </span>
-        <span class="fa-stack">
-          <a href="#your-link">
-            <i class="bi bi-twitter"></i>
-          </a>
-        </span>
+    <!-- end of image-wrapper -->
+    <p class="p-large">
+      <strong>{{ users[team.userId].firstName ? users[team.useId].firstName : '' }}</strong>
+    </p>
+    <p class="job-title">{{ team.position }}</p>
+    <p class="job-title">{{ team.description }}</p>
+    <span class="social-icons">
+      <span class="fa-stack">
+        <a href="#your-link">
+          <i class="bi bi-facebook"></i>
+        </a>
       </span>
-    </div>
-
+      <span class="fa-stack">
+        <a href="#your-link">
+          <i class="bi bi-twitter"></i>
+        </a>
+      </span>
+    </span>
   </div>
+  <div class="team-member" *ngFor="let team of teams; let i = index">
+    <div class="image-wrapper">
+      <img
+        class="img-fluid"
+        [src]="users[i].img ? users[i].img : '../../../assets/images/medicine-default.png'"
+        alt="alternative" />
+    </div>
+    <!-- end of image-wrapper -->
+    <p class="p-large">
+      <strong>{{ users[team.userId].firstName ? users[team.useId].firstName : '' }}</strong>
+    </p>
+    <p class="job-title">{{ team.position }}</p>
+    <p class="job-title">{{ team.description }}</p>
+    <span class="social-icons">
+      <span class="fa-stack">
+        <a href="#your-link">
+          <i class="bi bi-facebook"></i>
+        </a>
+      </span>
+      <span class="fa-stack">
+        <a href="#your-link">
+          <i class="bi bi-twitter"></i>
+        </a>
+      </span>
+    </span>
+  </div>
+</div>

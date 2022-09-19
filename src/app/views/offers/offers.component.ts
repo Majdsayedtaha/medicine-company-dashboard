@@ -29,18 +29,11 @@ export class OffersComponent implements OnInit {
 
     const fb = this.fb;
     this.offerForm = fb.group({
-      name: ['', [Validators.required]],
-      offerDetails: fb.array([
-        // this.fb.group({
-        //   medicineId: ['', [Validators.required]],
-        //   quantity: ['', [Validators.required]],
-        //   extraMedicineId: ['', [Validators.required]],
-        //   extraQuantity: ['', [Validators.required]],
-        // }),
-      ]),
+      name: [this.activeOffer?.name, [Validators.required]],
+      offerDetails: fb.array([]),
     });
   }
-  
+
   getAllMedicines() {
     this.http
       .post(environment.base + '/medicine/get-all', {
@@ -75,12 +68,23 @@ export class OffersComponent implements OnInit {
   }
 
   addNewOffer() {
-    // Todo update!
     this.http.post(environment.base + '/offer/add', JSON.stringify(this.offerForm.value)).subscribe((res: any) => {
       if (res.status === 'ok') {
         console.log(res);
         this.getAllOffers();
-        this.offerForm.reset();
+      } else {
+        console.log(res);
+      }
+    });
+  }
+  updateOffer(id: number) {
+    let offerUp = this.offerForm.value;
+    console.log(offerUp);
+    offerUp.id = id;
+    this.http.post(environment.base + '/offer/update', offerUp).subscribe((res: any) => {
+      if (res.status === 'ok') {
+        console.log('wow');
+        this.getAllOffers();
       } else {
         console.log(res);
       }
@@ -98,20 +102,22 @@ export class OffersComponent implements OnInit {
   }
 
   getOfferDetails(id: number) {
+    this.offerDetails.clear();
     this.http.get(environment.base + '/offer/get?id=' + id).subscribe((res: any) => {
       if (res.status === 'ok') {
         this.activeOffer = res.offer;
         this.activeOfferDetails = res.offerDetails;
-        // TODO fill the modal
+        this.offerForm.get('name')?.patchValue(this.activeOffer.name);
+        console.log(this.activeOffer);
         this.activeOfferDetails.forEach(offer => {
-          // this.offerDetails.push(
-          //   this.fb.group({
-          //     medicineId: [offer., [Validators.required]],
-          //     quantity: ['', [Validators.required]],
-          //     extraMedicineId: ['', [Validators.required]],
-          //     extraQuantity: ['', [Validators.required]],
-          //   })
-          // );
+          this.offerDetails.push(
+            this.fb.group({
+              medicineId: [offer.medicineId, [Validators.required]],
+              quantity: [offer.quantity, [Validators.required]],
+              extraMedicineId: [offer.extraMedicineId, [Validators.required]],
+              extraQuantity: [offer.extraQuantity, [Validators.required]],
+            })
+          );
         });
       } else {
         console.log(res);
@@ -149,10 +155,5 @@ export class OffersComponent implements OnInit {
 
   onResetOfferForm() {
     this.offerForm.reset();
-  }
-
-  onResetOfferDetailsForm() {
-    // TODO Save status checkbox
-    this.offerDetails.reset();
   }
 }

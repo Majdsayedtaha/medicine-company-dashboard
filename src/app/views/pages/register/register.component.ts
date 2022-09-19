@@ -16,7 +16,6 @@ export class RegisterComponent implements OnInit {
   submitted: boolean = false;
   message: string = '';
   userImg: any;
-  // TODO Send Role
 
   constructor(
     private fb: FormBuilder,
