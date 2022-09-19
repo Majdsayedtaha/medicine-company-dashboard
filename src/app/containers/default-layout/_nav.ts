@@ -10,15 +10,15 @@ export const navItems: INavData[] = [
     //   text: 'NEW',
     // },
   },
-  {
-    name: 'Widgets',
-    url: '/widgets',
-    iconComponent: { name: 'cil-calculator' },
-    // badge: {
-    //   color: 'info',
-    //   text: 'NEW',
-    // },
-  },
+  // {
+  //   name: 'Widgets',
+  //   url: '/widgets',
+  //   iconComponent: { name: 'cil-calculator' },
+  //   // badge: {
+  //   //   color: 'info',
+  //   //   text: 'NEW',
+  //   // },
+  // },
   {
     name: 'Pages',
     title: true,

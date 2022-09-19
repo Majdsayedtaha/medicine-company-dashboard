@@ -49,9 +49,37 @@ export class UsersManagementComponent implements OnInit {
       sortable: true,
       editable: true,
     },
-    { headerName: 'Region', field: 'region', sortable: true, editable: true },
-    { headerName: 'Country', field: 'country', sortable: true, editable: true },
-    { headerName: 'City', field: 'city', sortable: true, editable: true },
+    {
+      headerName: 'Region',
+      field: 'region',
+      cellRenderer: (params: any) => {
+        console.log(params);
+        if (params.value == null) return `not set yet`;
+        else return params.value.regionAr;
+      },
+      sortable: true,
+      editable: true,
+    },
+    {
+      headerName: 'Country',
+      field: 'country',
+      cellRenderer: (params: any) => {
+        if (params.value == null) return `not set yet`;
+        else return params.value.nameAr;
+      },
+      sortable: true,
+      editable: true,
+    },
+    {
+      headerName: 'City',
+      field: 'city',
+      cellRenderer: (params: any) => {
+        if (params.value == null) return `not set yet`;
+        else return params.value.nameAr;
+      },
+      sortable: true,
+      editable: true,
+    },
     { headerName: 'Special Mark', field: 'specialMark', sortable: true, editable: true },
   ];
 
@@ -134,7 +162,6 @@ export class UsersManagementComponent implements OnInit {
     // convert array of object to one object
     const obj = selectedData.reduce((obj, item) => Object.assign(obj, { [item.key]: item.value }));
 
-    console.log(obj);
     this.http.post(environment.base + '/site/update-user-info', obj).subscribe((res: any) => {
       if (res.status == 'ok') {
         this.notify.successNotification('Update User Successfully');
@@ -167,25 +194,18 @@ export class UsersManagementComponent implements OnInit {
   }
 
   onSubmit(userForm: NgForm) {
-    console.log(userForm.value);
     this.http.post(environment.base + '/site/signup', JSON.stringify(userForm.value)).subscribe((res: any) => {
+      let newOne = userForm.value;
+      newOne.id = res.user.id;
       if (res.status === 'ok') {
-        console.log(res);
-        // const newUser = {
-        //   firstName: res.firstName,
-        //   lastName: res.lastName,
-        //   email: res.email,
-        //   role: res.role,
-        //   region: res.region,
-        //   country: res.country,
-        //   city: res.city,
-        //   specialMark: res.specialMark,
-        // };
+        this.http.post(environment.base + '/site/update-user-info', newOne).subscribe((res: any) => {});
+        this.loadUsers();
+        this.gridOption.api?.setRowData([]);
         this.gridOption.api!.applyTransaction({
-          add: [res.user],
+          add: this.users,
           addIndex: this.gridApi.getLastDisplayedRow() + 1,
         })!;
-
+        this.gridApi.setRowData(this.rowData);
         this.notify.successNotification('user added successfully');
         userForm.reset();
       } else {
@@ -261,6 +281,42 @@ export class UsersManagementComponent implements OnInit {
     saveAs(file);
   }
 
+  // START countries - cities - regions
+  countries = { id: '', nameAr: '', nameEn: '' };
+  cities: any = [];
+  regions: any = [];
+  getCountries() {
+    this.http.get(environment.base + `/area/get-countries`).subscribe((res: any) => {
+      if (res.status === 'ok') {
+        this.countries = res.countries;
+      } else {
+        console.log(res);
+      }
+    });
+  }
+  getCities() {
+    this.http.get(environment.base + `/area/get-cities`).subscribe((res: any) => {
+      if (res.status === 'ok') {
+        this.cities = res.cities;
+      } else {
+        console.log(res);
+      }
+    });
+  }
+  getRegions(id: number) {
+    this.http.get(environment.base + `/area/get-regions?cityId=` + id).subscribe((res: any) => {
+      if (res.status === 'ok') {
+        this.regions = res.regions;
+      } else {
+        console.log(res);
+      }
+    });
+  }
+  log(x: any) {
+    console.log(x);
+  }
+
+  // DONE countries - cities - regions
   onReset(userForm: any) {
     userForm.reset();
   }

@@ -79,7 +79,6 @@ export class OffersComponent implements OnInit {
   }
   updateOffer(id: number) {
     let offerUp = this.offerForm.value;
-    console.log(offerUp);
     offerUp.id = id;
     this.http.post(environment.base + '/offer/update', offerUp).subscribe((res: any) => {
       if (res.status === 'ok') {

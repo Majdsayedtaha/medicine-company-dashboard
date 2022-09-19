@@ -1,6 +1,11 @@
 <!-- Button trigger modal-->
 <div class="d-flex justify-content-end mb-3">
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#exampleModal"
+    (click)="getCountries(); getCities()">
     <fa-icon [icon]="faUser"></fa-icon>
     Add User
   </button>
@@ -128,45 +133,48 @@
           <!-- Role -->
           <label for="inputRole" class="form-label">Role</label>
           <select id="inputRole" class="form-select" required name="role" [(ngModel)]="user.role" #role="ngModel">
-            <option selected>Choose...</option>
-            <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+            <option *ngFor="let role of roles;let i=index;" [value]="i">{{ role }}</option>
           </select>
           <!-- ERROR Massage Role-->
           <p class="text-danger" *ngIf="!role.valid && role.touched">You must select role</p>
 
           <!--Region & City & Country  -->
           <div class="d-flex mt-2">
-            <!-- Region -->
-            <label for="inputRegion2" class="form-label me-2">Region</label>
-            <select
-              id="inputRegion2"
-              class="form-select"
-              required
-              name="region"
-              [(ngModel)]="user.region"
-              #region="ngModel">
-              <option selected>Choose...</option>
-              <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-            </select>
-
-            <!-- City -->
-            <label for="inputCity2" class="form-label me-2">City</label>
-            <select id="inputCity2" class="form-select" required name="city" [(ngModel)]="user.city" #city="ngModel">
-              <option selected>Choose...</option>
-              <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
-            </select>
-
             <!-- Country -->
             <label for="inputCountry2" class="form-label me-2">Country</label>
             <select
               id="inputCountry2"
               class="form-select"
               required
-              name="country"
+              name="countryId"
               [(ngModel)]="user.country"
               #country="ngModel">
-              <option selected>Choose...</option>
-              <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+              <option [value]="countries.id">{{ countries.nameAr }}</option>
+            </select>
+            <!-- City -->
+            <label for="inputCity2" class="form-label me-2">City</label>
+            <select
+              (change)="log(city.value)"
+              id="inputCity2"
+              class="form-select"
+              required
+              name="cityId"
+              [(ngModel)]="user.city"
+              #city="ngModel">
+              <option *ngFor="let city of cities" [value]="city.id">{{ city.nameAr }}</option>
+            </select>
+
+            <!-- Region -->
+            <label for="inputRegion2" class="form-label me-2">Region</label>
+            <select
+              (click)="getRegions(city.value)"
+              id="inputRegion2"
+              class="form-select"
+              required
+              name="regionId"
+              [(ngModel)]="user.region"
+              #region="ngModel">
+              <option *ngFor="let region of regions" [value]="region.id">{{ region.regionAr }}</option>
             </select>
           </div>
           <div>
@@ -233,7 +241,7 @@
   (gridReady)="gridReady($event)"
   [gridOptions]="gridOption"
   [columnDefs]="columnDefs"
-  style="width: 100%; height: 400px"
+  style="width: 100%; height: 500px"
   [suppressRowClickSelection]="true"
   [rowSelection]="'multiple'"
   [pagination]="true"
