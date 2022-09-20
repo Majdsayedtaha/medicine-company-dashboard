@@ -154,20 +154,19 @@
             <!-- City -->
             <label for="inputCity2" class="form-label me-2">City</label>
             <select
-              (change)="log(city.value)"
               id="inputCity2"
               class="form-select"
               required
               name="cityId"
               [(ngModel)]="user.city"
-              #city="ngModel">
+              #city="ngModel"
+              (change)="onSelectCity(city.value)">
               <option *ngFor="let city of cities" [value]="city.id">{{ city.nameAr }}</option>
             </select>
 
             <!-- Region -->
             <label for="inputRegion2" class="form-label me-2">Region</label>
             <select
-              (click)="getRegions(city.value)"
               id="inputRegion2"
               class="form-select"
               required

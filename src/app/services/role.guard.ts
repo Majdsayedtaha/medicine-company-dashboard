@@ -17,7 +17,6 @@ export class RoleGuard implements CanActivate {
     return this.auth.user.pipe(
       take(1),
       map(user => {
-        console.log(user);
         if (user?.role == '5') {
           return true;
         }

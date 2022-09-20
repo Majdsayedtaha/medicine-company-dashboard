@@ -36,10 +36,11 @@ export class UsersManagementComponent implements OnInit {
       headerCheckboxSelection: true,
       headerCheckboxSelectionFilteredOnly: true,
       checkboxSelection: true,
+      flex: 1,
     },
-    { headerName: 'First Name', field: 'firstName', sortable: true, filter: true, editable: true },
-    { headerName: 'Last Name', field: 'lastName', sortable: true, editable: true },
-    { headerName: 'Email', field: 'email', sortable: true, editable: true },
+    { headerName: 'First Name', field: 'firstName', sortable: true, filter: true, editable: true, flex: 1 },
+    { headerName: 'Last Name', field: 'lastName', sortable: true, editable: true, flex: 1 },
+    { headerName: 'Email', field: 'email', sortable: true, editable: true, flex: 1 },
     {
       headerName: 'Role',
       field: 'role',
@@ -48,17 +49,18 @@ export class UsersManagementComponent implements OnInit {
       },
       sortable: true,
       editable: true,
+      flex: 1,
     },
     {
       headerName: 'Region',
       field: 'region',
       cellRenderer: (params: any) => {
-        console.log(params);
         if (params.value == null) return `not set yet`;
         else return params.value.regionAr;
       },
       sortable: true,
       editable: true,
+      flex: 1,
     },
     {
       headerName: 'Country',
@@ -69,6 +71,7 @@ export class UsersManagementComponent implements OnInit {
       },
       sortable: true,
       editable: true,
+      flex: 1,
     },
     {
       headerName: 'City',
@@ -79,8 +82,9 @@ export class UsersManagementComponent implements OnInit {
       },
       sortable: true,
       editable: true,
+      flex: 1,
     },
-    { headerName: 'Special Mark', field: 'specialMark', sortable: true, editable: true },
+    { headerName: 'Special Mark', field: 'specialMark', sortable: true, editable: true, flex: 1 },
   ];
 
   rowData: any[] = [];
@@ -94,6 +98,7 @@ export class UsersManagementComponent implements OnInit {
       autoHeight: true,
       suppressMovable: false,
       headerClass: 'headerCell',
+      flex: 1,
     },
 
     columnDefs: this.columnDefs,
@@ -303,6 +308,9 @@ export class UsersManagementComponent implements OnInit {
       }
     });
   }
+  onSelectCity(id: number) {
+    this.getRegions(id);
+  }
   getRegions(id: number) {
     this.http.get(environment.base + `/area/get-regions?cityId=` + id).subscribe((res: any) => {
       if (res.status === 'ok') {
@@ -312,10 +320,6 @@ export class UsersManagementComponent implements OnInit {
       }
     });
   }
-  log(x: any) {
-    console.log(x);
-  }
-
   // DONE countries - cities - regions
   onReset(userForm: any) {
     userForm.reset();
